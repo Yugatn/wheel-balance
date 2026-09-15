@@ -626,6 +626,43 @@
 
         }
 
+        /* НОВАЯ СТИЛИЗАЦИЯ ПОЛЗУНКА */
+        .slider-wrapper {
+            position: relative;
+            margin-top: 12px;
+        }
+
+        .slider-track-values {
+            display: flex;
+            justify-content: space-between;
+            color: #9da9bb;
+            font-size: 11px;
+            margin-top: 4px;
+            user-select: none;
+        }
+
+        .slider-current-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
+            background: #315fa8;
+            color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .slider-current-value.show {
+            opacity: 1;
+        }
+
     </style>
 </head>
 
@@ -708,24 +745,29 @@
             </div>
 
 
-            <input
-                type="range"
-                class="score-slider"
-                id="scoreSlider"
-                min="0"
-                max="10"
-                step="1"
-                value="5"
-                aria-valuemin="0"
-                aria-valuemax="10"
-                aria-valuenow="5"
-            >
+            <div class="slider-wrapper">
+                <input
+                    type="range"
+                    class="score-slider"
+                    id="scoreSlider"
+                    min="0"
+                    max="10"
+                    step="1"
+                    value="5"
+                    aria-valuemin="0"
+                    aria-valuemax="10"
+                    aria-valuenow="5"
+                >
+                
+                <div 
+                    class="slider-current-value" 
+                    id="sliderBubble"
+                >
+                    5
+                </div>
+            </div>
 
-
-            <div
-                class="number-scale"
-                id="numberScale"
-            ></div>
+            <div class="slider-track-values" id="sliderTrackValues"></div>
 
 
             <div class="scale-ends">
@@ -1187,4 +1229,579 @@ const spheres = [
     {
         name: "Работа и карьера",
         question:
-            "Насколько вас устраивает ваша текущая работа, профессиональное развитие и карьерная ситуация?
+            "Насколько вас устраивает ваша текущая работа, профессиональное развитие и карьерная ситуация?"
+    },
+
+    {
+        name: "Финансы",
+        question:
+            "Насколько вас устраивает ваше текущее финансовое положение и ощущение финансовой устойчивости?"
+    },
+
+    {
+        name: "Отношения и семья",
+        question:
+            "Насколько вас удовлетворяют ваши близкие отношения и семейная жизнь?"
+    },
+
+    {
+        name: "Друзья и социальная жизнь",
+        question:
+            "Насколько вы удовлетворены общением с друзьями, знакомыми и своим социальным окружением?"
+    },
+
+    {
+        name: "Личное развитие",
+        question:
+            "Насколько вы удовлетворены своим обучением, развитием навыков и личностным ростом?"
+    },
+
+    {
+        name: "Отдых и восстановление",
+        question:
+            "Насколько вам хватает отдыха, восстановления и времени для себя?"
+    },
+
+    {
+        name: "Творчество и самореализация",
+        question:
+            "Насколько вы чувствуете возможность заниматься творчеством, реализовывать свои идеи и способности?"
+    }
+
+];
+
+
+const categories =
+    spheres.map(
+        sphere => sphere.name
+    );
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
+
+let values =
+    Array(categories.length).fill(5);
+
+
+let desiredValues =
+    Array(categories.length).fill(5);
+
+
+let currentQuestion = 0;
+
+
+let testCompleted = false;
+
+
+/* =========================================================
+   DOM
+   ========================================================= */
+
+const testSection =
+    document.getElementById(
+        "testSection"
+    );
+
+
+const resultSection =
+    document.getElementById(
+        "resultSection"
+    );
+
+
+const sphereNumber =
+    document.getElementById(
+        "sphereNumber"
+    );
+
+
+const sphereTitle =
+    document.getElementById(
+        "sphereTitle"
+    );
+
+
+const question =
+    document.getElementById(
+        "question"
+    );
+
+
+const scoreDisplay =
+    document.getElementById(
+        "scoreDisplay"
+    );
+
+
+const scoreSlider =
+    document.getElementById(
+        "scoreSlider"
+    );
+
+
+const numberScale =
+    document.getElementById(
+        "numberScale"
+    );
+
+
+const progressText =
+    document.getElementById(
+        "progressText"
+    );
+
+
+const progressPercent =
+    document.getElementById(
+        "progressPercent"
+    );
+
+
+const progressBar =
+    document.getElementById(
+        "progressBar"
+    );
+
+
+const backBtn =
+    document.getElementById(
+        "backBtn"
+    );
+
+
+const nextBtn =
+    document.getElementById(
+        "nextBtn"
+    );
+
+
+const averageEl =
+    document.getElementById(
+        "average"
+    );
+
+
+const maximumEl =
+    document.getElementById(
+        "maximum"
+    );
+
+
+const minimumEl =
+    document.getElementById(
+        "minimum"
+    );
+
+
+const gapEl =
+    document.getElementById(
+        "gap"
+    );
+
+
+const interpretationEl =
+    document.getElementById(
+        "interpretation"
+    );
+
+
+const topSpheres =
+    document.getElementById(
+        "topSpheres"
+    );
+
+
+const bottomSpheres =
+    document.getElementById(
+        "bottomSpheres"
+    );
+
+
+const priorityList =
+    document.getElementById(
+        "priorityList"
+    );
+
+
+const desiredList =
+    document.getElementById(
+        "desiredList"
+    );
+
+
+const reflectionText =
+    document.getElementById(
+        "reflectionText"
+    );
+
+
+const firstStepText =
+    document.getElementById(
+        "firstStepText"
+    );
+
+
+const startDate =
+    document.getElementById(
+        "startDate"
+    );
+
+
+const desiredWheelCard =
+    document.getElementById(
+        "desiredWheelCard"
+    );
+
+
+const planCard =
+    document.getElementById(
+        "planCard"
+    );
+
+
+const planList =
+    document.getElementById(
+        "planList"
+    );
+
+
+const journalContainer =
+    document.getElementById(
+        "journal"
+    );
+
+
+const modal =
+    document.getElementById(
+        "modal"
+    );
+
+
+const pngPreview =
+    document.getElementById(
+        "pngPreview"
+    );
+
+
+const toast =
+    document.getElementById(
+        "toast"
+    );
+
+
+const sliderBubble =
+    document.getElementById(
+        "sliderBubble"
+    );
+
+
+const sliderTrackValues =
+    document.getElementById(
+        "sliderTrackValues"
+    );
+
+
+/* =========================================================
+   STORAGE KEYS
+   ========================================================= */
+
+const VALUES_KEY =
+    "wheelBalanceV2Values";
+
+
+const DESIRED_KEY =
+    "wheelBalanceV2Desired";
+
+
+const JOURNAL_KEY =
+    "wheelBalanceV2Journal";
+
+
+const TEXT_KEY =
+    "wheelBalanceV2Texts";
+
+
+/* =========================================================
+   HAPTIC
+   ========================================================= */
+
+function haptic(
+    type = "selection"
+) {
+
+    try {
+
+        if (
+            !tg.HapticFeedback
+        ) {
+            return;
+        }
+
+
+        if (
+            type === "success" &&
+            tg.HapticFeedback.notificationOccurred
+        ) {
+
+            tg.HapticFeedback.notificationOccurred(
+                "success"
+            );
+
+            return;
+
+        }
+
+
+        if (
+            tg.HapticFeedback.selectionChanged
+        ) {
+
+            tg.HapticFeedback.selectionChanged();
+
+        }
+
+    } catch {
+
+        // Ничего не делаем,
+        // если Telegram Haptic недоступен.
+
+    }
+
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer = null;
+
+
+function showToast(
+    text
+) {
+
+    toast.textContent =
+        text;
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2200
+        );
+
+}
+
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
+
+function saveValues() {
+
+    localStorage.setItem(
+        VALUES_KEY,
+        JSON.stringify(values)
+    );
+
+}
+
+
+function loadValues() {
+
+    const saved =
+        localStorage.getItem(
+            VALUES_KEY
+        );
+
+
+    if (!saved) {
+        return;
+    }
+
+
+    try {
+
+        const parsed =
+            JSON.parse(saved);
+
+
+        if (
+            Array.isArray(parsed) &&
+            parsed.length === categories.length
+        ) {
+
+            values =
+                parsed.map(
+                    value =>
+                        Math.max(
+                            0,
+                            Math.min(
+                                10,
+                                Number(value)
+                            )
+                        )
+                );
+
+        }
+
+    } catch {
+
+        values =
+            Array(categories.length).fill(5);
+
+    }
+
+}
+
+
+function saveDesiredValues() {
+
+    localStorage.setItem(
+        DESIRED_KEY,
+        JSON.stringify(desiredValues)
+    );
+
+}
+
+
+function loadDesiredValues() {
+
+    const saved =
+        localStorage.getItem(
+            DESIRED_KEY
+        );
+
+
+    if (!saved) {
+        return;
+    }
+
+
+    try {
+
+        const parsed =
+            JSON.parse(saved);
+
+
+        if (
+            Array.isArray(parsed) &&
+            parsed.length === categories.length
+        ) {
+
+            desiredValues =
+                parsed.map(
+                    value =>
+                        Math.max(
+                            0,
+                            Math.min(
+                                10,
+                                Number(value)
+                            )
+                        )
+                );
+
+        }
+
+    } catch {
+
+        desiredValues =
+            Array(categories.length).fill(5);
+
+    }
+
+}
+
+
+function saveTexts() {
+
+    const data = {
+
+        reflection:
+            reflectionText.value,
+
+        firstStep:
+            firstStepText.value,
+
+        startDate:
+            startDate.value
+
+    };
+
+
+    localStorage.setItem(
+        TEXT_KEY,
+        JSON.stringify(data)
+    );
+
+}
+
+
+function loadTexts() {
+
+    const saved =
+        localStorage.getItem(
+            TEXT_KEY
+        );
+
+
+    if (!saved) {
+        return;
+    }
+
+
+    try {
+
+        const data =
+            JSON.parse(saved);
+
+
+        reflectionText.value =
+            data.reflection || "";
+
+
+        firstStepText.value =
+            data.firstStep || "";
+
+
+        startDate.value =
+            data.startDate || "";
+
+    } catch {
+
+        // ignore
+
+    }
+
+}
+
+
+/* =========================================================
+   TEST UI
+   ========================================================= */
+
+function createNumberScale() {
+
+    numberScale.innerHTML = "";
+
+
+    for (
+        let
