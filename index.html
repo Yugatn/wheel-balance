@@ -2,40 +2,22 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width,
-        initial-scale=1.0,
-        maximum-scale=1.0,
-        user-scalable=no,
-        viewport-fit=cover"
-    >
-
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, viewport-fit=cover">
     <title>Колесо баланса</title>
-
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
     <style>
-
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
 
-        html,
-        body {
+        html, body {
             margin: 0;
             padding: 0;
             min-height: 100%;
             background: #0b1120;
             color: #ffffff;
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Arial,
-                sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
         }
 
         body {
@@ -44,9 +26,7 @@
             padding: 10px;
         }
 
-        button,
-        input,
-        textarea {
+        button, input, textarea {
             font-family: inherit;
         }
 
@@ -103,7 +83,6 @@
         }
 
         /* ПРОГРЕСС */
-
         .progress-wrapper {
             margin-bottom: 14px;
         }
@@ -133,7 +112,6 @@
         }
 
         /* ТЕСТ */
-
         .sphere-number {
             color: #7faeff;
             font-size: 13px;
@@ -169,6 +147,11 @@
             margin: 12px 0 18px;
         }
 
+        .slider-wrapper {
+            position: relative;
+            margin-top: 12px;
+        }
+
         .score-slider {
             width: 100%;
             height: 42px;
@@ -176,26 +159,36 @@
             cursor: pointer;
         }
 
-        .number-scale {
-            display: grid;
-            grid-template-columns: repeat(11, 1fr);
-            gap: 4px;
-            margin-top: 6px;
-        }
-
-        .number-button {
-            min-height: 38px;
-            padding: 7px 2px;
-            border-radius: 9px;
-            background: #18233a;
-            color: #aeb9ca;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .number-button.active {
+        .slider-current-value {
+            position: absolute;
+            top: -30px;
+            left: 50%;
+            transform: translateX(-50%);
             background: #315fa8;
             color: #ffffff;
+            padding: 4px 8px;
+            border-radius: 9px;
+            font-size: 14px;
+            font-weight: 700;
+            white-space: nowrap;
+            opacity: 0;
+            transition: opacity 0.15s ease;
+            pointer-events: none;
+            z-index: 10;
+        }
+
+        .slider-current-value.show {
+            opacity: 1;
+        }
+
+        .slider-track-values {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            color: #9da9bb;
+            font-size: 11px;
+            margin-top: 4px;
+            user-select: none;
         }
 
         .scale-ends {
@@ -226,7 +219,6 @@
         }
 
         /* КОЛЕСО */
-
         .wheel-wrapper {
             width: 100%;
             display: flex;
@@ -241,13 +233,6 @@
             height: min(96vw, 700px);
             max-width: 100%;
             touch-action: none;
-        }
-
-        .scale-info {
-            text-align: center;
-            color: #9da9bb;
-            font-size: 13px;
-            margin-top: 3px;
         }
 
         .stats {
@@ -276,15 +261,10 @@
         }
 
         /* ИНТЕРПРЕТАЦИЯ */
-
         .interpretation {
             color: #c2ccda;
             font-size: 15px;
             line-height: 1.6;
-        }
-
-        .interpretation p {
-            margin: 0 0 11px;
         }
 
         .range-list {
@@ -306,32 +286,7 @@
             color: #ffffff;
         }
 
-        .sphere-result {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            background: #18233a;
-            border-radius: 13px;
-            padding: 11px 12px;
-            margin-top: 8px;
-        }
-
-        .sphere-result-name {
-            font-size: 14px;
-        }
-
-        .sphere-result-score {
-            min-width: 38px;
-            text-align: center;
-            background: #315fa8;
-            padding: 5px 7px;
-            border-radius: 9px;
-            font-weight: 800;
-        }
-
         /* ПРИОРИТЕТЫ */
-
         .priority-item {
             display: flex;
             align-items: center;
@@ -342,36 +297,16 @@
             margin-top: 8px;
         }
 
-        .priority-item input {
-            width: 20px;
-            height: 20px;
-            accent-color: #6ea8fe;
-            flex-shrink: 0;
-        }
-
         .priority-name {
             flex: 1;
             font-size: 14px;
-        }
-
-        .priority-score {
-            color: #8fa0b8;
-            font-size: 12px;
         }
 
         .goal-box {
             margin-top: 15px;
         }
 
-        .goal-box label {
-            display: block;
-            color: #b5c0d0;
-            font-size: 13px;
-            margin-bottom: 7px;
-        }
-
-        textarea,
-        input[type="date"] {
+        textarea, input[type="date"] {
             width: 100%;
             border: 1px solid #33425f;
             border-radius: 12px;
@@ -391,37 +326,11 @@
             min-height: 45px;
         }
 
-        textarea:focus,
-        input[type="date"]:focus {
+        textarea:focus, input[type="date"]:focus {
             border-color: #6ea8fe;
         }
 
-        .desired-row {
-            background: #18233a;
-            border-radius: 13px;
-            padding: 12px;
-            margin-top: 9px;
-        }
-
-        .desired-header {
-            display: flex;
-            justify-content: space-between;
-            gap: 8px;
-            margin-bottom: 7px;
-        }
-
-        .desired-name {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .desired-value {
-            font-weight: 800;
-            color: #7faeff;
-        }
-
         /* ПЛАН */
-
         .plan {
             background: #18233a;
             border-radius: 15px;
@@ -446,7 +355,6 @@
         }
 
         /* КНОПКИ */
-
         .buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
@@ -470,7 +378,6 @@
         }
 
         /* ИСТОРИЯ */
-
         .journal-entry {
             background: #18233a;
             border-radius: 14px;
@@ -484,38 +391,7 @@
             margin-bottom: 7px;
         }
 
-        .journal-score {
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .journal-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .journal-buttons button {
-            padding: 10px;
-            border-radius: 11px;
-            background: #24314b;
-            font-size: 13px;
-        }
-
-        .journal-buttons .delete {
-            background: #5b3440;
-        }
-
-        .empty {
-            color: #8fa0b8;
-            text-align: center;
-            padding: 10px;
-            font-size: 14px;
-        }
-
         /* МОДАЛЬНОЕ ОКНО */
-
         .modal {
             position: fixed;
             inset: 0;
@@ -547,7 +423,6 @@
             max-height: 72vh;
             object-fit: contain;
             border-radius: 12px;
-            background: white;
         }
 
         .modal-text {
@@ -558,7 +433,6 @@
         }
 
         /* УВЕДОМЛЕНИЕ */
-
         .toast {
             position: fixed;
             left: 50%;
@@ -582,1226 +456,48 @@
             transform: translateX(-50%) translateY(0);
         }
 
-        /* MOBILE */
-
         @media (max-width: 600px) {
-
-            body {
-                padding: 8px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-
-            .card {
-                padding: 12px;
-                border-radius: 17px;
-            }
-
-            .sphere-title {
-                font-size: 22px;
-            }
-
-            .question {
-                font-size: 15px;
-            }
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .buttons {
-                grid-template-columns: 1fr;
-            }
-
-            .navigation {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .number-button {
-                min-height: 36px;
-                font-size: 12px;
-            }
-
+            body { padding: 8px; }
+            h1 { font-size: 24px; }
+            .card { padding: 12px; border-radius: 17px; }
+            .sphere-title { font-size: 22px; }
+            .question { font-size: 15px; }
+            .stats { grid-template-columns: repeat(2, 1fr); }
+            .buttons, .navigation { grid-template-columns: 1fr; }
         }
-
-        /* НОВАЯ СТИЛИЗАЦИЯ ПОЛЗУНКА */
-        .slider-wrapper {
-            position: relative;
-            margin-top: 12px;
-        }
-
-        .slider-track-values {
-            display: flex;
-            justify-content: space-between;
-            color: #9da9bb;
-            font-size: 11px;
-            margin-top: 4px;
-            user-select: none;
-        }
-
-        .slider-current-value {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #315fa8;
-            color: #ffffff;
-            padding: 4px 8px;
-            border-radius: 9px;
-            font-size: 14px;
-            font-weight: 700;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.15s ease;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .slider-current-value.show {
-            opacity: 1;
-        }
-
     </style>
 </head>
-
 <body>
-
-<div class="container">
-
-    <h1>🌀 Колесо баланса</h1>
-
-    <div class="subtitle">
-        Небольшая рефлексия о том, как вы воспринимаете
-        разные сферы своей жизни сейчас.
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- ТЕСТ -->
-    <!-- ========================= -->
-
-    <section id="testSection">
-
-        <div class="card">
-
-            <div class="progress-wrapper">
-
-                <div class="progress-top">
-
-                    <span id="progressText">
-                        Сфера 1 из 8
-                    </span>
-
-                    <span id="progressPercent">
-                        13%
-                    </span>
-
-                </div>
-
-                <div class="progress-track">
-
-                    <div
-                        class="progress-bar"
-                        id="progressBar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-
-            <div class="sphere-number" id="sphereNumber">
-                СФЕРА 1
-            </div>
-
-            <div
-                class="sphere-title"
-                id="sphereTitle"
-            >
-                Здоровье
-            </div>
-
-            <div
-                class="question"
-                id="question"
-            >
-                Насколько вы довольны своим физическим
-                состоянием и заботой о здоровье сейчас?
-            </div>
-
-
-            <div class="scale-label">
-                Выберите значение от 0 до 10
-            </div>
-
-
-            <div
-                class="score-display"
-                id="scoreDisplay"
-            >
-                5
-            </div>
-
-
-            <div class="slider-wrapper">
-                <input
-                    type="range"
-                    class="score-slider"
-                    id="scoreSlider"
-                    min="0"
-                    max="10"
-                    step="1"
-                    value="5"
-                    aria-valuemin="0"
-                    aria-valuemax="10"
-                    aria-valuenow="5"
-                >
-                
-                <div 
-                    class="slider-current-value" 
-                    id="sliderBubble"
-                >
-                    5
-                </div>
-            </div>
-
-            <div class="slider-track-values" id="sliderTrackValues"></div>
-
-
-            <div class="scale-ends">
-
-                <span>
-                    0 — совсем не удовлетворён
-                </span>
-
-                <span>
-                    10 — полностью удовлетворён
-                </span>
-
-            </div>
-
-
-            <div class="navigation">
-
-                <button
-                    class="nav-button"
-                    id="backBtn"
-                >
-                    ← Назад
-                </button>
-
-                <button
-                    class="nav-button primary"
-                    id="nextBtn"
-                >
-                    Далее →
-                </button>
-
-            </div>
-
+    <div class="container">
+        <h1>🌀 Колесо баланса</h1>
+        <div class="subtitle">
+            Небольшая рефлексия о том, как вы воспринимаете
+            разные сферы своей жизни сейчас.
         </div>
 
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- РЕЗУЛЬТАТ -->
-    <!-- ========================= -->
-
-    <section
-        id="resultSection"
-        class="hidden"
-    >
-
-        <div class="card">
-
-            <h2>
-                🌀 Ваше колесо баланса
-            </h2>
-
-            <div class="wheel-wrapper">
-
-                <canvas id="wheel"></canvas>
-
-            </div>
-
-            <div class="scale-info">
-                Центр = 0 · Внешний круг = 10
-            </div>
-
-
-            <div class="stats">
-
-                <div class="stat">
-
-                    <div
-                        class="stat-value"
-                        id="average"
-                    >
-                        5.0
+        <!-- ТЕСТ -->
+        <section id="testSection">
+            <div class="card">
+                <div class="progress-wrapper">
+                    <div class="progress-top">
+                        <span id="progressText">Сфера 1 из 8</span>
+                        <span id="progressPercent">13%</span>
                     </div>
-
-                    <div class="stat-label">
-                        Среднее
+                    <div class="progress-track">
+                        <div class="progress-bar" id="progressBar"></div>
                     </div>
-
                 </div>
 
+                <div class="sphere-number" id="sphereNumber">СФЕРА 1</div>
+                <div class="sphere-title" id="sphereTitle">Здоровье</div>
+                <div class="question" id="question">Насколько вы довольны своим физическим состоянием и заботой о здоровье сейчас?</div>
 
-                <div class="stat">
+                <div class="scale-label">Выберите значение от 0 до 10</div>
+                <div class="score-display" id="scoreDisplay">5</div>
 
-                    <div
-                        class="stat-value"
-                        id="maximum"
-                    >
-                        5
-                    </div>
-
-                    <div class="stat-label">
-                        Максимум
-                    </div>
-
+                <div class="slider-wrapper">
+                    <input type="range" class="score-slider" id="scoreSlider" min="0" max="10" step="1" value="5">
+                    <div class="slider-current-value" id="sliderBubble">5</div>
                 </div>
 
-
-                <div class="stat">
-
-                    <div
-                        class="stat-value"
-                        id="minimum"
-                    >
-                        5
-                    </div>
-
-                    <div class="stat-label">
-                        Минимум
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div
-                        class="stat-value"
-                        id="gap"
-                    >
-                        0
-                    </div>
-
-                    <div class="stat-label">
-                        Разрыв
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ИНТЕРПРЕТАЦИЯ -->
-
-        <div class="card">
-
-            <h2>
-                📊 Что показывает результат
-            </h2>
-
-            <div
-                class="interpretation"
-                id="interpretation"
-            ></div>
-
-            <div class="range-list">
-
-                <div class="range-item">
-                    <strong>8–10</strong> — относительно сильная сфера.
-                </div>
-
-                <div class="range-item">
-                    <strong>6–7</strong> — относительно стабильная сфера.
-                </div>
-
-                <div class="range-item">
-                    <strong>4–5</strong> — сфера, которой может быть полезно уделить внимание.
-                </div>
-
-                <div class="range-item">
-                    <strong>0–3</strong> — выраженный текущий приоритет для размышления.
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ЛУЧШИЕ / НИЖНИЕ -->
-
-        <div class="card">
-
-            <h2>
-                🔎 Сферы результата
-            </h2>
-
-            <h3>
-                Относительно сильные
-            </h3>
-
-            <div id="topSpheres"></div>
-
-
-            <h3 style="margin-top:18px;">
-                Требующие внимания
-            </h3>
-
-            <div id="bottomSpheres"></div>
-
-        </div>
-
-
-        <!-- ПРИОРИТЕТЫ -->
-
-        <div class="card">
-
-            <h2>
-                🎯 Приоритеты
-            </h2>
-
-            <div class="interpretation">
-                Выберите до трёх сфер, которым вы хотели бы
-                уделить больше внимания.
-            </div>
-
-            <div id="priorityList"></div>
-
-        </div>
-
-
-        <!-- ЖЕЛАЕМЫЕ ЗНАЧЕНИЯ -->
-
-        <div
-            class="card"
-            id="desiredCard"
-        >
-
-            <h2>
-                🌱 Желаемые изменения
-            </h2>
-
-            <div class="interpretation">
-                Для выбранных приоритетов укажите,
-                какого уровня вы хотели бы достичь.
-            </div>
-
-            <div id="desiredList"></div>
-
-
-            <div class="goal-box">
-
-                <label for="reflectionText">
-                    Что вы хотели бы изменить?
-                </label>
-
-                <textarea
-                    id="reflectionText"
-                    placeholder="Например: хочу уделять больше времени отдыху, наладить режим сна..."
-                ></textarea>
-
-            </div>
-
-
-            <div class="goal-box">
-
-                <label for="firstStepText">
-                    Какой первый шаг вы готовы сделать?
-                </label>
-
-                <textarea
-                    id="firstStepText"
-                    placeholder="Опишите небольшое конкретное действие..."
-                ></textarea>
-
-            </div>
-
-
-            <div class="goal-box">
-
-                <label for="startDate">
-                    Дата начала
-                </label>
-
-                <input
-                    type="date"
-                    id="startDate"
-                >
-
-            </div>
-
-        </div>
-
-
-        <!-- ЖЕЛАЕМОЕ КОЛЕСО -->
-
-        <div
-            class="card hidden"
-            id="desiredWheelCard"
-        >
-
-            <h2>
-                🌱 Текущее и желаемое
-            </h2>
-
-            <div class="wheel-wrapper">
-
-                <canvas
-                    id="desiredWheel"
-                ></canvas>
-
-            </div>
-
-            <div class="scale-info">
-                Сравнение текущих и желаемых значений
-            </div>
-
-        </div>
-
-
-        <!-- МИНИ-ПЛАН -->
-
-        <div
-            class="card hidden"
-            id="planCard"
-        >
-
-            <h2>
-                🧭 Мини-план
-            </h2>
-
-            <div id="planList"></div>
-
-        </div>
-
-
-        <!-- ДЕЙСТВИЯ -->
-
-        <div class="card">
-
-            <div class="buttons">
-
-                <button
-                    class="main-button primary"
-                    id="saveBtn"
-                >
-                    💾 Сохранить результат
-                </button>
-
-                <button
-                    class="main-button"
-                    id="pngBtn"
-                >
-                    🖼 Сохранить PNG
-                </button>
-
-                <button
-                    class="main-button"
-                    id="restartBtn"
-                >
-                    🔄 Пройти заново
-                </button>
-
-                <button
-                    class="main-button danger"
-                    id="resetBtn"
-                >
-                    🗑 Очистить текущий результат
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- ИСТОРИЯ -->
-
-        <div class="card">
-
-            <h2>
-                📖 История
-            </h2>
-
-            <div id="journal"></div>
-
-        </div>
-
-
-        <!-- ДИСКЛЕЙМЕР -->
-
-        <div class="card">
-
-            <div class="interpretation">
-
-                <p>
-                    <strong>Важно:</strong>
-                    результат отражает ваше текущее
-                    субъективное восприятие различных сфер жизни.
-                </p>
-
-                <p>
-                    Это не оценка качества вашей жизни
-                    и не психологическая диагностика.
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
-</div>
-
-
-<!-- ========================= -->
-<!-- PNG MODAL -->
-<!-- ========================= -->
-
-<div
-    class="modal"
-    id="modal"
->
-
-    <div class="modal-content">
-
-        <img
-            id="pngPreview"
-            alt="Колесо баланса"
-        >
-
-        <div class="modal-text">
-            На iPhone можно нажать и удерживать изображение,
-            чтобы сохранить его.
-        </div>
-
-        <button
-            class="main-button primary"
-            id="closeModal"
-        >
-            Закрыть
-        </button>
-
-    </div>
-
-</div>
-
-
-<div
-    class="toast"
-    id="toast"
-></div>
-
-
-<script>
-
-/* =========================================================
-   TELEGRAM
-   ========================================================= */
-
-const tg = window.Telegram.WebApp;
-
-tg.ready();
-tg.expand();
-
-
-/* =========================================================
-   DATA
-   ========================================================= */
-
-const spheres = [
-
-    {
-        name: "Здоровье",
-        question:
-            "Насколько вы довольны своим физическим состоянием и заботой о здоровье сейчас?"
-    },
-
-    {
-        name: "Работа и карьера",
-        question:
-            "Насколько вас устраивает ваша текущая работа, профессиональное развитие и карьерная ситуация?"
-    },
-
-    {
-        name: "Финансы",
-        question:
-            "Насколько вас устраивает ваше текущее финансовое положение и ощущение финансовой устойчивости?"
-    },
-
-    {
-        name: "Отношения и семья",
-        question:
-            "Насколько вас удовлетворяют ваши близкие отношения и семейная жизнь?"
-    },
-
-    {
-        name: "Друзья и социальная жизнь",
-        question:
-            "Насколько вы удовлетворены общением с друзьями, знакомыми и своим социальным окружением?"
-    },
-
-    {
-        name: "Личное развитие",
-        question:
-            "Насколько вы удовлетворены своим обучением, развитием навыков и личностным ростом?"
-    },
-
-    {
-        name: "Отдых и восстановление",
-        question:
-            "Насколько вам хватает отдыха, восстановления и времени для себя?"
-    },
-
-    {
-        name: "Творчество и самореализация",
-        question:
-            "Насколько вы чувствуете возможность заниматься творчеством, реализовывать свои идеи и способности?"
-    }
-
-];
-
-
-const categories =
-    spheres.map(
-        sphere => sphere.name
-    );
-
-
-/* =========================================================
-   STATE
-   ========================================================= */
-
-let values =
-    Array(categories.length).fill(5);
-
-
-let desiredValues =
-    Array(categories.length).fill(5);
-
-
-let currentQuestion = 0;
-
-
-let testCompleted = false;
-
-
-/* =========================================================
-   DOM
-   ========================================================= */
-
-const testSection =
-    document.getElementById(
-        "testSection"
-    );
-
-
-const resultSection =
-    document.getElementById(
-        "resultSection"
-    );
-
-
-const sphereNumber =
-    document.getElementById(
-        "sphereNumber"
-    );
-
-
-const sphereTitle =
-    document.getElementById(
-        "sphereTitle"
-    );
-
-
-const question =
-    document.getElementById(
-        "question"
-    );
-
-
-const scoreDisplay =
-    document.getElementById(
-        "scoreDisplay"
-    );
-
-
-const scoreSlider =
-    document.getElementById(
-        "scoreSlider"
-    );
-
-
-const numberScale =
-    document.getElementById(
-        "numberScale"
-    );
-
-
-const progressText =
-    document.getElementById(
-        "progressText"
-    );
-
-
-const progressPercent =
-    document.getElementById(
-        "progressPercent"
-    );
-
-
-const progressBar =
-    document.getElementById(
-        "progressBar"
-    );
-
-
-const backBtn =
-    document.getElementById(
-        "backBtn"
-    );
-
-
-const nextBtn =
-    document.getElementById(
-        "nextBtn"
-    );
-
-
-const averageEl =
-    document.getElementById(
-        "average"
-    );
-
-
-const maximumEl =
-    document.getElementById(
-        "maximum"
-    );
-
-
-const minimumEl =
-    document.getElementById(
-        "minimum"
-    );
-
-
-const gapEl =
-    document.getElementById(
-        "gap"
-    );
-
-
-const interpretationEl =
-    document.getElementById(
-        "interpretation"
-    );
-
-
-const topSpheres =
-    document.getElementById(
-        "topSpheres"
-    );
-
-
-const bottomSpheres =
-    document.getElementById(
-        "bottomSpheres"
-    );
-
-
-const priorityList =
-    document.getElementById(
-        "priorityList"
-    );
-
-
-const desiredList =
-    document.getElementById(
-        "desiredList"
-    );
-
-
-const reflectionText =
-    document.getElementById(
-        "reflectionText"
-    );
-
-
-const firstStepText =
-    document.getElementById(
-        "firstStepText"
-    );
-
-
-const startDate =
-    document.getElementById(
-        "startDate"
-    );
-
-
-const desiredWheelCard =
-    document.getElementById(
-        "desiredWheelCard"
-    );
-
-
-const planCard =
-    document.getElementById(
-        "planCard"
-    );
-
-
-const planList =
-    document.getElementById(
-        "planList"
-    );
-
-
-const journalContainer =
-    document.getElementById(
-        "journal"
-    );
-
-
-const modal =
-    document.getElementById(
-        "modal"
-    );
-
-
-const pngPreview =
-    document.getElementById(
-        "pngPreview"
-    );
-
-
-const toast =
-    document.getElementById(
-        "toast"
-    );
-
-
-const sliderBubble =
-    document.getElementById(
-        "sliderBubble"
-    );
-
-
-const sliderTrackValues =
-    document.getElementById(
-        "sliderTrackValues"
-    );
-
-
-/* =========================================================
-   STORAGE KEYS
-   ========================================================= */
-
-const VALUES_KEY =
-    "wheelBalanceV2Values";
-
-
-const DESIRED_KEY =
-    "wheelBalanceV2Desired";
-
-
-const JOURNAL_KEY =
-    "wheelBalanceV2Journal";
-
-
-const TEXT_KEY =
-    "wheelBalanceV2Texts";
-
-
-/* =========================================================
-   HAPTIC
-   ========================================================= */
-
-function haptic(
-    type = "selection"
-) {
-
-    try {
-
-        if (
-            !tg.HapticFeedback
-        ) {
-            return;
-        }
-
-
-        if (
-            type === "success" &&
-            tg.HapticFeedback.notificationOccurred
-        ) {
-
-            tg.HapticFeedback.notificationOccurred(
-                "success"
-            );
-
-            return;
-
-        }
-
-
-        if (
-            tg.HapticFeedback.selectionChanged
-        ) {
-
-            tg.HapticFeedback.selectionChanged();
-
-        }
-
-    } catch {
-
-        // Ничего не делаем,
-        // если Telegram Haptic недоступен.
-
-    }
-
-}
-
-
-/* =========================================================
-   TOAST
-   ========================================================= */
-
-let toastTimer = null;
-
-
-function showToast(
-    text
-) {
-
-    toast.textContent =
-        text;
-
-    toast.classList.add(
-        "show"
-    );
-
-
-    clearTimeout(
-        toastTimer
-    );
-
-
-    toastTimer =
-        setTimeout(
-            () => {
-
-                toast.classList.remove(
-                    "show"
-                );
-
-            },
-            2200
-        );
-
-}
-
-
-/* =========================================================
-   STORAGE
-   ========================================================= */
-
-function saveValues() {
-
-    localStorage.setItem(
-        VALUES_KEY,
-        JSON.stringify(values)
-    );
-
-}
-
-
-function loadValues() {
-
-    const saved =
-        localStorage.getItem(
-            VALUES_KEY
-        );
-
-
-    if (!saved) {
-        return;
-    }
-
-
-    try {
-
-        const parsed =
-            JSON.parse(saved);
-
-
-        if (
-            Array.isArray(parsed) &&
-            parsed.length === categories.length
-        ) {
-
-            values =
-                parsed.map(
-                    value =>
-                        Math.max(
-                            0,
-                            Math.min(
-                                10,
-                                Number(value)
-                            )
-                        )
-                );
-
-        }
-
-    } catch {
-
-        values =
-            Array(categories.length).fill(5);
-
-    }
-
-}
-
-
-function saveDesiredValues() {
-
-    localStorage.setItem(
-        DESIRED_KEY,
-        JSON.stringify(desiredValues)
-    );
-
-}
-
-
-function loadDesiredValues() {
-
-    const saved =
-        localStorage.getItem(
-            DESIRED_KEY
-        );
-
-
-    if (!saved) {
-        return;
-    }
-
-
-    try {
-
-        const parsed =
-            JSON.parse(saved);
-
-
-        if (
-            Array.isArray(parsed) &&
-            parsed.length === categories.length
-        ) {
-
-            desiredValues =
-                parsed.map(
-                    value =>
-                        Math.max(
-                            0,
-                            Math.min(
-                                10,
-                                Number(value)
-                            )
-                        )
-                );
-
-        }
-
-    } catch {
-
-        desiredValues =
-            Array(categories.length).fill(5);
-
-    }
-
-}
-
-
-function saveTexts() {
-
-    const data = {
-
-        reflection:
-            reflectionText.value,
-
-        firstStep:
-            firstStepText.value,
-
-        startDate:
-            startDate.value
-
-    };
-
-
-    localStorage.setItem(
-        TEXT_KEY,
-        JSON.stringify(data)
-    );
-
-}
-
-
-function loadTexts() {
-
-    const saved =
-        localStorage.getItem(
-            TEXT_KEY
-        );
-
-
-    if (!saved) {
-        return;
-    }
-
-
-    try {
-
-        const data =
-            JSON.parse(saved);
-
-
-        reflectionText.value =
-            data.reflection || "";
-
-
-        firstStepText.value =
-            data.firstStep || "";
-
-
-        startDate.value =
-            data.startDate || "";
-
-    } catch {
-
-        // ignore
-
-    }
-
-}
-
-
-/* =========================================================
-   TEST UI
-   ========================================================= */
-
-function createNumberScale() {
-
-    numberScale.innerHTML = "";
-
-
-    for (
-        let
+                <!-- Числовые метки 0–10
