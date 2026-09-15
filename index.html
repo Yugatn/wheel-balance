@@ -1,4837 +1,996 @@
 <!DOCTYPE html>
 <html lang="ru">
 <head>
-    <meta charset="UTF-8">
-
-    <meta
-        name="viewport"
-        content="width=device-width,
-        initial-scale=1.0,
-        maximum-scale=1.0,
-        user-scalable=no,
-        viewport-fit=cover"
-    >
-
-    <title>Колесо баланса</title>
-
-    <script src="https://telegram.org/js/telegram-web-app.js"></script>
-
-    <style>
-
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html,
-        body {
-            margin: 0;
-            padding: 0;
-            min-height: 100%;
-            background: #0b1120;
-            color: #ffffff;
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Arial,
-                sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            min-height: 100dvh;
-            padding: 10px;
-        }
-
-        button,
-        input,
-        textarea {
-            font-family: inherit;
-        }
-
-        button {
-            border: none;
-            cursor: pointer;
-            color: #ffffff;
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .container {
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 27px;
-            margin: 8px 0 5px;
-        }
-
-        h2 {
-            font-size: 20px;
-            margin: 0 0 15px;
-        }
-
-        h3 {
-            font-size: 17px;
-            margin: 0 0 10px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #aab4c3;
-            font-size: 14px;
-            line-height: 1.45;
-            margin-bottom: 15px;
-        }
-
-        .card {
-            background: #111a2e;
-            border: 1px solid #26324a;
-            border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 14px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
-
-        /* ПРОГРЕСС */
-
-        .progress-wrapper {
-            margin-bottom: 14px;
-        }
-
-        .progress-top {
-            display: flex;
-            justify-content: space-between;
-            color: #9da9bb;
-            font-size: 13px;
-            margin-bottom: 7px;
-        }
-
-        .progress-track {
-            width: 100%;
-            height: 8px;
-            background: #24314b;
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 12.5%;
-            background: #6ea8fe;
-            border-radius: 20px;
-            transition: width 0.25s ease;
-        }
-
-        /* ТЕСТ */
-
-        .sphere-number {
-            color: #7faeff;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
-
-        .sphere-title {
-            font-size: 25px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
-
-        .question {
-            color: #c1cada;
-            font-size: 16px;
-            line-height: 1.55;
-            margin-bottom: 20px;
-        }
-
-        .scale-label {
-            text-align: center;
-            color: #9da9bb;
-            font-size: 13px;
-            margin-bottom: 9px;
-        }
-
-        .score-display {
-            text-align: center;
-            font-size: 52px;
-            line-height: 1;
-            font-weight: 800;
-            margin: 12px 0 18px;
-        }
-
-        .score-slider {
-            width: 100%;
-            height: 42px;
-            accent-color: #6ea8fe;
-            cursor: pointer;
-        }
-
-        .number-scale {
-            display: grid;
-            grid-template-columns: repeat(11, 1fr);
-            gap: 4px;
-            margin-top: 6px;
-        }
-
-        .number-button {
-            min-height: 38px;
-            padding: 7px 2px;
-            border-radius: 9px;
-            background: #18233a;
-            color: #aeb9ca;
-            font-size: 13px;
-            font-weight: 600;
-        }
-
-        .number-button.active {
-            background: #315fa8;
-            color: #ffffff;
-        }
-
-        .scale-ends {
-            display: flex;
-            justify-content: space-between;
-            color: #718099;
-            font-size: 11px;
-            margin-top: 6px;
-        }
-
-        .navigation {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 18px;
-        }
-
-        .nav-button {
-            padding: 14px 10px;
-            border-radius: 14px;
-            background: #24314b;
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        .nav-button.primary {
-            background: #315fa8;
-        }
-
-        /* КОЛЕСО */
-
-        .wheel-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        canvas {
-            display: block;
-            width: min(96vw, 700px);
-            height: min(96vw, 700px);
-            max-width: 100%;
-            touch-action: none;
-        }
-
-        .scale-info {
-            text-align: center;
-            color: #9da9bb;
-            font-size: 13px;
-            margin-top: 3px;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 7px;
-            margin-top: 13px;
-        }
-
-        .stat {
-            background: #18233a;
-            border-radius: 13px;
-            padding: 10px 4px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 20px;
-            font-weight: 800;
-        }
-
-        .stat-label {
-            color: #9da9bb;
-            font-size: 11px;
-            margin-top: 3px;
-        }
-
-        /* ИНТЕРПРЕТАЦИЯ */
-
-        .interpretation {
-            color: #c2ccda;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .interpretation p {
-            margin: 0 0 11px;
-        }
-
-        .range-list {
-            display: grid;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .range-item {
-            background: #18233a;
-            border-radius: 12px;
-            padding: 10px 12px;
-            color: #b9c4d5;
-            font-size: 13px;
-            line-height: 1.45;
-        }
-
-        .range-item strong {
-            color: #ffffff;
-        }
-
-        .sphere-result {
-            display: flex;
-            align-items: center;
-            justify-content: space-between;
-            gap: 10px;
-            background: #18233a;
-            border-radius: 13px;
-            padding: 11px 12px;
-            margin-top: 8px;
-        }
-
-        .sphere-result-name {
-            font-size: 14px;
-        }
-
-        .sphere-result-score {
-            min-width: 38px;
-            text-align: center;
-            background: #315fa8;
-            padding: 5px 7px;
-            border-radius: 9px;
-            font-weight: 800;
-        }
-
-        /* ПРИОРИТЕТЫ */
-
-        .priority-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #18233a;
-            padding: 11px;
-            border-radius: 12px;
-            margin-top: 8px;
-        }
-
-        .priority-item input {
-            width: 20px;
-            height: 20px;
-            accent-color: #6ea8fe;
-            flex-shrink: 0;
-        }
-
-        .priority-name {
-            flex: 1;
-            font-size: 14px;
-        }
-
-        .priority-score {
-            color: #8fa0b8;
-            font-size: 12px;
-        }
-
-        .goal-box {
-            margin-top: 15px;
-        }
-
-        .goal-box label {
-            display: block;
-            color: #b5c0d0;
-            font-size: 13px;
-            margin-bottom: 7px;
-        }
-
-        textarea,
-        input[type="date"] {
-            width: 100%;
-            border: 1px solid #33425f;
-            border-radius: 12px;
-            background: #0e1729;
-            color: #ffffff;
-            padding: 11px;
-            font-size: 14px;
-            outline: none;
-        }
-
-        textarea {
-            min-height: 90px;
-            resize: vertical;
-        }
-
-        input[type="date"] {
-            min-height: 45px;
-        }
-
-        textarea:focus,
-        input[type="date"]:focus {
-            border-color: #6ea8fe;
-        }
-
-        .desired-row {
-            background: #18233a;
-            border-radius: 13px;
-            padding: 12px;
-            margin-top: 9px;
-        }
-
-        .desired-header {
-            display: flex;
-            justify-content: space-between;
-            gap: 8px;
-            margin-bottom: 7px;
-        }
-
-        .desired-name {
-            font-size: 14px;
-            font-weight: 600;
-        }
-
-        .desired-value {
-            font-weight: 800;
-            color: #7faeff;
-        }
-
-        /* ПЛАН */
-
-        .plan {
-            background: #18233a;
-            border-radius: 15px;
-            padding: 13px;
-            margin-top: 9px;
-        }
-
-        .plan-title {
-            font-weight: 700;
-            margin-bottom: 9px;
-        }
-
-        .plan-line {
-            color: #b7c2d2;
-            font-size: 13px;
-            line-height: 1.5;
-            margin: 5px 0;
-        }
-
-        .plan-line strong {
-            color: #ffffff;
-        }
-
-        /* КНОПКИ */
-
-        .buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 9px;
-        }
-
-        .main-button {
-            padding: 14px 10px;
-            border-radius: 14px;
-            background: #24314b;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .main-button.primary {
-            background: #315fa8;
-        }
-
-        .main-button.danger {
-            background: #713c49;
-        }
-
-        /* ИСТОРИЯ */
-
-        .journal-entry {
-            background: #18233a;
-            border-radius: 14px;
-            padding: 13px;
-            margin-top: 10px;
-        }
-
-        .journal-date {
-            color: #8fa0b8;
-            font-size: 12px;
-            margin-bottom: 7px;
-        }
-
-        .journal-score {
-            font-size: 14px;
-            line-height: 1.5;
-        }
-
-        .journal-buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 8px;
-            margin-top: 10px;
-        }
-
-        .journal-buttons button {
-            padding: 10px;
-            border-radius: 11px;
-            background: #24314b;
-            font-size: 13px;
-        }
-
-        .journal-buttons .delete {
-            background: #5b3440;
-        }
-
-        .empty {
-            color: #8fa0b8;
-            text-align: center;
-            padding: 10px;
-            font-size: 14px;
-        }
-
-        /* МОДАЛЬНОЕ ОКНО */
-
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            z-index: 1000;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            width: 100%;
-            max-width: 720px;
-            max-height: 95vh;
-            overflow: auto;
-            background: #111a2e;
-            border-radius: 20px;
-            padding: 13px;
-            text-align: center;
-        }
-
-        .modal img {
-            width: 100%;
-            max-height: 72vh;
-            object-fit: contain;
-            border-radius: 12px;
-            background: white;
-        }
-
-        .modal-text {
-            color: #b6c0cf;
-            font-size: 13px;
-            line-height: 1.45;
-            margin: 9px 0;
-        }
-
-        /* УВЕДОМЛЕНИЕ */
-
-        .toast {
-            position: fixed;
-            left: 50%;
-            bottom: 20px;
-            transform: translateX(-50%) translateY(100px);
-            background: #263653;
-            color: #ffffff;
-            padding: 11px 16px;
-            border-radius: 13px;
-            font-size: 13px;
-            z-index: 2000;
-            opacity: 0;
-            transition: all 0.25s ease;
-            max-width: calc(100vw - 30px);
-            text-align: center;
-            pointer-events: none;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
-
-        /* MOBILE */
-
-        @media (max-width: 600px) {
-
-            body {
-                padding: 8px;
-            }
-
-            h1 {
-                font-size: 24px;
-            }
-
-            .card {
-                padding: 12px;
-                border-radius: 17px;
-            }
-
-            .sphere-title {
-                font-size: 22px;
-            }
-
-            .question {
-                font-size: 15px;
-            }
-
-            .stats {
-                grid-template-columns: repeat(2, 1fr);
-            }
-
-            .buttons {
-                grid-template-columns: 1fr;
-            }
-
-            .navigation {
-                grid-template-columns: 1fr 1fr;
-            }
-
-            .number-button {
-                min-height: 36px;
-                font-size: 12px;
-            }
-
-        }
-
-    </style>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
+<meta name="theme-color" content="#0b1120">
+<script src="https://telegram.org/js/telegram-web-app.js" defer></script>
+<title>Колесо баланса</title>
+<style>
+*{box-sizing:border-box;-webkit-tap-highlight-color:transparent;}
+html{-webkit-text-size-adjust:100%;}
+body{
+  margin:0;
+  padding:12px;
+  padding-bottom:120px;
+  font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif;
+  color:#e2e8f0;
+  background:#0b1120;
+  background-image:radial-gradient(1200px 800px at 15% -10%, #1e293b 0%, #0b1120 55%, #070c14 100%);
+  background-repeat:no-repeat;
+  min-height:100vh;
+  min-height:100dvh;
+  -webkit-user-select:none;
+  user-select:none;
+  overscroll-behavior:none;
+}
+@supports (padding: env(safe-area-inset-top)){
+  body{
+    padding-top:calc(12px + env(safe-area-inset-top));
+    padding-right:calc(12px + env(safe-area-inset-right));
+    padding-bottom:calc(120px + env(safe-area-inset-bottom));
+    padding-left:calc(12px + env(safe-area-inset-left));
+  }
+}
+h1{font-size:20px;margin:0 0 6px;}
+.sub{font-size:13px;color:#94a3b8;margin:0 0 12px;}
+.panel{background:#16203a;border:1px solid rgba(148,163,184,0.18);border-radius:16px;padding:12px;margin-bottom:14px;}
+@media (min-width:900px){
+  .wrap{max-width:1180px;margin:0 auto;display:flex;gap:16px;align-items:flex-start;}
+  .left{flex:1 1 400px;min-width:0;}
+  .right{flex:0 0 420px;min-width:0;}
+}
+@media (max-width:899px){.wrap{max-width:640px;margin:0 auto;}}
+canvas#wheel{
+  display:block;
+  width:100%;
+  max-width:560px;
+  height:auto;
+  margin:0 auto;
+  border-radius:14px;
+  touch-action:none;
+  cursor:pointer;
+  -webkit-user-select:none;
+  user-select:none;
+  -webkit-touch-callout:none;
+}
+.hint{font-size:12px;color:#94a3b8;text-align:center;margin:8px 0 0;}
+.head{display:flex;align-items:center;justify-content:space-between;margin-bottom:10px;gap:8px;}
+.head h1{margin:0;}
+.jbtn{
+  font:inherit;font-size:12px;font-weight:600;
+  padding:6px 10px;border-radius:9px;
+  border:1px solid rgba(148,163,184,0.25);
+  background:rgba(96,165,250,0.15);
+  color:#60a5fa;cursor:pointer;
+  -webkit-appearance:none;appearance:none;
+}
+.stats{display:flex;gap:8px;margin-bottom:14px;flex-wrap:wrap;}
+.stat{flex:1 1 28%;background:rgba(148,163,184,0.07);border:1px solid rgba(148,163,184,0.18);border-radius:10px;padding:8px;min-width:0;}
+.stat span.l{display:block;font-size:9px;text-transform:uppercase;color:#94a3b8;letter-spacing:0.04em;margin-bottom:3px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.stat span.n{font-size:15px;font-weight:700;display:block;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+.row{position:relative;background:rgba(148,163,184,0.05);border:1px solid rgba(148,163,184,0.18);border-radius:10px;padding:8px 10px 2px;margin-bottom:8px;}
+.row.active{border-color:rgba(96,165,250,0.6);background:rgba(96,165,250,0.1);}
+.rowhead{position:relative;display:flex;align-items:center;gap:8px;padding-right:60px;min-height:22px;z-index:1;}
+.dot{width:10px;height:10px;border-radius:50%;flex:0 0 auto;}
+.nm{font-size:14px;font-weight:600;flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;}
+.vl{
+  position:absolute;right:0;top:50%;
+  transform:translateY(-50%);-webkit-transform:translateY(-50%);
+  font-size:17px;font-weight:800;color:#93c5fd;
+  padding:3px 10px;border-radius:8px;
+  background:rgba(96,165,250,0.18);
+  border:1px solid rgba(96,165,250,0.45);
+  min-width:34px;text-align:center;
+  pointer-events:none;z-index:1;
+  font-variant-numeric:tabular-nums;
+  box-shadow:0 0 0 3px rgba(11,17,32,0.55);
+}
+input[type=range]{
+  -webkit-appearance:none;appearance:none;
+  width:100%;height:40px;margin:-18px 0 0;
+  background:transparent;display:block;
+  position:relative;z-index:2;padding:0;cursor:pointer;
+}
+input[type=range]::-webkit-slider-runnable-track{height:6px;border-radius:99px;background:rgba(148,163,184,0.22);}
+input[type=range]::-webkit-slider-thumb{
+  -webkit-appearance:none;appearance:none;
+  width:32px;height:32px;margin-top:-13px;border-radius:50%;
+  background:#60a5fa;border:2px solid #0b1120;
+  box-shadow:0 0 0 3px rgba(96,165,250,0.3),0 4px 12px rgba(0,0,0,0.5);
+}
+input[type=range]::-moz-range-track{height:6px;border-radius:99px;background:rgba(148,163,184,0.22);}
+input[type=range]::-moz-range-thumb{width:28px;height:28px;border-radius:50%;background:#60a5fa;border:2px solid #0b1120;}
+.actions{display:flex;gap:8px;margin-top:12px;}
+@media (max-width:899px){
+  .actions{
+    position:fixed;left:10px;right:10px;bottom:10px;
+    margin:0;padding:8px;border-radius:14px;
+    background:rgba(13,20,36,0.95);
+    border:1px solid rgba(148,163,184,0.2);
+    box-shadow:0 8px 30px rgba(0,0,0,0.6);z-index:50;
+  }
+  @supports (padding: env(safe-area-inset-bottom)){
+    .actions{
+      bottom:calc(10px + env(safe-area-inset-bottom));
+      left:calc(10px + env(safe-area-inset-left));
+      right:calc(10px + env(safe-area-inset-right));
+    }
+  }
+}
+button.act{
+  flex:1;font:inherit;font-size:13px;font-weight:600;
+  padding:12px 8px;border-radius:10px;
+  border:1px solid rgba(148,163,184,0.2);
+  background:rgba(148,163,184,0.08);
+  color:#e2e8f0;cursor:pointer;
+  white-space:nowrap;overflow:hidden;text-overflow:ellipsis;
+  -webkit-appearance:none;appearance:none;
+}
+button.act.pri{background:#2563eb;border-color:#3b82f6;color:#fff;}
+button.act.acc{background:rgba(96,165,250,0.16);border-color:rgba(96,165,250,0.4);color:#60a5fa;}
+.modal{
+  position:fixed;top:0;right:0;bottom:0;left:0;z-index:200;
+  display:flex;align-items:center;justify-content:center;
+  padding:16px;background:rgba(4,7,14,0.9);
+  overflow:auto;-webkit-overflow-scrolling:touch;
+  min-height:100vh;min-height:100dvh;
+}
+.modal.hide{display:none;}
+.min{width:100%;max-width:500px;background:#16203a;border:1px solid rgba(148,163,184,0.2);border-radius:16px;padding:16px;text-align:center;}
+.min h2{font-size:16px;margin:0 0 8px;}
+.min p{font-size:12.5px;color:#94a3b8;margin:0 0 10px;line-height:1.4;}
+.min img{width:100%;border-radius:10px;margin:10px 0;display:block;-webkit-user-select:auto;user-select:auto;-webkit-touch-callout:default;}
+.jlist{text-align:left;max-height:55vh;overflow-y:auto;margin-bottom:8px;-webkit-overflow-scrolling:touch;}
+.jempty{text-align:center;padding:20px 8px;color:#94a3b8;font-size:13px;}
+.jentry{background:rgba(148,163,184,0.06);border:1px solid rgba(148,163,184,0.2);border-radius:10px;padding:10px;margin-bottom:8px;}
+.jh{display:flex;justify-content:space-between;gap:8px;margin-bottom:8px;align-items:center;}
+.jd{font-size:13px;font-weight:700;}
+.ja{font-size:14px;font-weight:800;color:#60a5fa;padding:2px 8px;border-radius:7px;background:rgba(96,165,250,0.15);}
+.jb{display:flex;gap:3px;margin-bottom:8px;}
+.jbar{flex:1;height:20px;border-radius:3px;display:flex;align-items:center;justify-content:center;font-size:10px;font-weight:700;color:#0b1120;min-width:0;}
+.jr{display:flex;gap:6px;}
+.jr button{font-size:11px;padding:8px;border-radius:8px;flex:1;font:inherit;font-weight:600;border:1px solid rgba(148,163,184,0.2);background:rgba(148,163,184,0.08);color:#e2e8f0;cursor:pointer;-webkit-appearance:none;appearance:none;}
+.mact{display:flex;gap:8px;margin-top:10px;}
+.mact button{flex:1;font:inherit;font-size:13px;font-weight:600;padding:11px;border-radius:10px;border:1px solid rgba(148,163,184,0.2);background:rgba(148,163,184,0.08);color:#e2e8f0;cursor:pointer;-webkit-appearance:none;appearance:none;}
+.mact button.pri{background:#2563eb;border-color:#3b82f6;color:#fff;}
+#errScreen{display:none;padding:20px;font-family:-apple-system,BlinkMacSystemFont,sans-serif;background:#0b1120;color:#fff;min-height:100vh;position:fixed;top:0;right:0;bottom:0;left:0;z-index:9999;overflow:auto;}
+#errScreen h2{margin-top:0;color:#f87171;}
+#errScreen pre{background:#16203a;padding:12px;border-radius:8px;overflow:auto;font-size:12px;white-space:pre-wrap;word-break:break-word;font-family:monospace;}
+</style>
 </head>
-
 <body>
 
-<div class="container">
-
-    <h1>🌀 Колесо баланса</h1>
-
-    <div class="subtitle">
-        Небольшая рефлексия о том, как вы воспринимаете
-        разные сферы своей жизни сейчас.
-    </div>
-
-
-    <!-- ========================= -->
-    <!-- ТЕСТ -->
-    <!-- ========================= -->
-
-    <section id="testSection">
-
-        <div class="card">
-
-            <div class="progress-wrapper">
-
-                <div class="progress-top">
-
-                    <span id="progressText">
-                        Сфера 1 из 8
-                    </span>
-
-                    <span id="progressPercent">
-                        13%
-                    </span>
-
-                </div>
-
-                <div class="progress-track">
-
-                    <div
-                        class="progress-bar"
-                        id="progressBar"
-                    ></div>
-
-                </div>
-
-            </div>
-
-
-            <div class="sphere-number" id="sphereNumber">
-                СФЕРА 1
-            </div>
-
-            <div
-                class="sphere-title"
-                id="sphereTitle"
-            >
-                Здоровье
-            </div>
-
-            <div
-                class="question"
-                id="question"
-            >
-                Насколько вы довольны своим физическим
-                состоянием и заботой о здоровье сейчас?
-            </div>
-
-
-            <div class="scale-label">
-                Выберите значение от 0 до 10
-            </div>
-
-
-            <div
-                class="score-display"
-                id="scoreDisplay"
-            >
-                5
-            </div>
-
-
-            <input
-                type="range"
-                class="score-slider"
-                id="scoreSlider"
-                min="0"
-                max="10"
-                step="1"
-                value="5"
-            >
-
-
-            <div
-                class="number-scale"
-                id="numberScale"
-            ></div>
-
-
-            <div class="scale-ends">
-
-                <span>
-                    0 — совсем не удовлетворён
-                </span>
-
-                <span>
-                    10 — полностью удовлетворён
-                </span>
-
-            </div>
-
-
-            <div class="navigation">
-
-                <button
-                    class="nav-button"
-                    id="backBtn"
-                >
-                    ← Назад
-                </button>
-
-                <button
-                    class="nav-button primary"
-                    id="nextBtn"
-                >
-                    Далее →
-                </button>
-
-            </div>
-
-        </div>
-
-    </section>
-
-
-    <!-- ========================= -->
-    <!-- РЕЗУЛЬТАТ -->
-    <!-- ========================= -->
-
-    <section
-        id="resultSection"
-        class="hidden"
-    >
-
-        <div class="card">
-
-            <h2>
-                🌀 Ваше колесо баланса
-            </h2>
-
-            <div class="wheel-wrapper">
-
-                <canvas id="wheel"></canvas>
-
-            </div>
-
-            <div class="scale-info">
-                Центр = 0 · Внешний круг = 10
-            </div>
-
-
-            <div class="stats">
-
-                <div class="stat">
-
-                    <div
-                        class="stat-value"
-                        id="average"
-                    >
-                        5.0
-                    </div>
-
-                    <div class="stat-label">
-                        Среднее
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div
-                        class="stat-value"
-                        id="maximum"
-                    >
-                        5
-                    </div>
-
-                    <div class="stat-label">
-                        Максимум
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div
-                        class="stat-value"
-                        id="minimum"
-                    >
-                        5
-                    </div>
-
-                    <div class="stat-label">
-                        Минимум
-                    </div>
-
-                </div>
-
-
-                <div class="stat">
-
-                    <div
-                        class="stat-value"
-                        id="gap"
-                    >
-                        0
-                    </div>
-
-                    <div class="stat-label">
-                        Разрыв
-                    </div>
-
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ИНТЕРПРЕТАЦИЯ -->
-
-        <div class="card">
-
-            <h2>
-                📊 Что показывает результат
-            </h2>
-
-            <div
-                class="interpretation"
-                id="interpretation"
-            ></div>
-
-            <div class="range-list">
-
-                <div class="range-item">
-                    <strong>8–10</strong> — относительно сильная сфера.
-                </div>
-
-                <div class="range-item">
-                    <strong>6–7</strong> — относительно стабильная сфера.
-                </div>
-
-                <div class="range-item">
-                    <strong>4–5</strong> — сфера, которой может быть полезно уделить внимание.
-                </div>
-
-                <div class="range-item">
-                    <strong>0–3</strong> — выраженный текущий приоритет для размышления.
-                </div>
-
-            </div>
-
-        </div>
-
-
-        <!-- ЛУЧШИЕ / НИЖНИЕ -->
-
-        <div class="card">
-
-            <h2>
-                🔎 Сферы результата
-            </h2>
-
-            <h3>
-                Относительно сильные
-            </h3>
-
-            <div id="topSpheres"></div>
-
-
-            <h3 style="margin-top:18px;">
-                Требующие внимания
-            </h3>
-
-            <div id="bottomSpheres"></div>
-
-        </div>
-
-
-        <!-- ПРИОРИТЕТЫ -->
-
-        <div class="card">
-
-            <h2>
-                🎯 Приоритеты
-            </h2>
-
-            <div class="interpretation">
-                Выберите до трёх сфер, которым вы хотели бы
-                уделить больше внимания.
-            </div>
-
-            <div id="priorityList"></div>
-
-        </div>
-
-
-        <!-- ЖЕЛАЕМЫЕ ЗНАЧЕНИЯ -->
-
-        <div
-            class="card"
-            id="desiredCard"
-        >
-
-            <h2>
-                🌱 Желаемые изменения
-            </h2>
-
-            <div class="interpretation">
-                Для выбранных приоритетов укажите,
-                какого уровня вы хотели бы достичь.
-            </div>
-
-            <div id="desiredList"></div>
-
-
-            <div class="goal-box">
-
-                <label for="reflectionText">
-                    Что вы хотели бы изменить?
-                </label>
-
-                <textarea
-                    id="reflectionText"
-                    placeholder="Например: хочу уделять больше времени отдыху, наладить режим сна..."
-                ></textarea>
-
-            </div>
-
-
-            <div class="goal-box">
-
-                <label for="firstStepText">
-                    Какой первый шаг вы готовы сделать?
-                </label>
-
-                <textarea
-                    id="firstStepText"
-                    placeholder="Опишите небольшое конкретное действие..."
-                ></textarea>
-
-            </div>
-
-
-            <div class="goal-box">
-
-                <label for="startDate">
-                    Дата начала
-                </label>
-
-                <input
-                    type="date"
-                    id="startDate"
-                >
-
-            </div>
-
-        </div>
-
-
-        <!-- ЖЕЛАЕМОЕ КОЛЕСО -->
-
-        <div
-            class="card hidden"
-            id="desiredWheelCard"
-        >
-
-            <h2>
-                🌱 Текущее и желаемое
-            </h2>
-
-            <div class="wheel-wrapper">
-
-                <canvas
-                    id="desiredWheel"
-                ></canvas>
-
-            </div>
-
-            <div class="scale-info">
-                Сравнение текущих и желаемых значений
-            </div>
-
-        </div>
-
-
-        <!-- МИНИ-ПЛАН -->
-
-        <div
-            class="card hidden"
-            id="planCard"
-        >
-
-            <h2>
-                🧭 Мини-план
-            </h2>
-
-            <div id="planList"></div>
-
-        </div>
-
-
-        <!-- ДЕЙСТВИЯ -->
-
-        <div class="card">
-
-            <div class="buttons">
-
-                <button
-                    class="main-button primary"
-                    id="saveBtn"
-                >
-                    💾 Сохранить результат
-                </button>
-
-                <button
-                    class="main-button"
-                    id="pngBtn"
-                >
-                    🖼 Сохранить PNG
-                </button>
-
-                <button
-                    class="main-button"
-                    id="restartBtn"
-                >
-                    🔄 Пройти заново
-                </button>
-
-                <button
-                    class="main-button danger"
-                    id="resetBtn"
-                >
-                    🗑 Очистить текущий результат
-                </button>
-
-            </div>
-
-        </div>
-
-
-        <!-- ИСТОРИЯ -->
-
-        <div class="card">
-
-            <h2>
-                📖 История
-            </h2>
-
-            <div id="journal"></div>
-
-        </div>
-
-
-        <!-- ДИСКЛЕЙМЕР -->
-
-        <div class="card">
-
-            <div class="interpretation">
-
-                <p>
-                    <strong>Важно:</strong>
-                    результат отражает ваше текущее
-                    субъективное восприятие различных сфер жизни.
-                </p>
-
-                <p>
-                    Это не оценка качества вашей жизни
-                    и не психологическая диагностика.
-                </p>
-
-            </div>
-
-        </div>
-
-    </section>
-
+<div id="errScreen">
+  <h2>Ошибка приложения</h2>
+  <p>Пришлите текст ниже разработчику:</p>
+  <pre id="errText"></pre>
 </div>
 
-
-<!-- ========================= -->
-<!-- PNG MODAL -->
-<!-- ========================= -->
-
-<div
-    class="modal"
-    id="modal"
->
-
-    <div class="modal-content">
-
-        <img
-            id="pngPreview"
-            alt="Колесо баланса"
-        >
-
-        <div class="modal-text">
-            На iPhone можно нажать и удерживать изображение,
-            чтобы сохранить его.
-        </div>
-
-        <button
-            class="main-button primary"
-            id="closeModal"
-        >
-            Закрыть
-        </button>
-
+<div class="wrap" id="mainWrap">
+  <div class="left">
+    <div class="panel">
+      <canvas id="wheel" width="900" height="900"></canvas>
+      <p class="hint">Нажмите в секторе и потяните от центра к краю — или используйте ползунки.</p>
     </div>
-
+  </div>
+  <div class="right">
+    <div class="panel">
+      <div class="head">
+        <h1>Колесо баланса</h1>
+        <button class="jbtn" id="jOpen" type="button">Журнал (<span id="jN">0</span>)</button>
+      </div>
+      <p class="sub">Оцените каждую сферу от 0 до 10.</p>
+      <div class="stats">
+        <div class="stat"><span class="l">Средний</span><span class="n" id="sAvg">5.0</span></div>
+        <div class="stat"><span class="l">Сильная</span><span class="n" id="sMax">—</span></div>
+        <div class="stat"><span class="l">Роста</span><span class="n" id="sMin">—</span></div>
+      </div>
+      <div id="list"></div>
+      <div class="actions">
+        <button class="act" id="bReset" type="button">Сбросить</button>
+        <button class="act acc" id="bSaveJ" type="button">Сохранить в журнал</button>
+        <button class="act pri" id="bPng" type="button">Скачать PNG</button>
+      </div>
+    </div>
+  </div>
 </div>
 
+<div class="modal hide" id="mImg">
+  <div class="min">
+    <h2>Сохраните изображение</h2>
+    <p>Нажмите и удерживайте картинку → «Сохранить изображение».</p>
+    <img id="mImgSrc" alt="">
+    <div class="mact"><button id="mImgClose" type="button">Готово</button></div>
+  </div>
+</div>
 
-<div
-    class="toast"
-    id="toast"
-></div>
-
+<div class="modal hide" id="mJ">
+  <div class="min">
+    <h2>Журнал результатов</h2>
+    <p id="jSub">Записей пока нет.</p>
+    <div class="jlist" id="jList"></div>
+    <div class="mact">
+      <button class="pri" id="jExp" type="button">Скачать журнал</button>
+      <button id="jClose" type="button">Закрыть</button>
+    </div>
+  </div>
+</div>
 
 <script>
-
-/* =========================================================
-   TELEGRAM
-   ========================================================= */
-
-const tg = window.Telegram.WebApp;
-
-tg.ready();
-tg.expand();
-
-
-/* =========================================================
-   DATA
-   ========================================================= */
-
-const spheres = [
-
-    {
-        name: "Здоровье",
-        question:
-            "Насколько вы довольны своим физическим состоянием и заботой о здоровье сейчас?"
-    },
-
-    {
-        name: "Работа и карьера",
-        question:
-            "Насколько вас устраивает ваша текущая работа, профессиональное развитие и карьерная ситуация?"
-    },
-
-    {
-        name: "Финансы",
-        question:
-            "Насколько вас устраивает ваше текущее финансовое положение и ощущение финансовой устойчивости?"
-    },
-
-    {
-        name: "Отношения и семья",
-        question:
-            "Насколько вас удовлетворяют ваши близкие отношения и семейная жизнь?"
-    },
-
-    {
-        name: "Друзья и социальная жизнь",
-        question:
-            "Насколько вы удовлетворены общением с друзьями, знакомыми и своим социальным окружением?"
-    },
-
-    {
-        name: "Личное развитие",
-        question:
-            "Насколько вы удовлетворены своим обучением, развитием навыков и личностным ростом?"
-    },
-
-    {
-        name: "Отдых и восстановление",
-        question:
-            "Насколько вам хватает отдыха, восстановления и времени для себя?"
-    },
-
-    {
-        name: "Творчество и самореализация",
-        question:
-            "Насколько вы чувствуете возможность заниматься творчеством, реализовывать свои идеи и способности?"
+/* ============ ГЛОБАЛЬНЫЙ ПЕРЕХВАТ ОШИБОК ============ */
+window.onerror = function(message, source, lineno, colno, error) {
+  try {
+    var el = document.getElementById('errScreen');
+    var txt = document.getElementById('errText');
+    if (el && txt) {
+      el.style.display = 'block';
+      txt.textContent =
+        'Сообщение: ' + message + '\n' +
+        'Строка: ' + lineno + ':' + colno + '\n' +
+        'Источник: ' + source + '\n' +
+        (error && error.stack ? '\nСтек:\n' + error.stack : '');
     }
+  } catch(e){}
+  return false;
+};
 
+/* ============ ОСНОВНОЙ КОД ============ */
+(function(){
+'use strict';
+
+try {
+
+/* ---------- ДАННЫЕ ---------- */
+var CATS = [
+  {n:'Здоровье',s:'Здоровье',c:'#FF6B6B'},
+  {n:'Энергия',s:'Энергия',c:'#4ECDC4'},
+  {n:'Карьера',s:'Карьера',c:'#FFD93D'},
+  {n:'Призвание',s:'Призвание',c:'#A78BFA'},
+  {n:'Финансы',s:'Финансы',c:'#FB923C'},
+  {n:'Семья',s:'Семья',c:'#38BDF8'},
+  {n:'Друзья',s:'Друзья',c:'#34D399'},
+  {n:'Окружение',s:'Окружение',c:'#F472B6'},
+  {n:'Любовь',s:'Любовь',c:'#F87171'},
+  {n:'Секс',s:'Секс',c:'#22D3EE'},
+  {n:'Личный рост',s:'Рост',c:'#FACC15'},
+  {n:'Отдых',s:'Отдых',c:'#C084FC'},
+  {n:'Хобби',s:'Хобби',c:'#FDBA74'},
+  {n:'Прокрастинация',s:'Прокраст.',c:'#7DD3FC'},
+  {n:'Дом и быт',s:'Дом',c:'#6EE7B7'},
+  {n:'Духовность и смыслы',s:'Духовность',c:'#F9A8D4'},
+  {n:'Самооценка',s:'Самооценка',c:'#93C5FD'},
+  {n:'Стабильность',s:'Стабильн.',c:'#FCD34D'},
+  {n:'Творчество',s:'Творчество',c:'#5EEAD4'},
+  {n:'Путешествия',s:'Поездки',c:'#D8B4FE'}
 ];
-
-
-const categories =
-    spheres.map(
-        sphere => sphere.name
-    );
-
-
-/* =========================================================
-   STATE
-   ========================================================= */
-
-let values =
-    Array(categories.length).fill(5);
-
-
-let desiredValues =
-    Array(categories.length).fill(5);
-
-
-let currentQuestion = 0;
-
-
-let testCompleted = false;
-
-
-/* =========================================================
-   DOM
-   ========================================================= */
-
-const testSection =
-    document.getElementById(
-        "testSection"
-    );
-
-
-const resultSection =
-    document.getElementById(
-        "resultSection"
-    );
-
-
-const sphereNumber =
-    document.getElementById(
-        "sphereNumber"
-    );
-
-
-const sphereTitle =
-    document.getElementById(
-        "sphereTitle"
-    );
-
-
-const question =
-    document.getElementById(
-        "question"
-    );
-
-
-const scoreDisplay =
-    document.getElementById(
-        "scoreDisplay"
-    );
-
-
-const scoreSlider =
-    document.getElementById(
-        "scoreSlider"
-    );
-
-
-const numberScale =
-    document.getElementById(
-        "numberScale"
-    );
-
-
-const progressText =
-    document.getElementById(
-        "progressText"
-    );
-
-
-const progressPercent =
-    document.getElementById(
-        "progressPercent"
-    );
-
-
-const progressBar =
-    document.getElementById(
-        "progressBar"
-    );
-
-
-const backBtn =
-    document.getElementById(
-        "backBtn"
-    );
-
-
-const nextBtn =
-    document.getElementById(
-        "nextBtn"
-    );
-
-
-const averageEl =
-    document.getElementById(
-        "average"
-    );
-
-
-const maximumEl =
-    document.getElementById(
-        "maximum"
-    );
-
-
-const minimumEl =
-    document.getElementById(
-        "minimum"
-    );
-
-
-const gapEl =
-    document.getElementById(
-        "gap"
-    );
-
-
-const interpretationEl =
-    document.getElementById(
-        "interpretation"
-    );
-
-
-const topSpheres =
-    document.getElementById(
-        "topSpheres"
-    );
-
-
-const bottomSpheres =
-    document.getElementById(
-        "bottomSpheres"
-    );
-
-
-const priorityList =
-    document.getElementById(
-        "priorityList"
-    );
-
-
-const desiredList =
-    document.getElementById(
-        "desiredList"
-    );
-
-
-const reflectionText =
-    document.getElementById(
-        "reflectionText"
-    );
-
-
-const firstStepText =
-    document.getElementById(
-        "firstStepText"
-    );
-
-
-const startDate =
-    document.getElementById(
-        "startDate"
-    );
-
-
-const desiredWheelCard =
-    document.getElementById(
-        "desiredWheelCard"
-    );
-
-
-const planCard =
-    document.getElementById(
-        "planCard"
-    );
-
-
-const planList =
-    document.getElementById(
-        "planList"
-    );
-
-
-const journalContainer =
-    document.getElementById(
-        "journal"
-    );
-
-
-const modal =
-    document.getElementById(
-        "modal"
-    );
-
-
-const pngPreview =
-    document.getElementById(
-        "pngPreview"
-    );
-
-
-const toast =
-    document.getElementById(
-        "toast"
-    );
-
-
-/* =========================================================
-   STORAGE KEYS
-   ========================================================= */
-
-const VALUES_KEY =
-    "wheelBalanceV2Values";
-
-
-const DESIRED_KEY =
-    "wheelBalanceV2Desired";
-
-
-const JOURNAL_KEY =
-    "wheelBalanceV2Journal";
-
-
-const TEXT_KEY =
-    "wheelBalanceV2Texts";
-
-
-/* =========================================================
-   HAPTIC
-   ========================================================= */
-
-function haptic(
-    type = "selection"
-) {
-
-    try {
-
-        if (
-            !tg.HapticFeedback
-        ) {
-            return;
-        }
-
-
-        if (
-            type === "success" &&
-            tg.HapticFeedback.notificationOccurred
-        ) {
-
-            tg.HapticFeedback.notificationOccurred(
-                "success"
-            );
-
-            return;
-
-        }
-
-
-        if (
-            tg.HapticFeedback.selectionChanged
-        ) {
-
-            tg.HapticFeedback.selectionChanged();
-
-        }
-
-    } catch {
-
-        // Ничего не делаем,
-        // если Telegram Haptic недоступен.
-
+var N = CATS.length;
+var SZ = 900, CX = 450, CY = 450, R = 320;
+var TAU = Math.PI * 2, START = -Math.PI / 2, STEP = TAU / N;
+var FONT = '-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,Arial,sans-serif';
+var K_VALS = 'wheel-vals-11';
+var K_J = 'wheel-journal-11';
+var MONTHS = ['января','февраля','марта','апреля','мая','июня','июля','августа','сентября','октября','ноября','декабря'];
+
+var values = [];
+for (var i = 0; i < N; i++) values.push(5);
+
+/* ---------- CANVAS ---------- */
+var cv = document.getElementById('wheel');
+if (!cv) throw new Error('Canvas element not found');
+var ctx = cv.getContext ? cv.getContext('2d') : null;
+if (!ctx) throw new Error('Canvas 2D context not available');
+
+var activeIdx = -1, dragging = false;
+
+/* ---------- LOCALSTORAGE ---------- */
+function lsGet(k){
+  try {
+    if (!window.localStorage) return null;
+    var v = window.localStorage.getItem(k);
+    return (v === undefined || v === null) ? null : String(v);
+  } catch(e) { return null; }
+}
+function lsSet(k, v){
+  try { if (window.localStorage) window.localStorage.setItem(k, v); } catch(e) {}
+}
+
+function loadValues(){
+  var raw = lsGet(K_VALS);
+  if (!raw) return;
+  try {
+    var a = JSON.parse(raw);
+    if (a && a.length === N) {
+      for (var i = 0; i < N; i++) {
+        var v = Math.round(Number(a[i]) || 0);
+        values[i] = Math.max(0, Math.min(10, v));
+      }
     }
-
+  } catch(e) {}
 }
-
-
-/* =========================================================
-   TOAST
-   ========================================================= */
-
-let toastTimer = null;
-
-
-function showToast(
-    text
-) {
-
-    toast.textContent =
-        text;
-
-    toast.classList.add(
-        "show"
-    );
-
-
-    clearTimeout(
-        toastTimer
-    );
-
-
-    toastTimer =
-        setTimeout(
-            () => {
-
-                toast.classList.remove(
-                    "show"
-                );
-
-            },
-            2200
-        );
-
+function saveValues(){
+  try { lsSet(K_VALS, JSON.stringify(values)); } catch(e) {}
 }
-
-
-/* =========================================================
-   STORAGE
-   ========================================================= */
-
-function saveValues() {
-
-    localStorage.setItem(
-        VALUES_KEY,
-        JSON.stringify(values)
-    );
-
-}
-
-
-function loadValues() {
-
-    const saved =
-        localStorage.getItem(
-            VALUES_KEY
-        );
-
-
-    if (!saved) {
-        return;
+function loadJournal(){
+  var raw = lsGet(K_J);
+  if (!raw) return [];
+  try {
+    var a = JSON.parse(raw);
+    if (!a || !a.length) return [];
+    var out = [];
+    for (var i = 0; i < a.length; i++) {
+      if (a[i] && a[i].values && a[i].values.length === N && a[i].date) out.push(a[i]);
     }
-
-
-    try {
-
-        const parsed =
-            JSON.parse(saved);
-
-
-        if (
-            Array.isArray(parsed) &&
-            parsed.length === categories.length
-        ) {
-
-            values =
-                parsed.map(
-                    value =>
-                        Math.max(
-                            0,
-                            Math.min(
-                                10,
-                                Number(value)
-                            )
-                        )
-                );
-
-        }
-
-    } catch {
-
-        values =
-            Array(categories.length).fill(5);
-
-    }
-
+    return out;
+  } catch(e) { return []; }
+}
+function saveJournal(j){
+  try { lsSet(K_J, JSON.stringify(j)); } catch(e) {}
 }
 
+/* ---------- РИСОВАНИЕ КОЛЕСА ---------- */
+/* opts.fillBg = false — не заливать фон (используется при экспорте PNG) */
+function drawWheel(c, cx, cy, R, hl, opts){
+  opts = opts || {};
+  var fillBg = opts.fillBg !== false;
 
-function saveDesiredValues() {
+  /* Фон — только для экранного канваса */
+  if (fillBg) {
+    c.fillStyle = '#16203a';
+    c.fillRect(0, 0, cx * 2, cy * 2);
+  }
 
-    localStorage.setItem(
-        DESIRED_KEY,
-        JSON.stringify(desiredValues)
-    );
+  /* Подсветка активного сектора */
+  if (hl >= 0 && hl < N) {
+    var a0 = START + hl * STEP - STEP / 2;
+    var a1 = START + hl * STEP + STEP / 2;
+    c.beginPath();
+    c.moveTo(cx, cy);
+    c.arc(cx, cy, R, a0, a1);
+    c.closePath();
+    c.fillStyle = 'rgba(96,165,250,0.12)';
+    c.fill();
+  }
 
+  /* Кольца */
+  for (var i = 1; i <= 10; i++) {
+    c.beginPath();
+    c.arc(cx, cy, R * i / 10, 0, TAU);
+    c.strokeStyle = i === 10 ? 'rgba(148,163,184,0.5)'
+                  : (i % 5 === 0 ? 'rgba(148,163,184,0.22)' : 'rgba(148,163,184,0.08)');
+    c.lineWidth = i === 10 ? 2 : 1;
+    c.stroke();
+  }
+
+  /* Спицы */
+  c.strokeStyle = 'rgba(148,163,184,0.18)';
+  c.lineWidth = 1;
+  for (var k = 0; k < N; k++) {
+    var a = START + k * STEP;
+    c.beginPath();
+    c.moveTo(cx, cy);
+    c.lineTo(cx + Math.cos(a) * R, cy + Math.sin(a) * R);
+    c.stroke();
+  }
+
+  /* ========== НОВОЕ: числовые метки шкалы 2,4,6,8,10 ==========
+     Размещаем их вдоль оси между секторами «Здоровье» и «Энергия»,
+     чтобы было видно значение шкалы на каждом кольце. */
+  var scaleAngle = START + STEP / 2; /* ≈ -81° — между 1-м и 2-м сектором */
+  c.font = 'bold ' + Math.max(10, Math.round(R * 0.038)) + 'px ' + FONT;
+  c.textAlign = 'center';
+  c.textBaseline = 'middle';
+  for (var sv = 2; sv <= 10; sv += 2) {
+    var sr = R * sv / 10;
+    var sxPos = cx + Math.cos(scaleAngle) * sr;
+    var syPos = cy + Math.sin(scaleAngle) * sr;
+
+    /* Тёмная подложка для читаемости на любом фоне */
+    c.beginPath();
+    c.arc(sxPos, syPos, Math.max(9, Math.round(R * 0.032)), 0, TAU);
+    c.fillStyle = 'rgba(11,17,32,0.85)';
+    c.fill();
+
+    c.fillStyle = 'rgba(148,163,184,0.95)';
+    c.fillText(String(sv), sxPos, syPos + 1);
+  }
+  /* ============================================================ */
+
+  /* Полигон значений */
+  c.beginPath();
+  for (var p = 0; p < N; p++) {
+    var pa = START + p * STEP;
+    var pr = R * values[p] / 10;
+    var px = cx + Math.cos(pa) * pr;
+    var py = cy + Math.sin(pa) * pr;
+    if (p === 0) c.moveTo(px, py); else c.lineTo(px, py);
+  }
+  c.closePath();
+  c.fillStyle = 'rgba(96,165,250,0.22)';
+  c.fill();
+  c.strokeStyle = '#60a5fa';
+  c.lineWidth = 2.5;
+  c.lineJoin = 'round';
+  c.stroke();
+
+  /* Вершины с числовыми значениями */
+  for (var t = 0; t < N; t++) {
+    var ta = START + t * STEP;
+    var tr = R * values[t] / 10;
+    var tx = cx + Math.cos(ta) * tr;
+    var ty = cy + Math.sin(ta) * tr;
+    var big = (t === hl);
+
+    c.beginPath();
+    c.arc(tx, ty, big ? 20 : 17, 0, TAU);
+    c.fillStyle = CATS[t].c;
+    c.fill();
+    c.lineWidth = 2.5;
+    c.strokeStyle = '#0b1120';
+    c.stroke();
+
+    c.fillStyle = '#0b1120';
+    c.font = 'bold 16px ' + FONT;
+    c.textAlign = 'center';
+    c.textBaseline = 'middle';
+    c.fillText(String(values[t]), tx, ty + 1);
+  }
+
+  /* Подписи категорий */
+  c.font = 'bold 22px ' + FONT;
+  c.textBaseline = 'middle';
+  var lr = R * 1.15;
+  for (var m = 0; m < N; m++) {
+    var ma = START + m * STEP;
+    var norm = Math.atan2(Math.sin(ma), Math.cos(ma));
+    var flip = (norm > Math.PI / 2 || norm < -Math.PI / 2);
+    c.save();
+    c.translate(cx, cy);
+    c.rotate(flip ? ma + Math.PI : ma);
+    c.textAlign = flip ? 'left' : 'right';
+    var lx = flip ? -lr : lr;
+    var txt = CATS[m].s;
+    c.lineWidth = 6;
+    c.strokeStyle = 'rgba(11,17,32,0.95)';
+    c.strokeText(txt, lx, 0);
+    c.fillStyle = (m === hl) ? '#ffffff' : CATS[m].c;
+    c.fillText(txt, lx, 0);
+    c.restore();
+  }
+
+  /* Бейдж с числом при перетаскивании */
+  if (dragging && hl >= 0 && hl < N) {
+    var da = START + hl * STEP;
+    var dr = Math.min(R * values[hl] / 10 + 60, R * 1.02);
+    var bx = cx + Math.cos(da) * dr;
+    var by = cy + Math.sin(da) * dr;
+    c.beginPath();
+    c.arc(bx, by, 28, 0, TAU);
+    c.fillStyle = CATS[hl].c;
+    c.fill();
+    c.lineWidth = 3;
+    c.strokeStyle = '#0b1120';
+    c.stroke();
+    c.fillStyle = '#0b1120';
+    c.font = 'bold 26px ' + FONT;
+    c.textAlign = 'center';
+    c.textBaseline = 'middle';
+    c.fillText(String(values[hl]), bx, by + 2);
+  }
 }
 
-
-function loadDesiredValues() {
-
-    const saved =
-        localStorage.getItem(
-            DESIRED_KEY
-        );
-
-
-    if (!saved) {
-        return;
-    }
-
-
-    try {
-
-        const parsed =
-            JSON.parse(saved);
-
-
-        if (
-            Array.isArray(parsed) &&
-            parsed.length === categories.length
-        ) {
-
-            desiredValues =
-                parsed.map(
-                    value =>
-                        Math.max(
-                            0,
-                            Math.min(
-                                10,
-                                Number(value)
-                            )
-                );
-
-        }
-
-    } catch {
-
-        desiredValues =
-            Array(categories.length).fill(5);
-
-    }
-
+function draw(){
+  try {
+    drawWheel(ctx, CX, CY, R, activeIdx, {fillBg: true});
+  } catch(e) {
+    ctx.fillStyle = '#7f1d1d';
+    ctx.fillRect(0, 0, SZ, SZ);
+    ctx.fillStyle = '#fff';
+    ctx.font = 'bold 30px ' + FONT;
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText('Ошибка рисования', CX, CY - 30);
+    ctx.font = '20px monospace';
+    ctx.fillText(String(e.message || e), CX, CY + 20);
+  }
 }
 
+/* ---------- СПИСОК ПОЛЗУНКОВ ---------- */
+var listEl = document.getElementById('list');
+var rows = [];
+function buildList(){
+  var frag = document.createDocumentFragment();
+  for (var i = 0; i < N; i++) {
+    (function(idx){
+      var cat = CATS[idx];
+      var row = document.createElement('div');
+      row.className = 'row';
 
-function saveTexts() {
+      var hd = document.createElement('div');
+      hd.className = 'rowhead';
 
-    const data = {
+      var dot = document.createElement('span');
+      dot.className = 'dot';
+      dot.style.background = cat.c;
 
-        reflection:
-            reflectionText.value,
+      var nm = document.createElement('span');
+      nm.className = 'nm';
+      nm.textContent = cat.n;
 
-        firstStep:
-            firstStepText.value,
+      var vl = document.createElement('span');
+      vl.className = 'vl';
+      vl.id = 'v' + idx;
+      vl.textContent = String(values[idx]);
 
-        startDate:
-            startDate.value
+      hd.appendChild(dot);
+      hd.appendChild(nm);
+      hd.appendChild(vl);
 
-    };
+      var rng = document.createElement('input');
+      rng.type = 'range';
+      rng.min = '0';
+      rng.max = '10';
+      rng.step = '1';
+      rng.value = String(values[idx]);
 
+      rng.addEventListener('input', function(){
+        values[idx] = Number(rng.value);
+        vl.textContent = String(values[idx]);
+        updateStats();
+        draw();
+        saveValues();
+      });
 
-    localStorage.setItem(
-        TEXT_KEY,
-        JSON.stringify(data)
-    );
-
+      row.appendChild(hd);
+      row.appendChild(rng);
+      frag.appendChild(row);
+      rows.push({row: row, vl: vl, rng: rng});
+    })(i);
+  }
+  listEl.innerHTML = '';
+  listEl.appendChild(frag);
 }
 
-
-function loadTexts() {
-
-    const saved =
-        localStorage.getItem(
-            TEXT_KEY
-        );
-
-
-    if (!saved) {
-        return;
-    }
-
-
-    try {
-
-        const data =
-            JSON.parse(saved);
-
-
-        reflectionText.value =
-            data.reflection || "";
-
-
-        firstStepText.value =
-            data.firstStep || "";
-
-
-        startDate.value =
-            data.startDate || "";
-
-    } catch {
-
-        // ignore
-
-    }
-
+function updateRow(i){
+  if (!rows[i]) return;
+  rows[i].vl.textContent = String(values[i]);
+  if (Number(rows[i].rng.value) !== values[i]) rows[i].rng.value = String(values[i]);
+}
+function updateStats(){
+  var sum = 0, mn = 0, mx = 0;
+  for (var i = 0; i < N; i++) {
+    sum += values[i];
+    if (values[i] < values[mn]) mn = i;
+    if (values[i] > values[mx]) mx = i;
+  }
+  document.getElementById('sAvg').textContent = (sum / N).toFixed(1);
+  document.getElementById('sMax').textContent = CATS[mx].n;
+  document.getElementById('sMin').textContent = CATS[mn].n;
+}
+function updateHl(){
+  for (var i = 0; i < rows.length; i++) {
+    rows[i].row.className = (i === activeIdx) ? 'row active' : 'row';
+  }
 }
 
-
-/* =========================================================
-   TEST UI
-   ========================================================= */
-
-function createNumberScale() {
-
-    numberScale.innerHTML = "";
-
-
-    for (
-        let number = 0;
-        number <= 10;
-        number++
-    ) {
-
-        const button =
-            document.createElement(
-                "button"
-            );
-
-
-        button.type =
-            "button";
-
-
-        button.className =
-            "number-button";
-
-
-        button.textContent =
-            number;
-
-
-        button.dataset.value =
-            number;
-
-
-        button.addEventListener(
-            "click",
-            () => {
-
-                setCurrentScore(
-                    number
-                );
-
-                haptic();
-
-            }
-        );
-
-
-        numberScale.appendChild(
-            button
-        );
-
-    }
-
+/* ---------- ИНТЕРАКТИВ С КОЛЕСОМ ---------- */
+function pos(e){
+  var r = cv.getBoundingClientRect();
+  var x, y;
+  if (e.touches && e.touches[0]) { x = e.touches[0].clientX; y = e.touches[0].clientY; }
+  else if (e.changedTouches && e.changedTouches[0]) { x = e.changedTouches[0].clientX; y = e.changedTouches[0].clientY; }
+  else { x = e.clientX; y = e.clientY; }
+  return { x: (x - r.left) * (SZ / r.width), y: (y - r.top) * (SZ / r.height) };
 }
-
-
-function updateNumberScale() {
-
-    const buttons =
-        numberScale.querySelectorAll(
-            ".number-button"
-        );
-
-
-    buttons.forEach(
-        button => {
-
-            button.classList.toggle(
-                "active",
-                Number(
-                    button.dataset.value
-                ) === values[currentQuestion]
-            );
-
-        }
-    );
-
+function pickSector(x, y){
+  var a = Math.atan2(y - CY, x - CX) + Math.PI / 2;
+  a = ((a % TAU) + TAU) % TAU;
+  return Math.floor(a / STEP + 0.5) % N;
 }
-
-
-function setCurrentScore(
-    value
-) {
-
-    value =
-        Math.max(
-            0,
-            Math.min(
-                10,
-                Number(value)
-            )
-        );
-
-
-    values[currentQuestion] =
-        value;
-
-
-    scoreSlider.value =
-        value;
-
-
-    scoreDisplay.textContent =
-        value;
-
-
-    updateNumberScale();
-
+function setVal(x, y){
+  if (activeIdx < 0) return;
+  var d = Math.sqrt((x - CX) * (x - CX) + (y - CY) * (y - CY));
+  var v = Math.max(0, Math.min(10, Math.round(d / R * 10)));
+  if (values[activeIdx] !== v) {
+    values[activeIdx] = v;
+    updateRow(activeIdx);
+    updateStats();
     saveValues();
-
+  }
+  draw();
+}
+function onStart(x, y){
+  var d = Math.sqrt((x - CX) * (x - CX) + (y - CY) * (y - CY));
+  if (d > R * 1.2) return false;
+  activeIdx = pickSector(x, y);
+  dragging = true;
+  setVal(x, y);
+  updateHl();
+  return true;
+}
+function onEnd(){
+  if (dragging) {
+    dragging = false;
+    activeIdx = -1;
+    draw();
+    updateHl();
+  }
 }
 
+cv.addEventListener('touchstart', function(e){
+  if (e.touches.length !== 1) return;
+  var p = pos(e);
+  if (onStart(p.x, p.y)) e.preventDefault();
+}, {passive:false});
+cv.addEventListener('touchmove', function(e){
+  if (!dragging || e.touches.length !== 1) return;
+  e.preventDefault();
+  var p = pos(e);
+  setVal(p.x, p.y);
+}, {passive:false});
+cv.addEventListener('touchend', onEnd);
+cv.addEventListener('touchcancel', onEnd);
+cv.addEventListener('mousedown', function(e){
+  if (e.button !== 0) return;
+  var p = pos(e);
+  if (onStart(p.x, p.y)) e.preventDefault();
+});
+window.addEventListener('mousemove', function(e){
+  if (!dragging) return;
+  var p = pos(e);
+  setVal(p.x, p.y);
+});
+window.addEventListener('mouseup', onEnd);
 
-function renderQuestion() {
-
-    const sphere =
-        spheres[currentQuestion];
-
-
-    sphereNumber.textContent =
-        `СФЕРА ${currentQuestion + 1}`;
-
-
-    sphereTitle.textContent =
-        sphere.name;
-
-
-    question.textContent =
-        sphere.question;
-
-
-    scoreDisplay.textContent =
-        values[currentQuestion];
-
-
-    scoreSlider.value =
-        values[currentQuestion];
-
-
-    progressText.textContent =
-        `Сфера ${currentQuestion + 1} из ${spheres.length}`;
-
-
-    const percent =
-        Math.round(
-            (
-                (currentQuestion + 1) /
-                spheres.length
-            ) * 100
-        );
-
-
-    progressPercent.textContent =
-        `${percent}%`;
-
-
-    progressBar.style.width =
-        `${percent}%`;
-
-
-    backBtn.disabled =
-        currentQuestion === 0;
-
-
-    backBtn.style.opacity =
-        currentQuestion === 0
-            ? "0.45"
-            : "1";
-
-
-    nextBtn.textContent =
-        currentQuestion === spheres.length - 1
-            ? "Получить результат →"
-            : "Далее →";
-
-
-    updateNumberScale();
-
+/* ---------- ДАТА ---------- */
+function pad(n){ return (n < 10 ? '0' : '') + n; }
+function fmt(iso){
+  var d = iso ? new Date(iso) : new Date();
+  return d.getDate() + ' ' + MONTHS[d.getMonth()] + ' ' + d.getFullYear() +
+         ' · ' + pad(d.getHours()) + ':' + pad(d.getMinutes());
 }
 
+/* ---------- ЭКСПОРТ PNG ---------- */
+function buildPng(){
+  var W = 1080, H = 1380;
+  var c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  var g = c.getContext('2d');
 
-scoreSlider.addEventListener(
-    "input",
-    () => {
+  /* Градиентный фон экспорта */
+  var gr = g.createLinearGradient(0, 0, W, H);
+  gr.addColorStop(0, '#1c2844');
+  gr.addColorStop(0.5, '#101a2e');
+  gr.addColorStop(1, '#070c16');
+  g.fillStyle = gr;
+  g.fillRect(0, 0, W, H);
 
-        setCurrentScore(
-            Number(
-                scoreSlider.value
-            )
-        );
+  /* Заголовок */
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.fillStyle = '#e2e8f0';
+  g.font = 'bold 52px ' + FONT;
+  g.fillText('Колесо баланса', W / 2, 96);
 
-        haptic();
+  g.fillStyle = '#94a3b8';
+  g.font = '400 26px ' + FONT;
+  g.fillText(fmt(), W / 2, 148);
 
+  var sum = 0;
+  for (var i = 0; i < N; i++) sum += values[i];
+  g.fillStyle = '#60a5fa';
+  g.font = '600 32px ' + FONT;
+  g.fillText('Средний балл: ' + (sum / N).toFixed(1), W / 2, 206);
+
+  /* Колесо БЕЗ заливки фона — сохраняем градиент */
+  drawWheel(g, W / 2, 250 + 470, 357, -1, {fillBg: false});
+
+  /* Подпись внизу */
+  g.fillStyle = '#64748b';
+  g.font = '400 22px ' + FONT;
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.fillText('0 — не удовлетворён · 10 — полностью удовлетворён', W / 2, H - 46);
+
+  return c;
+}
+
+function buildJournalPng(){
+  var ent = loadJournal();
+  if (!ent.length) return null;
+  var W = 1080, rowH = 200, hH = 220, fH = 90;
+  var H = hH + ent.length * rowH + fH;
+  if (H > 8000) H = 8000;
+  var c = document.createElement('canvas');
+  c.width = W; c.height = H;
+  var g = c.getContext('2d');
+
+  var gr = g.createLinearGradient(0, 0, W, H);
+  gr.addColorStop(0, '#1c2844');
+  gr.addColorStop(0.5, '#101a2e');
+  gr.addColorStop(1, '#070c16');
+  g.fillStyle = gr;
+  g.fillRect(0, 0, W, H);
+
+  g.textAlign = 'center';
+  g.textBaseline = 'middle';
+  g.fillStyle = '#e2e8f0';
+  g.font = 'bold 48px ' + FONT;
+  g.fillText('Журнал результатов', W / 2, 90);
+  g.fillStyle = '#94a3b8';
+  g.font = '400 24px ' + FONT;
+  g.fillText('Колесо баланса · ' + ent.length + ' записей', W / 2, 148);
+
+  g.strokeStyle = 'rgba(148,163,184,0.22)';
+  g.beginPath();
+  g.moveTo(60, 190);
+  g.lineTo(W - 60, 190);
+  g.stroke();
+
+  for (var k = 0; k < ent.length; k++) {
+    var e = ent[k];
+    var y = hH + k * rowH;
+    if (y + rowH > H) break;
+    var s = 0;
+    for (var q = 0; q < N; q++) s += e.values[q];
+
+    g.fillStyle = '#e2e8f0';
+    g.font = 'bold 30px ' + FONT;
+    g.textAlign = 'left';
+    g.fillText(fmt(e.date), 60, y + 40);
+
+    g.textAlign = 'right';
+    g.fillStyle = '#60a5fa';
+    g.font = 'bold 34px ' + FONT;
+    g.fillText((s / N).toFixed(1), W - 60, y + 40);
+
+    var bw = 44, gap = 6;
+    var totW = N * bw + (N - 1) * gap;
+    var sx = (W - totW) / 2;
+    var baseY = y + 92;
+    var mh = 60;
+
+    for (var i = 0; i < N; i++) {
+      var v = e.values[i];
+      var bh = Math.max(4, (v / 10) * mh);
+      var bx = sx + i * (bw + gap);
+      var by = baseY + (mh - bh);
+      g.fillStyle = CATS[i].c;
+      g.fillRect(bx, by, bw, bh);
+      g.fillStyle = '#94a3b8';
+      g.font = 'bold 18px ' + FONT;
+      g.textAlign = 'center';
+      g.fillText(String(v), bx + bw / 2, baseY + mh + 22);
     }
-);
 
+    if (k < ent.length - 1) {
+      g.strokeStyle = 'rgba(148,163,184,0.12)';
+      g.beginPath();
+      g.moveTo(60, y + rowH - 8);
+      g.lineTo(W - 60, y + rowH - 8);
+      g.stroke();
+    }
+  }
 
-backBtn.addEventListener(
-    "click",
-    () => {
+  g.fillStyle = '#64748b';
+  g.font = '400 22px ' + FONT;
+  g.textAlign = 'center';
+  g.fillText('Создано в приложении «Колесо баланса»', W / 2, H - 40);
+  return c;
+}
 
-        if (
-            currentQuestion > 0
-        ) {
+function isIOS(){
+  var ua = navigator.userAgent || '';
+  return /iPad|iPhone|iPod/.test(ua) ||
+         (navigator.platform === 'MacIntel' && navigator.maxTouchPoints > 1);
+}
 
-            currentQuestion--;
+function download(srcCanvas, fname){
+  if (!srcCanvas) { alert('Нечего сохранять.'); return; }
+  var url;
+  try { url = srcCanvas.toDataURL('image/png'); }
+  catch(e) { alert('Не удалось сформировать изображение.'); return; }
 
-            renderQuestion();
+  if (isIOS()) {
+    var img = document.getElementById('mImgSrc');
+    var modal = document.getElementById('mImg');
+    if (img && modal) {
+      img.src = url;
+      modal.className = 'modal';
+    }
+    return;
+  }
+  try {
+    var a = document.createElement('a');
+    a.href = url;
+    a.download = fname;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+  } catch(e) {
+    alert('Не удалось сохранить изображение.');
+  }
+}
 
-            haptic();
+/* ---------- ЖУРНАЛ UI ---------- */
+function renderJournal(){
+  var ent = loadJournal();
+  document.getElementById('jN').textContent = String(ent.length);
+  var list = document.getElementById('jList');
+  var sub = document.getElementById('jSub');
 
+  if (!ent.length) {
+    list.innerHTML = '<div class="jempty">Записей пока нет.<br>Нажмите «Сохранить в журнал».</div>';
+    sub.textContent = 'Сохранённые результаты будут здесь.';
+    return;
+  }
+  sub.textContent = 'Всего записей: ' + ent.length + '. Нажмите «Загрузить», чтобы вернуть значения.';
+
+  var frag = document.createDocumentFragment();
+  for (var k = 0; k < ent.length; k++) {
+    (function(e){
+      var s = 0;
+      for (var q = 0; q < N; q++) s += e.values[q];
+      var card = document.createElement('div');
+      card.className = 'jentry';
+      var hd = document.createElement('div');
+      hd.className = 'jh';
+      var dd = document.createElement('span');
+      dd.className = 'jd';
+      dd.textContent = fmt(e.date);
+      var aa = document.createElement('span');
+      aa.className = 'ja';
+      aa.textContent = (s / N).toFixed(1);
+      hd.appendChild(dd);
+      hd.appendChild(aa);
+
+      var bars = document.createElement('div');
+      bars.className = 'jb';
+      for (var i = 0; i < N; i++) {
+        var b = document.createElement('div');
+        b.className = 'jbar';
+        var v = e.values[i];
+        b.style.background = CATS[i].c;
+        b.style.opacity = String(0.25 + (v / 10) * 0.75);
+        b.textContent = String(v);
+        bars.appendChild(b);
+      }
+
+      var act = document.createElement('div');
+      act.className = 'jr';
+      var lb = document.createElement('button');
+      lb.type = 'button';
+      lb.textContent = 'Загрузить';
+      lb.onclick = function(){
+        values = e.values.slice();
+        for (var i = 0; i < N; i++) updateRow(i);
+        updateStats();
+        draw();
+        saveValues();
+        document.getElementById('mJ').className = 'modal hide';
+      };
+      var db = document.createElement('button');
+      db.type = 'button';
+      db.textContent = 'Удалить';
+      db.onclick = function(){
+        var l = loadJournal();
+        var out = [];
+        for (var z = 0; z < l.length; z++) {
+          if (l[z].id !== e.id) out.push(l[z]);
         }
+        saveJournal(out);
+        renderJournal();
+      };
+      act.appendChild(lb);
+      act.appendChild(db);
 
-    }
-);
-
-
-nextBtn.addEventListener(
-    "click",
-    () => {
-
-        if (
-            currentQuestion <
-            spheres.length - 1
-        ) {
-
-            currentQuestion++;
-
-            renderQuestion();
-
-            haptic();
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-            return;
-
-        }
-
-
-        finishTest();
-
-    }
-);
-
-
-/* =========================================================
-   SCORING
-   ========================================================= */
-
-function calculateStats() {
-
-    const sum =
-        values.reduce(
-            (a, b) => a + b,
-            0
-        );
-
-
-    const average =
-        sum / values.length;
-
-
-    const maximum =
-        Math.max(
-            ...values
-        );
-
-
-    const minimum =
-        Math.min(
-            ...values
-        );
-
-
-    const gap =
-        maximum - minimum;
-
-
-    return {
-
-        average,
-        maximum,
-        minimum,
-        gap
-
-    };
-
+      card.appendChild(hd);
+      card.appendChild(bars);
+      card.appendChild(act);
+      frag.appendChild(card);
+    })(ent[k]);
+  }
+  list.innerHTML = '';
+  list.appendChild(frag);
 }
 
-
-function getLevel(
-    value
-) {
-
-    if (
-        value >= 8
-    ) {
-
-        return "strong";
-
-    }
-
-
-    if (
-        value >= 6
-    ) {
-
-        return "stable";
-
-    }
-
-
-    if (
-        value >= 4
-    ) {
-
-        return "attention";
-
-    }
-
-
-    return "priority";
-
+function addToJournal(){
+  var ent = loadJournal();
+  ent.unshift({
+    id: Date.now(),
+    date: new Date().toISOString(),
+    values: values.slice()
+  });
+  if (ent.length > 100) ent.length = 100;
+  saveJournal(ent);
+  renderJournal();
+  var btn = document.getElementById('bSaveJ');
+  var old = btn.textContent;
+  btn.textContent = '✓ Сохранено';
+  setTimeout(function(){ btn.textContent = old; }, 1000);
 }
 
+/* ---------- КНОПКИ ---------- */
+document.getElementById('bReset').onclick = function(){
+  for (var i = 0; i < N; i++) values[i] = 5;
+  for (var i = 0; i < N; i++) updateRow(i);
+  updateStats();
+  draw();
+  saveValues();
+};
+document.getElementById('bPng').onclick = function(){
+  try { download(buildPng(), 'koleso-balansa.png'); }
+  catch(e){ alert('Ошибка: ' + e.message); }
+};
+document.getElementById('bSaveJ').onclick = addToJournal;
+document.getElementById('jOpen').onclick = function(){
+  renderJournal();
+  document.getElementById('mJ').className = 'modal';
+};
+document.getElementById('jClose').onclick = function(){
+  document.getElementById('mJ').className = 'modal hide';
+};
+document.getElementById('jExp').onclick = function(){
+  try {
+    var c = buildJournalPng();
+    if (!c) { alert('Журнал пуст.'); return; }
+    download(c, 'koleso-zhurnal.png');
+  } catch(e) { alert('Ошибка: ' + e.message); }
+};
+document.getElementById('mImgClose').onclick = function(){
+  document.getElementById('mImg').className = 'modal hide';
+  document.getElementById('mImgSrc').removeAttribute('src');
+};
+document.getElementById('mJ').onclick = function(e){
+  if (e.target === this) this.className = 'modal hide';
+};
+document.getElementById('mImg').onclick = function(e){
+  if (e.target === this) {
+    this.className = 'modal hide';
+    document.getElementById('mImgSrc').removeAttribute('src');
+  }
+};
 
-/* =========================================================
-   INTERPRETATION
-   ========================================================= */
-
-function getLevelText(
-    value
-) {
-
-    if (
-        value >= 8
-    ) {
-
-        return "относительно сильная";
-
+/* ---------- TELEGRAM INIT ---------- */
+function initTelegram(){
+  try {
+    if (window.Telegram && window.Telegram.WebApp) {
+      var tg = window.Telegram.WebApp;
+      if (typeof tg.ready === 'function') tg.ready();
+      if (typeof tg.expand === 'function') tg.expand();
+      if (typeof tg.setHeaderColor === 'function') {
+        try { tg.setHeaderColor('#0b1120'); } catch(e){}
+      }
+      if (typeof tg.setBackgroundColor === 'function') {
+        try { tg.setBackgroundColor('#0b1120'); } catch(e){}
+      }
     }
-
-
-    if (
-        value >= 6
-    ) {
-
-        return "относительно стабильная";
-
-    }
-
-
-    if (
-        value >= 4
-    ) {
-
-        return "требующая внимания";
-
-    }
-
-
-    return "текущий приоритет";
-
+  } catch(e) {
+    if (window.console && console.log) console.log('Telegram WebApp init:', e);
+  }
 }
 
-
-function generateInterpretation(
-    stats
-) {
-
-    const averageText =
-        stats.average >= 8
-            ? "Средняя оценка находится в достаточно высоком диапазоне."
-            : stats.average >= 6
-                ? "В среднем оценки находятся в относительно стабильном диапазоне."
-                : stats.average >= 4
-                    ? "Средний показатель показывает, что нескольким сферам может быть полезно уделить дополнительное внимание."
-                    : "Средний показатель находится в низком диапазоне, поэтому особенно полезно посмотреть на конкретные сферы и определить собственные приоритеты.";
-
-
-    const gapText =
-        stats.gap >= 6
-            ? "Разница между наиболее и наименее высоко оценёнными сферами заметная."
-            : stats.gap >= 3
-                ? "Между сферами есть умеренная разница в оценках."
-                : "Оценки сфер находятся достаточно близко друг к другу.";
-
-
-    interpretationEl.innerHTML = `
-
-        <p>
-            ${averageText}
-        </p>
-
-        <p>
-            ${gapText}
-        </p>
-
-        <p>
-            Само по себе среднее значение не говорит о
-            качестве вашей жизни. Важнее то, какие именно
-            сферы вы хотите сохранить, изменить или развивать.
-        </p>
-
-    `;
-
-}
-
-
-/* =========================================================
-   RESULT LISTS
-   ========================================================= */
-
-function sortSpheres() {
-
-    return spheres
-        .map(
-            (sphere, index) => ({
-
-                index,
-
-                name:
-                    sphere.name,
-
-                value:
-                    values[index]
-
-            })
-        )
-        .sort(
-            (a, b) =>
-                b.value - a.value
-        );
-
-}
-
-
-function createSphereResult(
-    item
-) {
-
-    return `
-
-        <div class="sphere-result">
-
-            <div class="sphere-result-name">
-                ${item.name}
-                <br>
-                <span
-                    style="
-                        color:#8290a6;
-                        font-size:11px;
-                    "
-                >
-                    ${getLevelText(item.value)}
-                </span>
-            </div>
-
-            <div class="sphere-result-score">
-                ${item.value}
-            </div>
-
-        </div>
-
-    `;
-
-}
-
-
-function renderTopBottom() {
-
-    const sorted =
-        sortSpheres();
-
-
-    const top =
-        sorted.slice(
-            0,
-            3
-        );
-
-
-    const bottom =
-        [...sorted]
-            .sort(
-                (a, b) =>
-                    a.value - b.value
-            )
-            .slice(
-                0,
-                3
-            );
-
-
-    topSpheres.innerHTML =
-        top
-            .map(
-                createSphereResult
-            )
-            .join("");
-
-
-    bottomSpheres.innerHTML =
-        bottom
-            .map(
-                createSphereResult
-            )
-            .join("");
-
-}
-
-
-/* =========================================================
-   PRIORITIES
-   ========================================================= */
-
-function getSelectedPriorities() {
-
-    return Array.from(
-        document.querySelectorAll(
-            ".priority-checkbox:checked"
-        )
-    ).map(
-        checkbox =>
-            Number(
-                checkbox.value
-            )
-    );
-
-}
-
-
-function renderPriorities() {
-
-    priorityList.innerHTML =
-        "";
-
-
-    spheres.forEach(
-        (sphere, index) => {
-
-            const wrapper =
-                document.createElement(
-                    "label"
-                );
-
-
-            wrapper.className =
-                "priority-item";
-
-
-            wrapper.innerHTML = `
-
-                <input
-                    type="checkbox"
-                    class="priority-checkbox"
-                    value="${index}"
-                >
-
-                <span class="priority-name">
-                    ${sphere.name}
-                </span>
-
-                <span class="priority-score">
-                    Сейчас: ${values[index]}
-                </span>
-
-            `;
-
-
-            priorityList.appendChild(
-                wrapper
-            );
-
-        }
-    );
-
-
-    document
-        .querySelectorAll(
-            ".priority-checkbox"
-        )
-        .forEach(
-            checkbox => {
-
-                checkbox.addEventListener(
-                    "change",
-                    () => {
-
-                        const selected =
-                            getSelectedPriorities();
-
-
-                        if (
-                            selected.length > 3
-                        ) {
-
-                            checkbox.checked =
-                                false;
-
-                            showToast(
-                                "Можно выбрать максимум 3 приоритета."
-                            );
-
-                            return;
-
-                        }
-
-
-                        renderDesiredValues();
-
-                        updatePlan();
-
-                        haptic();
-
-                    }
-                );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   DESIRED VALUES
-   ========================================================= */
-
-function renderDesiredValues() {
-
-    const selected =
-        getSelectedPriorities();
-
-
-    desiredList.innerHTML =
-        "";
-
-
-    if (
-        selected.length === 0
-    ) {
-
-        desiredWheelCard.classList.add(
-            "hidden"
-        );
-
-        planCard.classList.add(
-            "hidden"
-        );
-
-        return;
-
-    }
-
-
-    selected.forEach(
-        index => {
-
-            if (
-                desiredValues[index] <
-                values[index]
-            ) {
-
-                desiredValues[index] =
-                    values[index];
-
-            }
-
-
-            const wrapper =
-                document.createElement(
-                    "div"
-                );
-
-
-            wrapper.className =
-                "desired-row";
-
-
-            wrapper.innerHTML = `
-
-                <div class="desired-header">
-
-                    <span class="desired-name">
-                        ${categories[index]}
-                    </span>
-
-                    <span
-                        class="desired-value"
-                        id="desired-value-${index}"
-                    >
-                        ${desiredValues[index]}
-                    </span>
-
-                </div>
-
-                <input
-                    type="range"
-                    min="${values[index]}"
-                    max="10"
-                    step="1"
-                    value="${desiredValues[index]}"
-                    class="score-slider desired-slider"
-                    data-index="${index}"
-                >
-
-                <div class="scale-ends">
-                    <span>
-                        Сейчас: ${values[index]}
-                    </span>
-                    <span>
-                        Цель: 10
-                    </span>
-                </div>
-
-            `;
-
-
-            desiredList.appendChild(
-                wrapper
-            );
-
-        }
-    );
-
-
-    document
-        .querySelectorAll(
-            ".desired-slider"
-        )
-        .forEach(
-            slider => {
-
-                slider.addEventListener(
-                    "input",
-                    () => {
-
-                        const index =
-                            Number(
-                                slider.dataset.index
-                            );
-
-
-                        desiredValues[index] =
-                            Number(
-                                slider.value
-                            );
-
-
-                        const label =
-                            document.getElementById(
-                                `desired-value-${index}`
-                            );
-
-
-                        if (label) {
-
-                            label.textContent =
-                                desiredValues[index];
-
-                        }
-
-
-                        saveDesiredValues();
-
-                        updatePlan();
-
-                        drawDesiredWheel();
-
-                    }
-                );
-
-            }
-        );
-
-
-    desiredWheelCard.classList.remove(
-        "hidden"
-    );
-
-
-    planCard.classList.remove(
-        "hidden"
-    );
-
-
-    saveDesiredValues();
-
-    updatePlan();
-
-    drawDesiredWheel();
-
-}
-
-
-/* =========================================================
-   MINI PLAN
-   ========================================================= */
-
-function updatePlan() {
-
-    const selected =
-        getSelectedPriorities();
-
-
-    if (
-        selected.length === 0
-    ) {
-
-        planCard.classList.add(
-            "hidden"
-        );
-
-        return;
-
-    }
-
-
-    planCard.classList.remove(
-        "hidden"
-    );
-
-
-    planList.innerHTML =
-        "";
-
-
-    selected.forEach(
-        index => {
-
-            const current =
-                values[index];
-
-
-            const desired =
-                desiredValues[index];
-
-
-            const plan =
-                document.createElement(
-                    "div"
-                );
-
-
-            plan.className =
-                "plan";
-
-
-            plan.innerHTML = `
-
-                <div class="plan-title">
-                    ${categories[index]}
-                </div>
-
-                <div class="plan-line">
-                    <strong>Текущая оценка:</strong>
-                    ${current}
-                </div>
-
-                <div class="plan-line">
-                    <strong>Желаемая оценка:</strong>
-                    ${desired}
-                </div>
-
-                <div class="plan-line">
-                    <strong>Изменение:</strong>
-                    ${Math.max(
-                        0,
-                        desired - current
-                    )}
-                </div>
-
-                <div class="plan-line">
-                    <strong>Первый шаг:</strong>
-                    ${
-                        firstStepText.value.trim()
-                            ? firstStepText.value.trim()
-                            : "Определить небольшое конкретное действие."
-                    }
-                </div>
-
-                <div class="plan-line">
-                    <strong>Дата начала:</strong>
-                    ${
-                        startDate.value
-                            ? formatDate(
-                                startDate.value
-                            )
-                            : "не указана"
-                    }
-                </div>
-
-            `;
-
-
-            planList.appendChild(
-                plan
-            );
-
-        }
-    );
-
-}
-
-
-function formatDate(
-    dateString
-) {
-
-    if (!dateString) {
-        return "";
-    }
-
-
-    const parts =
-        dateString.split("-");
-
-
-    if (
-        parts.length !== 3
-    ) {
-
-        return dateString;
-
-    }
-
-
-    return `${parts[2]}.${parts[1]}.${parts[0]}`;
-
-}
-
-
-reflectionText.addEventListener(
-    "input",
-    () => {
-
-        saveTexts();
-
-        updatePlan();
-
-    }
-);
-
-
-firstStepText.addEventListener(
-    "input",
-    () => {
-
-        saveTexts();
-
-        updatePlan();
-
-    }
-);
-
-
-startDate.addEventListener(
-    "change",
-    () => {
-
-        saveTexts();
-
-        updatePlan();
-
-    }
-);
-
-
-/* =========================================================
-   WHEEL
-   ========================================================= */
-
-const canvas =
-    document.getElementById(
-        "wheel"
-    );
-
-
-const ctx =
-    canvas.getContext(
-        "2d"
-    );
-
-
-const desiredCanvas =
-    document.getElementById(
-        "desiredWheel"
-    );
-
-
-const desiredCtx =
-    desiredCanvas.getContext(
-        "2d"
-    );
-
-
-function resizeCanvas() {
-
-    resizeSingleCanvas(
-        canvas,
-        ctx
-    );
-
-
-    resizeSingleCanvas(
-        desiredCanvas,
-        desiredCtx
-    );
-
-}
-
-
-function resizeSingleCanvas(
-    targetCanvas,
-    targetCtx
-) {
-
-    const containerWidth =
-        Math.min(
-            window.innerWidth * 0.96,
-            700
-        );
-
-
-    const size =
-        Math.max(
-            300,
-            containerWidth
-        );
-
-
-    const dpr =
-        window.devicePixelRatio || 1;
-
-
-    targetCanvas.width =
-        size * dpr;
-
-
-    targetCanvas.height =
-        size * dpr;
-
-
-    targetCanvas.style.width =
-        size + "px";
-
-
-    targetCanvas.style.height =
-        size + "px";
-
-
-    targetCtx.setTransform(
-        dpr,
-        0,
-        0,
-        dpr,
-        0,
-        0
-    );
-
-}
-
-
-function drawBaseWheel(
-    targetCanvas,
-    targetCtx,
-    data,
-    compareData = null
-) {
-
-    const width =
-        targetCanvas.clientWidth;
-
-
-    const height =
-        targetCanvas.clientHeight;
-
-
-    const size =
-        Math.min(
-            width,
-            height
-        );
-
-
-    const center =
-        size / 2;
-
-
-    const radius =
-        size * 0.33;
-
-
-    const count =
-        categories.length;
-
-
-    const step =
-        Math.PI * 2 / count;
-
-
-    targetCtx.clearRect(
-        0,
-        0,
-        width,
-        height
-    );
-
-
-    targetCtx.save();
-
-
-    targetCtx.translate(
-        center,
-        center
-    );
-
-
-    /* Фон */
-
-    targetCtx.beginPath();
-
-    targetCtx.arc(
-        0,
-        0,
-        radius,
-        0,
-        Math.PI * 2
-    );
-
-    targetCtx.fillStyle =
-        "#111a2e";
-
-    targetCtx.fill();
-
-
-    /* Круги 1–10 */
-
-    for (
-        let level = 1;
-        level <= 10;
-        level++
-    ) {
-
-        const r =
-            radius *
-            level /
-            10;
-
-
-        targetCtx.beginPath();
-
-        targetCtx.arc(
-            0,
-            0,
-            r,
-            0,
-            Math.PI * 2
-        );
-
-
-        targetCtx.strokeStyle =
-            level === 5 ||
-            level === 10
-                ? "#5a6b88"
-                : "#33425f";
-
-
-        targetCtx.lineWidth =
-            level === 5 ||
-            level === 10
-                ? 1.5
-                : 1;
-
-
-        targetCtx.stroke();
-
-
-        /* Шкала */
-
-        targetCtx.fillStyle =
-            level === 5 ||
-            level === 10
-                ? "#ffffff"
-                : "#8fa0b8";
-
-
-        targetCtx.font =
-            level === 5 ||
-            level === 10
-                ? "bold 12px Arial"
-                : "11px Arial";
-
-
-        targetCtx.textAlign =
-            "left";
-
-
-        targetCtx.textBaseline =
-            "middle";
-
-
-        targetCtx.fillText(
-            String(level),
-            5,
-            -r
-        );
-
-    }
-
-
-    /* Радиальные оси */
-
-    for (
-        let i = 0;
-        i < count;
-        i++
-    ) {
-
-        const angle =
-            -Math.PI / 2 +
-            i * step;
-
-
-        targetCtx.beginPath();
-
-        targetCtx.moveTo(
-            0,
-            0
-        );
-
-
-        targetCtx.lineTo(
-            Math.cos(angle) *
-                radius,
-            Math.sin(angle) *
-                radius
-        );
-
-
-        targetCtx.strokeStyle =
-            "#33425f";
-
-
-        targetCtx.lineWidth =
-            1;
-
-
-        targetCtx.stroke();
-
-    }
-
-
-    /* Желаемая фигура */
-
-    if (
-        compareData
-    ) {
-
-        targetCtx.beginPath();
-
-
-        compareData.forEach(
-            (value, index) => {
-
-                const angle =
-                    -Math.PI / 2 +
-                    index * step;
-
-
-                const r =
-                    radius *
-                    value /
-                    10;
-
-
-                const x =
-                    Math.cos(angle) * r;
-
-
-                const y =
-                    Math.sin(angle) * r;
-
-
-                if (
-                    index === 0
-                ) {
-
-                    targetCtx.moveTo(
-                        x,
-                        y
-                    );
-
-                } else {
-
-                    targetCtx.lineTo(
-                        x,
-                        y
-                    );
-
-                }
-
-            }
-        );
-
-
-        targetCtx.closePath();
-
-
-        targetCtx.strokeStyle =
-            "#ffffff";
-
-
-        targetCtx.lineWidth =
-            2;
-
-
-        targetCtx.setLineDash(
-            [7, 5]
-        );
-
-
-        targetCtx.stroke();
-
-
-        targetCtx.setLineDash([]);
-
-    }
-
-
-    /* Основная фигура */
-
-    targetCtx.beginPath();
-
-
-    data.forEach(
-        (value, index) => {
-
-            const angle =
-                -Math.PI / 2 +
-                index * step;
-
-
-            const r =
-                radius *
-                value /
-                10;
-
-
-            const x =
-                Math.cos(angle) * r;
-
-
-            const y =
-                Math.sin(angle) * r;
-
-
-            if (
-                index === 0
-            ) {
-
-                targetCtx.moveTo(
-                    x,
-                    y
-                );
-
-            } else {
-
-                targetCtx.lineTo(
-                    x,
-                    y
-                );
-
-            }
-
-        }
-    );
-
-
-    targetCtx.closePath();
-
-
-    targetCtx.fillStyle =
-        "rgba(76, 137, 218, 0.35)";
-
-
-    targetCtx.fill();
-
-
-    targetCtx.strokeStyle =
-        "#6ea8fe";
-
-
-    targetCtx.lineWidth =
-        3;
-
-
-    targetCtx.stroke();
-
-
-    /* Точки */
-
-    data.forEach(
-        (value, index) => {
-
-            const angle =
-                -Math.PI / 2 +
-                index * step;
-
-
-            const r =
-                radius *
-                value /
-                10;
-
-
-            const x =
-                Math.cos(angle) * r;
-
-
-            const y =
-                Math.sin(angle) * r;
-
-
-            targetCtx.beginPath();
-
-
-            targetCtx.arc(
-                x,
-                y,
-                5,
-                0,
-                Math.PI * 2
-            );
-
-
-            targetCtx.fillStyle =
-                "#ffffff";
-
-
-            targetCtx.fill();
-
-
-            targetCtx.strokeStyle =
-                "#6ea8fe";
-
-
-            targetCtx.lineWidth =
-                2;
-
-
-            targetCtx.stroke();
-
-
-            /* Значение */
-
-            const labelR =
-                Math.max(
-                    r + 10,
-                    18
-                );
-
-
-            const lx =
-                Math.cos(angle) *
-                labelR;
-
-
-            const ly =
-                Math.sin(angle) *
-                labelR;
-
-
-            targetCtx.fillStyle =
-                "#ffffff";
-
-
-            targetCtx.font =
-                "bold 11px Arial";
-
-
-            targetCtx.textAlign =
-                "center";
-
-
-            targetCtx.textBaseline =
-                "middle";
-
-
-            targetCtx.fillText(
-                String(value),
-                lx,
-                ly
-            );
-
-        }
-    );
-
-
-    /* Подписи */
-
-    categories.forEach(
-        (category, index) => {
-
-            const angle =
-                -Math.PI / 2 +
-                index * step;
-
-
-            const labelRadius =
-                radius + 30;
-
-
-            const x =
-                Math.cos(angle) *
-                labelRadius;
-
-
-            const y =
-                Math.sin(angle) *
-                labelRadius;
-
-
-            targetCtx.save();
-
-
-            targetCtx.translate(
-                x,
-                y
-            );
-
-
-            targetCtx.fillStyle =
-                "#ffffff";
-
-
-            targetCtx.font =
-                category.length > 18
-                    ? "8px Arial"
-                    : "10px Arial";
-
-
-            targetCtx.textAlign =
-                "center";
-
-
-            targetCtx.textBaseline =
-                "middle";
-
-
-            targetCtx.fillText(
-                category,
-                0,
-                0
-            );
-
-
-            targetCtx.restore();
-
-        }
-    );
-
-
-    /* Центр */
-
-    targetCtx.beginPath();
-
-
-    targetCtx.arc(
-        0,
-        0,
-        4,
-        0,
-        Math.PI * 2
-    );
-
-
-    targetCtx.fillStyle =
-        "#ffffff";
-
-
-    targetCtx.fill();
-
-
-    targetCtx.restore();
-
-}
-
-
-function drawWheel() {
-
-    drawBaseWheel(
-        canvas,
-        ctx,
-        values
-    );
-
-}
-
-
-function drawDesiredWheel() {
-
-    drawBaseWheel(
-        desiredCanvas,
-        desiredCtx,
-        values,
-        desiredValues
-    );
-
-}
-
-
-window.addEventListener(
-    "resize",
-    () => {
-
-        if (
-            !resultSection.classList.contains(
-                "hidden"
-            )
-        ) {
-
-            resizeCanvas();
-
-            drawWheel();
-
-            drawDesiredWheel();
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   POINTER CONTROL
-   ========================================================= */
-
-function updateValueFromPointer(
-    event
-) {
-
-    const rect =
-        canvas.getBoundingClientRect();
-
-
-    const x =
-        event.clientX -
-        rect.left;
-
-
-    const y =
-        event.clientY -
-        rect.top;
-
-
-    const centerX =
-        rect.width / 2;
-
-
-    const centerY =
-        rect.height / 2;
-
-
-    let angle =
-        Math.atan2(
-            y - centerY,
-            x - centerX
-        );
-
-
-    angle +=
-        Math.PI / 2;
-
-
-    if (
-        angle < 0
-    ) {
-
-        angle +=
-            Math.PI * 2;
-
-    }
-
-
-    const count =
-        categories.length;
-
-
-    const index =
-        Math.round(
-            angle /
-            (
-                Math.PI * 2 /
-                count
-            )
-        ) % count;
-
-
-    const distance =
-        Math.sqrt(
-            Math.pow(
-                x - centerX,
-                2
-            ) +
-            Math.pow(
-                y - centerY,
-                2
-            )
-        );
-
-
-    const radius =
-        rect.width * 0.33;
-
-
-    let value =
-        Math.round(
-            (
-                distance /
-                radius
-            ) * 10
-        );
-
-
-    value =
-        Math.max(
-            0,
-            Math.min(
-                10,
-                value
-            )
-        );
-
-
-    values[index] =
-        value;
-
-
-    saveValues();
-
-
-    updateResultDisplay();
-
-}
-
-
-canvas.addEventListener(
-    "pointerdown",
-    event => {
-
-        canvas.setPointerCapture(
-            event.pointerId
-        );
-
-
-        updateValueFromPointer(
-            event
-        );
-
-    }
-);
-
-
-canvas.addEventListener(
-    "pointermove",
-    event => {
-
-        if (
-            event.buttons === 1
-        ) {
-
-            updateValueFromPointer(
-                event
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   RESULT DISPLAY
-   ========================================================= */
-
-function updateResultDisplay() {
-
-    const stats =
-        calculateStats();
-
-
-    averageEl.textContent =
-        stats.average.toFixed(1);
-
-
-    maximumEl.textContent =
-        stats.maximum;
-
-
-    minimumEl.textContent =
-        stats.minimum;
-
-
-    gapEl.textContent =
-        stats.gap;
-
-
-    drawWheel();
-
-    renderTopBottom();
-
-    renderPriorities();
-
-}
-
-
-function finishTest() {
-
-    testCompleted =
-        true;
-
-
-    testSection.classList.add(
-        "hidden"
-    );
-
-
-    resultSection.classList.remove(
-        "hidden"
-    );
-
-
-    updateResultDisplay();
-
-
-    generateInterpretation(
-        calculateStats()
-    );
-
-
-    window.scrollTo({
-        top: 0,
-        behavior: "smooth"
-    });
-
-
-    haptic(
-        "success"
-    );
-
-}
-
-
-/* =========================================================
-   RESTART
-   ========================================================= */
-
-document
-    .getElementById(
-        "restartBtn"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            currentQuestion =
-                0;
-
-
-            testCompleted =
-                false;
-
-
-            testSection.classList.remove(
-                "hidden"
-            );
-
-
-            resultSection.classList.add(
-                "hidden"
-            );
-
-
-            renderQuestion();
-
-
-            window.scrollTo({
-                top: 0,
-                behavior: "smooth"
-            });
-
-        }
-    );
-
-
-/* =========================================================
-   RESET
-   ========================================================= */
-
-document
-    .getElementById(
-        "resetBtn"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            if (
-                !confirm(
-                    "Очистить текущие оценки и начать заново?"
-                )
-            ) {
-
-                return;
-
-            }
-
-
-            values =
-                Array(
-                    categories.length
-                ).fill(5);
-
-
-            desiredValues =
-                Array(
-                    categories.length
-                ).fill(5);
-
-
-            localStorage.removeItem(
-                VALUES_KEY
-            );
-
-
-            localStorage.removeItem(
-                DESIRED_KEY
-            );
-
-
-            localStorage.removeItem(
-                TEXT_KEY
-            );
-
-
-            reflectionText.value =
-                "";
-
-
-            firstStepText.value =
-                "";
-
-
-            startDate.value =
-                "";
-
-
-            currentQuestion =
-                0;
-
-
-            testSection.classList.remove(
-                "hidden"
-            );
-
-
-            resultSection.classList.add(
-                "hidden"
-            );
-
-
-            renderQuestion();
-
-
-            showToast(
-                "Текущий результат очищен."
-            );
-
-        }
-    );
-
-
-/* =========================================================
-   JOURNAL
-   ========================================================= */
-
-function getJournal() {
-
-    const saved =
-        localStorage.getItem(
-            JOURNAL_KEY
-        );
-
-
-    if (!saved) {
-        return [];
-    }
-
-
-    try {
-
-        const journal =
-            JSON.parse(saved);
-
-
-        return Array.isArray(journal)
-            ? journal
-            : [];
-
-    } catch {
-
-        return [];
-
-    }
-
-}
-
-
-function saveJournal() {
-
-    const journal =
-        getJournal();
-
-
-    const stats =
-        calculateStats();
-
-
-    const priorities =
-        getSelectedPriorities();
-
-
-    const record = {
-
-        date:
-            new Date().toLocaleString(
-                "ru-RU"
-            ),
-
-        values:
-            [...values],
-
-        desiredValues:
-            [...desiredValues],
-
-        average:
-            Number(
-                stats.average.toFixed(1)
-            ),
-
-        maximum:
-            stats.maximum,
-
-        minimum:
-            stats.minimum,
-
-        gap:
-            stats.gap,
-
-        priorities:
-            priorities,
-
-        reflection:
-            reflectionText.value.trim(),
-
-        firstStep:
-            firstStepText.value.trim(),
-
-        startDate:
-            startDate.value
-
-    };
-
-
-    journal.unshift(
-        record
-    );
-
-
-    localStorage.setItem(
-        JOURNAL_KEY,
-        JSON.stringify(
-            journal.slice(
-                0,
-                100
-            )
-        )
-    );
-
-
-    renderJournal();
-
-
-    showToast(
-        "Результат сохранён в историю."
-    );
-
-
-    haptic(
-        "success"
-    );
-
-}
-
-
-document
-    .getElementById(
-        "saveBtn"
-    )
-    .addEventListener(
-        "click",
-        saveJournal
-    );
-
-
-function renderJournal() {
-
-    const journal =
-        getJournal();
-
-
-    journalContainer.innerHTML =
-        "";
-
-
-    if (
-        journal.length === 0
-    ) {
-
-        journalContainer.innerHTML =
-            `
-            <div class="empty">
-                Сохранённых результатов пока нет.
-            </div>
-            `;
-
-        return;
-
-    }
-
-
-    journal.forEach(
-        (record, index) => {
-
-            const entry =
-                document.createElement(
-                    "div"
-                );
-
-
-            entry.className =
-                "journal-entry";
-
-
-            const priorityNames =
-                Array.isArray(
-                    record.priorities
-                )
-                    ? record.priorities
-                        .map(
-                            i =>
-                                categories[i]
-                        )
-                        .filter(Boolean)
-                        .join(", ")
-                    : "";
-
-
-            entry.innerHTML = `
-
-                <div class="journal-date">
-                    ${record.date}
-                </div>
-
-                <div class="journal-score">
-
-                    <b>
-                        Среднее: ${record.average}
-                    </b>
-
-                    &nbsp;·&nbsp;
-
-                    Максимум: ${record.maximum}
-
-                    &nbsp;·&nbsp;
-
-                    Минимум: ${record.minimum}
-
-                    <br>
-
-                    Разрыв:
-                    ${record.gap}
-
-                    ${
-                        priorityNames
-                            ? `
-                                <br>
-                                Приоритеты:
-                                ${priorityNames}
-                            `
-                            : ""
-                    }
-
-                </div>
-
-
-                <div class="journal-buttons">
-
-                    <button
-                        class="load-record"
-                        data-index="${index}"
-                    >
-                        Загрузить
-                    </button>
-
-                    <button
-                        class="delete delete-record"
-                        data-index="${index}"
-                    >
-                        Удалить
-                    </button>
-
-                </div>
-
-            `;
-
-
-            journalContainer.appendChild(
-                entry
-            );
-
-        }
-    );
-
-
-    document
-        .querySelectorAll(
-            ".load-record"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        const index =
-                            Number(
-                                button.dataset.index
-                            );
-
-
-                        const journal =
-                            getJournal();
-
-
-                        const record =
-                            journal[index];
-
-
-                        if (!record) {
-                            return;
-                        }
-
-
-                        values =
-                            Array.isArray(
-                                record.values
-                            )
-                                ? [
-                                    ...record.values
-                                ]
-                                : Array(
-                                    categories.length
-                                ).fill(5);
-
-
-                        desiredValues =
-                            Array.isArray(
-                                record.desiredValues
-                            )
-                                ? [
-                                    ...record.desiredValues
-                                ]
-                                : [
-                                    ...values
-                                ];
-
-
-                        reflectionText.value =
-                            record.reflection || "";
-
-
-                        firstStepText.value =
-                            record.firstStep || "";
-
-
-                        startDate.value =
-                            record.startDate || "";
-
-
-                        saveValues();
-
-                        saveDesiredValues();
-
-                        saveTexts();
-
-
-                        currentQuestion =
-                            0;
-
-
-                        testSection.classList.add(
-                            "hidden"
-                        );
-
-
-                        resultSection.classList.remove(
-                            "hidden"
-                        );
-
-
-                        updateResultDisplay();
-
-                        generateInterpretation(
-                            calculateStats()
-                        );
-
-
-                        restorePriorities(
-                            record.priorities || []
-                        );
-
-
-                        renderDesiredValues();
-
-                        renderJournal();
-
-
-                        window.scrollTo({
-                            top: 0,
-                            behavior: "smooth"
-                        });
-
-
-                        showToast(
-                            "Результат загружен."
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-
-    document
-        .querySelectorAll(
-            ".delete-record"
-        )
-        .forEach(
-            button => {
-
-                button.addEventListener(
-                    "click",
-                    () => {
-
-                        const index =
-                            Number(
-                                button.dataset.index
-                            );
-
-
-                        const journal =
-                            getJournal();
-
-
-                        journal.splice(
-                            index,
-                            1
-                        );
-
-
-                        localStorage.setItem(
-                            JOURNAL_KEY,
-                            JSON.stringify(
-                                journal
-                            )
-                        );
-
-
-                        renderJournal();
-
-
-                        showToast(
-                            "Запись удалена."
-                        );
-
-                    }
-                );
-
-            }
-        );
-
-}
-
-
-function restorePriorities(
-    indexes
-) {
-
-    document
-        .querySelectorAll(
-            ".priority-checkbox"
-        )
-        .forEach(
-            checkbox => {
-
-                checkbox.checked =
-                    indexes.includes(
-                        Number(
-                            checkbox.value
-                        )
-                    );
-
-            }
-        );
-
-}
-
-
-/* =========================================================
-   PNG EXPORT
-   ========================================================= */
-
-document
-    .getElementById(
-        "pngBtn"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            const dataURL =
-                getWheelDataURL();
-
-
-            pngPreview.src =
-                dataURL;
-
-
-            modal.classList.add(
-                "active"
-            );
-
-        }
-    );
-
-
-document
-    .getElementById(
-        "closeModal"
-    )
-    .addEventListener(
-        "click",
-        () => {
-
-            modal.classList.remove(
-                "active"
-            );
-
-        }
-    );
-
-
-modal.addEventListener(
-    "click",
-    event => {
-
-        if (
-            event.target === modal
-        ) {
-
-            modal.classList.remove(
-                "active"
-            );
-
-        }
-
-    }
-);
-
-
-/* =========================================================
-   EXPORT CANVAS
-   ========================================================= */
-
-function getWheelDataURL() {
-
-    const size =
-        1600;
-
-
-    const exportCanvas =
-        document.createElement(
-            "canvas"
-        );
-
-
-    exportCanvas.width =
-        size;
-
-
-    exportCanvas.height =
-        size;
-
-
-    const exportCtx =
-        exportCanvas.getContext(
-            "2d"
-        );
-
-
-    /* Белый фон */
-
-    exportCtx.fillStyle =
-        "#ffffff";
-
-
-    exportCtx.fillRect(
-        0,
-        0,
-        size,
-        size
-    );
-
-
-    const center =
-        size / 2;
-
-
-    const radius =
-        size * 0.35;
-
-
-    const count =
-        categories.length;
-
-
-    const step =
-        Math.PI * 2 /
-        count;
-
-
-    exportCtx.save();
-
-
-    exportCtx.translate(
-        center,
-        center
-    );
-
-
-    /* Заголовок */
-
-    exportCtx.fillStyle =
-        "#111111";
-
-
-    exportCtx.font =
-        "bold 44px Arial";
-
-
-    exportCtx.textAlign =
-        "center";
-
-
-    exportCtx.fillText(
-        "Колесо баланса",
-        0,
-        -radius - 170
-    );
-
-
-    /* Среднее */
-
-    const stats =
-        calculateStats();
-
-
-    exportCtx.font =
-        "28px Arial";
-
-
-    exportCtx.fillStyle =
-        "#444444";
-
-
-    exportCtx.fillText(
-        `Среднее: ${stats.average.toFixed(1)} · Разрыв: ${stats.gap}`,
-        0,
-        -radius - 125
-    );
-
-
-    /* Сетка */
-
-    for (
-        let level = 1;
-        level <= 10;
-        level++
-    ) {
-
-        const r =
-            radius *
-            level /
-            10;
-
-
-        exportCtx.beginPath();
-
-
-        exportCtx.arc(
-            0,
-            0,
-            r,
-            0,
-            Math.PI * 2
-        );
-
-
-        exportCtx.strokeStyle =
-            "#b5bfd0";
-
-
-        exportCtx.lineWidth =
-            level === 5 ||
-            level === 10
-                ? 3
-                : 2;
-
-
-        exportCtx.stroke();
-
-
-        /* Число */
-
-        exportCtx.fillStyle =
-            "#555555";
-
-
-        exportCtx.font =
-            level === 5 ||
-            level === 10
-                ? "bold 26px Arial"
-                : "21px Arial";
-
-
-        exportCtx.textAlign =
-            "left";
-
-
-        exportCtx.textBaseline =
-            "middle";
-
-
-        exportCtx.fillText(
-            String(level),
-            15,
-            -r
-        );
-
-    }
-
-
-    /* Оси */
-
-    for (
-        let i = 0;
-        i < count;
-        i++
-    ) {
-
-        const angle =
-            -Math.PI / 2 +
-            i * step;
-
-
-        exportCtx.beginPath();
-
-
-        exportCtx.moveTo(
-            0,
-            0
-        );
-
-
-        exportCtx.lineTo(
-            Math.cos(angle) *
-                radius,
-            Math.sin(angle) *
-                radius
-        );
-
-
-        exportCtx.strokeStyle =
-            "#b5bfd0";
-
-
-        exportCtx.lineWidth =
-            2;
-
-
-        exportCtx.stroke();
-
-    }
-
-
-    /* Желаемая фигура */
-
-    const selected =
-        getSelectedPriorities();
-
-
-    if (
-        selected.length > 0
-    ) {
-
-        exportCtx.beginPath();
-
-
-        desiredValues.forEach(
-            (value, index) => {
-
-                const angle =
-                    -Math.PI / 2 +
-                    index * step;
-
-
-                const r =
-                    radius *
-                    value /
-                    10;
-
-
-                const x =
-                    Math.cos(angle) *
-                    r;
-
-
-                const y =
-                    Math.sin(angle) *
-                    r;
-
-
-                if (
-                    index === 0
-                ) {
-
-                    exportCtx.moveTo(
-                        x,
-                        y
-                    );
-
-                } else {
-
-                    exportCtx.lineTo(
-                        x,
-                        y
-                    );
-
-                }
-
-            }
-        );
-
-
-        exportCtx.closePath();
-
-
-        exportCtx.strokeStyle =
-            "#555555";
-
-
-        exportCtx.lineWidth =
-            4;
-
-
-        exportCtx.setLineDash(
-            [12, 8]
-        );
-
-
-        exportCtx.stroke();
-
-
-        exportCtx.setLineDash([]);
-
-    }
-
-
-    /* Текущая фигура */
-
-    exportCtx.beginPath();
-
-
-    values.forEach(
-        (value, index) => {
-
-            const angle =
-                -Math.PI / 2 +
-                index * step;
-
-
-            const r =
-                radius *
-                value /
-                10;
-
-
-            const x =
-                Math.cos(angle) *
-                r;
-
-
-            const y =
-                Math.sin(angle) *
-                r;
-
-
-            if (
-                index === 0
-            ) {
-
-                exportCtx.moveTo(
-                    x,
-                    y
-                );
-
-            } else {
-
-                exportCtx.lineTo(
-                    x,
-                    y
-                );
-
-            }
-
-        }
-    );
-
-
-    exportCtx.closePath();
-
-
-    exportCtx.fillStyle =
-        "rgba(70,120,200,0.22)";
-
-
-    exportCtx.fill();
-
-
-    exportCtx.strokeStyle =
-        "#315fa8";
-
-
-    exportCtx.lineWidth =
-        6;
-
-
-    exportCtx.stroke();
-
-
-    /* Точки и значения */
-
-    values.forEach(
-        (value, index) => {
-
-            const angle =
-                -Math.PI / 2 +
-                index * step;
-
-
-            const r =
-                radius *
-                value /
-                10;
-
-
-            const x =
-                Math.cos(angle) *
-                r;
-
-
-            const y =
-                Math.sin(angle) *
-                r;
-
-
-            exportCtx.beginPath();
-
-
-            exportCtx.arc(
-                x,
-                y,
-                10,
-                0,
-                Math.PI * 2
-            );
-
-
-            exportCtx.fillStyle =
-                "#315fa8";
-
-
-            exportCtx.fill();
-
-
-            const labelR =
-                Math.max(
-                    r + 25,
-                    30
-                );
-
-
-            exportCtx.fillStyle =
-                "#222222";
-
-
-            exportCtx.font =
-                "bold 24px Arial";
-
-
-            exportCtx.textAlign =
-                "center";
-
-
-            exportCtx.textBaseline =
-                "middle";
-
-
-            exportCtx.fillText(
-                String(value),
-                Math.cos(angle) *
-                    labelR,
-                Math.sin(angle) *
-                    labelR
-            );
-
-        }
-    );
-
-
-    /* Названия */
-
-    categories.forEach(
-        (category, index) => {
-
-            const angle =
-                -Math.PI / 2 +
-                index * step;
-
-
-            const labelRadius =
-                radius + 95;
-
-
-            const x =
-                Math.cos(angle) *
-                labelRadius;
-
-
-            const y =
-                Math.sin(angle) *
-                labelRadius;
-
-
-            exportCtx.fillStyle =
-                "#111111";
-
-
-            exportCtx.font =
-                category.length > 18
-                    ? "16px Arial"
-                    : "20px Arial";
-
-
-            exportCtx.textAlign =
-                "center";
-
-
-            exportCtx.textBaseline =
-                "middle";
-
-
-            exportCtx.fillText(
-                category,
-                x,
-                y
-            );
-
-        }
-    );
-
-
-    exportCtx.restore();
-
-
-    return exportCanvas.toDataURL(
-        "image/png"
-    );
-
-}
-
-
-/* =========================================================
-   INITIALIZATION
-   ========================================================= */
-
+/* ---------- ИНИЦИАЛИЗАЦИЯ ---------- */
 loadValues();
-
-loadDesiredValues();
-
-loadTexts();
-
-createNumberScale();
-
-renderQuestion();
-
+buildList();
+updateStats();
 renderJournal();
+draw();
+initTelegram();
+setTimeout(initTelegram, 500);
+setTimeout(initTelegram, 1500);
 
-
-/*
- * Дата по умолчанию — сегодня.
- */
-
-if (
-    !startDate.value
-) {
-
-    const now =
-        new Date();
-
-
-    const yyyy =
-        now.getFullYear();
-
-
-    const mm =
-        String(
-            now.getMonth() + 1
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    const dd =
-        String(
-            now.getDate()
-        ).padStart(
-            2,
-            "0"
-        );
-
-
-    startDate.value =
-        `${yyyy}-${mm}-${dd}`;
-
+} catch(err) {
+  var el = document.getElementById('errScreen');
+  var txt = document.getElementById('errText');
+  if (el && txt) {
+    el.style.display = 'block';
+    txt.textContent = 'Ошибка инициализации:\n' + (err.message || err) +
+                      (err.stack ? '\n\n' + err.stack : '');
+  }
 }
 
-
-/*
- * Canvas сначала скрыт,
- * поэтому инициализируем его
- * после загрузки.
- */
-
-window.addEventListener(
-    "load",
-    () => {
-
-        resizeCanvas();
-
-    }
-);
-
+})();
 </script>
-
 </body>
 </html>
