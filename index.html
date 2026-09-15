@@ -17,6 +17,7 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
+
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
@@ -29,13 +30,18 @@
             min-height: 100%;
             background: #0b1120;
             color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+            font-family:
+                -apple-system,
+                BlinkMacSystemFont,
+                "Segoe UI",
+                Arial,
+                sans-serif;
         }
 
         body {
             min-height: 100vh;
             min-height: 100dvh;
-            padding: 16px;
+            padding: 12px;
         }
 
         .container {
@@ -47,37 +53,45 @@
         h1 {
             text-align: center;
             font-size: 28px;
-            margin: 8px 0 6px;
+            margin: 8px 0 5px;
         }
 
         .subtitle {
             text-align: center;
             color: #aab4c3;
             font-size: 15px;
-            margin-bottom: 20px;
+            margin-bottom: 16px;
         }
 
         .card {
             background: #111a2e;
             border: 1px solid #26324a;
             border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 16px;
+            padding: 15px;
+            margin-bottom: 15px;
         }
 
         .wheel-wrapper {
+            width: 100%;
             display: flex;
             justify-content: center;
             align-items: center;
-            width: 100%;
+            overflow: hidden;
         }
 
         canvas {
             display: block;
-            width: min(90vw, 600px);
-            height: min(90vw, 600px);
+            width: min(96vw, 700px);
+            height: min(96vw, 700px);
             max-width: 100%;
             touch-action: none;
+        }
+
+        .scale-info {
+            text-align: center;
+            color: #9da9bb;
+            font-size: 13px;
+            margin-top: 4px;
         }
 
         .stats {
@@ -90,7 +104,7 @@
         .stat {
             background: #18233a;
             border-radius: 14px;
-            padding: 12px 6px;
+            padding: 10px 5px;
             text-align: center;
         }
 
@@ -105,16 +119,22 @@
             margin-top: 3px;
         }
 
+        h2 {
+            font-size: 19px;
+            margin-top: 3px;
+            margin-bottom: 15px;
+        }
+
         .slider-item {
-            margin-bottom: 18px;
+            margin-bottom: 17px;
         }
 
         .slider-header {
             display: flex;
             justify-content: space-between;
             align-items: center;
-            margin-bottom: 7px;
             gap: 10px;
+            margin-bottom: 5px;
         }
 
         .slider-name {
@@ -122,7 +142,7 @@
         }
 
         .slider-value {
-            min-width: 34px;
+            min-width: 36px;
             text-align: center;
             font-weight: 700;
             background: #24314b;
@@ -193,11 +213,11 @@
         .modal {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.86);
+            background: rgba(0, 0, 0, 0.88);
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 20px;
+            padding: 18px;
             z-index: 1000;
         }
 
@@ -229,8 +249,9 @@
         }
 
         @media (max-width: 600px) {
+
             body {
-                padding: 10px;
+                padding: 8px;
             }
 
             h1 {
@@ -238,7 +259,7 @@
             }
 
             .card {
-                padding: 12px;
+                padding: 11px;
                 border-radius: 17px;
             }
 
@@ -246,10 +267,11 @@
                 grid-template-columns: 1fr;
             }
 
-            .stats {
-                gap: 6px;
+            .slider-name {
+                font-size: 14px;
             }
         }
+
     </style>
 </head>
 
@@ -264,36 +286,66 @@
     </div>
 
     <div class="card">
+
         <div class="wheel-wrapper">
             <canvas id="wheel"></canvas>
         </div>
 
-        <div class="stats">
-            <div class="stat">
-                <div class="stat-value" id="average">5.0</div>
-                <div class="stat-label">Среднее</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-value" id="maximum">5</div>
-                <div class="stat-label">Максимум</div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-value" id="minimum">5</div>
-                <div class="stat-label">Минимум</div>
-            </div>
+        <div class="scale-info">
+            Центр = 0 · Внешний круг = 10
         </div>
+
+        <div class="stats">
+
+            <div class="stat">
+                <div class="stat-value" id="average">
+                    5.0
+                </div>
+                <div class="stat-label">
+                    Среднее
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-value" id="maximum">
+                    5
+                </div>
+                <div class="stat-label">
+                    Максимум
+                </div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-value" id="minimum">
+                    5
+                </div>
+                <div class="stat-label">
+                    Минимум
+                </div>
+            </div>
+
+        </div>
+
     </div>
 
+
     <div class="card">
+
         <h2>Оценки сфер</h2>
+
         <div id="sliders"></div>
+
     </div>
 
+
     <div class="card">
+
         <div class="buttons">
-            <button class="primary" id="saveBtn">
+
+            <button
+                class="primary"
+                id="saveBtn"
+            >
                 💾 Сохранить результат
             </button>
 
@@ -301,23 +353,40 @@
                 🖼 Сохранить PNG
             </button>
 
-            <button class="danger" id="resetBtn">
+            <button
+                class="danger"
+                id="resetBtn"
+            >
                 🔄 Сбросить
             </button>
+
         </div>
+
     </div>
 
+
     <div class="card">
+
         <h2>📖 История</h2>
+
         <div id="journal"></div>
+
     </div>
 
 </div>
 
-<div class="modal" id="modal">
+
+<div
+    class="modal"
+    id="modal"
+>
+
     <div class="modal-content">
 
-        <img id="pngPreview" alt="Колесо баланса">
+        <img
+            id="pngPreview"
+            alt="Колесо баланса"
+        >
 
         <div class="modal-text">
             На iPhone можно нажать и удерживать изображение,
@@ -329,7 +398,9 @@
         </button>
 
     </div>
+
 </div>
+
 
 <script>
 
@@ -340,6 +411,7 @@ tg.expand();
 
 
 const categories = [
+
     "Здоровье",
     "Энергия",
     "Карьера",
@@ -360,57 +432,84 @@ const categories = [
     "Стабильность",
     "Творчество",
     "Путешествия"
+
 ];
 
 
-let values = Array(categories.length).fill(5);
+let values =
+    Array(categories.length).fill(5);
 
-const canvas = document.getElementById("wheel");
-const ctx = canvas.getContext("2d");
 
-const slidersContainer = document.getElementById("sliders");
+const canvas =
+    document.getElementById("wheel");
 
-const averageEl = document.getElementById("average");
-const maximumEl = document.getElementById("maximum");
-const minimumEl = document.getElementById("minimum");
+const ctx =
+    canvas.getContext("2d");
 
-const journalContainer = document.getElementById("journal");
+const slidersContainer =
+    document.getElementById("sliders");
 
-const modal = document.getElementById("modal");
-const pngPreview = document.getElementById("pngPreview");
+const averageEl =
+    document.getElementById("average");
+
+const maximumEl =
+    document.getElementById("maximum");
+
+const minimumEl =
+    document.getElementById("minimum");
+
+const journalContainer =
+    document.getElementById("journal");
+
+const modal =
+    document.getElementById("modal");
+
+const pngPreview =
+    document.getElementById("pngPreview");
 
 
 function saveValues() {
+
     localStorage.setItem(
         "wheelBalanceValues",
         JSON.stringify(values)
     );
+
 }
 
 
 function loadValues() {
 
-    const saved = localStorage.getItem(
-        "wheelBalanceValues"
-    );
+    const saved =
+        localStorage.getItem(
+            "wheelBalanceValues"
+        );
 
-    if (saved) {
-
-        try {
-
-            const parsed = JSON.parse(saved);
-
-            if (
-                Array.isArray(parsed) &&
-                parsed.length === categories.length
-            ) {
-                values = parsed.map(Number);
-            }
-
-        } catch (error) {
-            console.log(error);
-        }
+    if (!saved) {
+        return;
     }
+
+    try {
+
+        const parsed =
+            JSON.parse(saved);
+
+        if (
+            Array.isArray(parsed) &&
+            parsed.length === categories.length
+        ) {
+
+            values =
+                parsed.map(Number);
+
+        }
+
+    } catch (error) {
+
+        console.log(error);
+
+    }
+
 }
 
 
@@ -418,89 +517,108 @@ function createSliders() {
 
     slidersContainer.innerHTML = "";
 
-    categories.forEach((category, index) => {
+    categories.forEach(
+        (category, index) => {
 
-        const item = document.createElement("div");
+            const item =
+                document.createElement("div");
 
-        item.className = "slider-item";
+            item.className =
+                "slider-item";
 
-        item.innerHTML = `
-            <div class="slider-header">
+            item.innerHTML = `
 
-                <div class="slider-name">
-                    ${index + 1}. ${category}
+                <div class="slider-header">
+
+                    <div class="slider-name">
+                        ${index + 1}. ${category}
+                    </div>
+
+                    <div
+                        class="slider-value"
+                        id="value-${index}"
+                    >
+                        ${values[index]}
+                    </div>
+
                 </div>
 
-                <div class="slider-value"
-                     id="value-${index}">
-                    ${values[index]}
-                </div>
+                <input
+                    type="range"
+                    min="0"
+                    max="10"
+                    step="1"
+                    value="${values[index]}"
+                    id="slider-${index}"
+                >
 
-            </div>
+            `;
 
-            <input
-                type="range"
-                min="0"
-                max="10"
-                step="1"
-                value="${values[index]}"
-                id="slider-${index}"
-            >
-        `;
+            slidersContainer.appendChild(item);
 
-        slidersContainer.appendChild(item);
 
-        const slider =
-            document.getElementById(`slider-${index}`);
+            const slider =
+                document.getElementById(
+                    `slider-${index}`
+                );
 
-        slider.addEventListener("input", function () {
 
-            values[index] = Number(this.value);
+            slider.addEventListener(
+                "input",
+                function () {
 
-            document.getElementById(
-                `value-${index}`
-            ).textContent = values[index];
+                    values[index] =
+                        Number(this.value);
 
-            saveValues();
+                    document.getElementById(
+                        `value-${index}`
+                    ).textContent =
+                        values[index];
 
-            updateStats();
-            drawWheel();
+                    saveValues();
 
-            if (
-                tg.HapticFeedback &&
-                tg.HapticFeedback.selectionChanged
-            ) {
-                tg.HapticFeedback.selectionChanged();
-            }
-        });
-    });
+                    updateStats();
+
+                    drawWheel();
+
+                    if (
+                        tg.HapticFeedback &&
+                        tg.HapticFeedback.selectionChanged
+                    ) {
+
+                        tg.HapticFeedback.selectionChanged();
+
+                    }
+
+                }
+            );
+
+        }
+    );
+
 }
 
 
 function updateStats() {
 
-    const sum = values.reduce(
-        (a, b) => a + b,
-        0
-    );
+    const sum =
+        values.reduce(
+            (a, b) => a + b,
+            0
+        );
 
     const average =
         sum / values.length;
-
-    const maximum =
-        Math.max(...values);
-
-    const minimum =
-        Math.min(...values);
 
     averageEl.textContent =
         average.toFixed(1);
 
     maximumEl.textContent =
-        maximum;
+        Math.max(...values);
 
     minimumEl.textContent =
-        minimum;
+        Math.min(...values);
+
 }
 
 
@@ -508,8 +626,8 @@ function resizeCanvas() {
 
     const size =
         Math.min(
-            window.innerWidth * 0.9,
-            600
+            window.innerWidth * 0.96,
+            700
         );
 
     const dpr =
@@ -537,6 +655,7 @@ function resizeCanvas() {
     );
 
     drawWheel();
+
 }
 
 
@@ -554,8 +673,20 @@ function drawWheel() {
     const center =
         size / 2;
 
+    /*
+     * Увеличиваем рабочую область,
+     * чтобы подписи сфер помещались.
+     */
+
     const radius =
-        size * 0.36;
+        size * 0.33;
+
+    const count =
+        categories.length;
+
+    const step =
+        Math.PI * 2 / count;
+
 
     ctx.clearRect(
         0,
@@ -563,6 +694,7 @@ function drawWheel() {
         width,
         height
     );
+
 
     ctx.save();
 
@@ -573,7 +705,7 @@ function drawWheel() {
 
 
     /*
-     * Фон
+     * Фоновый круг
      */
 
     ctx.beginPath();
@@ -593,7 +725,7 @@ function drawWheel() {
 
 
     /*
-     * Сетка
+     * Круги шкалы 1–10
      */
 
     for (
@@ -604,6 +736,7 @@ function drawWheel() {
 
         const r =
             radius * level / 10;
+
 
         ctx.beginPath();
 
@@ -615,242 +748,34 @@ function drawWheel() {
             Math.PI * 2
         );
 
-        ctx.strokeStyle =
-            "#33425f";
 
-        ctx.lineWidth = 1;
+        /*
+         * Каждый 5-й круг делаем
+         * немного заметнее.
+         */
+
+        ctx.strokeStyle =
+            level === 5 || level === 10
+                ? "#5a6b88"
+                : "#33425f";
+
+        ctx.lineWidth =
+            level === 5 || level === 10
+                ? 1.5
+                : 1;
 
         ctx.stroke();
+
     }
 
 
     /*
-     * Сектора
-     */
-
-    const count =
-        categories.length;
-
-    const step =
-        Math.PI * 2 / count;
-
-    for (
-        let i = 0;
-        i < count;
-        i++
-    ) {
-
-        const angle =
-            -Math.PI / 2 +
-            i * step;
-
-        ctx.beginPath();
-
-        ctx.moveTo(0, 0);
-
-        ctx.lineTo(
-            Math.cos(angle) * radius,
-            Math.sin(angle) * radius
-        );
-
-        ctx.strokeStyle =
-            "#33425f";
-
-        ctx.lineWidth = 1;
-
-        ctx.stroke();
-    }
-
-
-    /*
-     * Значения
-     */
-
-    ctx.beginPath();
-
-    values.forEach(
-        (value, index) => {
-
-            const angle =
-                -Math.PI / 2 +
-                index * step;
-
-            const r =
-                radius * value / 10;
-
-            const x =
-                Math.cos(angle) * r;
-
-            const y =
-                Math.sin(angle) * r;
-
-            if (index === 0) {
-                ctx.moveTo(x, y);
-            } else {
-                ctx.lineTo(x, y);
-            }
-        }
-    );
-
-    ctx.closePath();
-
-    ctx.fillStyle =
-        "rgba(76, 137, 218, 0.35)";
-
-    ctx.fill();
-
-    ctx.strokeStyle =
-        "#6ea8fe";
-
-    ctx.lineWidth = 3;
-
-    ctx.stroke();
-
-
-    /*
-     * Точки
-     */
-
-    values.forEach(
-        (value, index) => {
-
-            const angle =
-                -Math.PI / 2 +
-                index * step;
-
-            const r =
-                radius * value / 10;
-
-            const x =
-                Math.cos(angle) * r;
-
-            const y =
-                Math.sin(angle) * r;
-
-            ctx.beginPath();
-
-            ctx.arc(
-                x,
-                y,
-                5,
-                0,
-                Math.PI * 2
-            );
-
-            ctx.fillStyle =
-                "#ffffff";
-
-            ctx.fill();
-
-            ctx.strokeStyle =
-                "#6ea8fe";
-
-            ctx.lineWidth = 2;
-
-            ctx.stroke();
-        }
-    );
-
-
-    /*
-     * Подписи
-     */
-
-    categories.forEach(
-        (category, index) => {
-
-            const angle =
-                -Math.PI / 2 +
-                index * step;
-
-            const labelRadius =
-                radius + 25;
-
-            const x =
-                Math.cos(angle) *
-                labelRadius;
-
-            const y =
-                Math.sin(angle) *
-                labelRadius;
-
-            ctx.save();
-
-            ctx.translate(
-                x,
-                y
-            );
-
-            ctx.fillStyle =
-                "#ffffff";
-
-            ctx.font =
-                "11px Arial";
-
-            ctx.textAlign =
-                "center";
-
-            ctx.textBaseline =
-                "middle";
-
-            ctx.fillText(
-                category,
-                0,
-                0
-            );
-
-            ctx.restore();
-        }
-    );
-
-
-    ctx.restore();
-}
-
-
-function getWheelDataURL() {
-
-    /*
-     * Создаём отдельный белый PNG,
-     * чтобы изображение было удобно
-     * сохранять и отправлять.
-     */
-
-    const exportCanvas =
-        document.createElement("canvas");
-
-    const size = 1200;
-
-    exportCanvas.width = size;
-    exportCanvas.height = size;
-
-    const exportCtx =
-        exportCanvas.getContext("2d");
-
-    exportCtx.fillStyle = "#ffffff";
-
-    exportCtx.fillRect(
-        0,
-        0,
-        size,
-        size
-    );
-
-    const center =
-        size / 2;
-
-    const radius =
-        size * 0.36;
-
-    exportCtx.save();
-
-    exportCtx.translate(
-        center,
-        center
-    );
-
-    /*
-     * Сетка
+     * ЧИСЛОВАЯ ШКАЛА
+     *
+     * 1 ... 10
+     *
+     * Цифры располагаются сверху,
+     * на вертикальной оси.
      */
 
     for (
@@ -862,30 +787,33 @@ function getWheelDataURL() {
         const r =
             radius * level / 10;
 
-        exportCtx.beginPath();
 
-        exportCtx.arc(
-            0,
-            0,
-            r,
-            0,
-            Math.PI * 2
+        ctx.fillStyle =
+            level === 5 || level === 10
+                ? "#ffffff"
+                : "#8fa0b8";
+
+
+        ctx.font =
+            level === 5 || level === 10
+                ? "bold 12px Arial"
+                : "11px Arial";
+
+
+        ctx.textAlign =
+            "left";
+
+        ctx.textBaseline =
+            "middle";
+
+
+        ctx.fillText(
+            String(level),
+            5,
+            -r
         );
 
-        exportCtx.strokeStyle =
-            "#b5bfd0";
-
-        exportCtx.lineWidth = 2;
-
-        exportCtx.stroke();
     }
-
-
-    const count =
-        categories.length;
-
-    const step =
-        Math.PI * 2 / count;
 
 
     /*
@@ -902,32 +830,36 @@ function getWheelDataURL() {
             -Math.PI / 2 +
             i * step;
 
-        exportCtx.beginPath();
 
-        exportCtx.moveTo(
+        ctx.beginPath();
+
+        ctx.moveTo(
             0,
             0
         );
 
-        exportCtx.lineTo(
+        ctx.lineTo(
             Math.cos(angle) * radius,
             Math.sin(angle) * radius
         );
 
-        exportCtx.strokeStyle =
-            "#b5bfd0";
 
-        exportCtx.lineWidth = 2;
+        ctx.strokeStyle =
+            "#33425f";
 
-        exportCtx.stroke();
+        ctx.lineWidth = 1;
+
+        ctx.stroke();
+
     }
 
 
     /*
-     * Фигура
+     * Фигура текущего баланса
      */
 
-    exportCtx.beginPath();
+    ctx.beginPath();
+
 
     values.forEach(
         (value, index) => {
@@ -945,37 +877,46 @@ function getWheelDataURL() {
             const y =
                 Math.sin(angle) * r;
 
+
             if (index === 0) {
-                exportCtx.moveTo(
+
+                ctx.moveTo(
                     x,
                     y
                 );
+
             } else {
-                exportCtx.lineTo(
+
+                ctx.lineTo(
                     x,
                     y
                 );
+
             }
+
         }
     );
 
-    exportCtx.closePath();
 
-    exportCtx.fillStyle =
-        "rgba(70, 120, 200, 0.30)";
+    ctx.closePath();
 
-    exportCtx.fill();
 
-    exportCtx.strokeStyle =
-        "#315fa8";
+    ctx.fillStyle =
+        "rgba(76, 137, 218, 0.35)";
 
-    exportCtx.lineWidth = 6;
+    ctx.fill();
 
-    exportCtx.stroke();
+
+    ctx.strokeStyle =
+        "#6ea8fe";
+
+    ctx.lineWidth = 3;
+
+    ctx.stroke();
 
 
     /*
-     * Точки
+     * Точки значений
      */
 
     values.forEach(
@@ -994,26 +935,96 @@ function getWheelDataURL() {
             const y =
                 Math.sin(angle) * r;
 
-            exportCtx.beginPath();
 
-            exportCtx.arc(
+            ctx.beginPath();
+
+            ctx.arc(
                 x,
                 y,
-                10,
+                5,
                 0,
                 Math.PI * 2
             );
 
-            exportCtx.fillStyle =
-                "#315fa8";
 
-            exportCtx.fill();
+            ctx.fillStyle =
+                "#ffffff";
+
+            ctx.fill();
+
+
+            ctx.strokeStyle =
+                "#6ea8fe";
+
+            ctx.lineWidth = 2;
+
+            ctx.stroke();
+
         }
     );
 
 
     /*
-     * Подписи
+     * Значения рядом с точками
+     */
+
+    values.forEach(
+        (value, index) => {
+
+            const angle =
+                -Math.PI / 2 +
+                index * step;
+
+            const r =
+                radius * value / 10;
+
+
+            /*
+             * Если значение 0,
+             * ставим цифру немного выше центра.
+             */
+
+            const labelR =
+                Math.max(
+                    r + 9,
+                    18
+                );
+
+
+            const x =
+                Math.cos(angle) *
+                labelR;
+
+            const y =
+                Math.sin(angle) *
+                labelR;
+
+
+            ctx.fillStyle =
+                "#ffffff";
+
+            ctx.font =
+                "bold 11px Arial";
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+
+            ctx.fillText(
+                String(value),
+                x,
+                y
+            );
+
+        }
+    );
+
+
+    /*
+     * Подписи сфер
      */
 
     categories.forEach(
@@ -1024,7 +1035,8 @@ function getWheelDataURL() {
                 index * step;
 
             const labelRadius =
-                radius + 55;
+                radius + 30;
+
 
             const x =
                 Math.cos(angle) *
@@ -1034,32 +1046,78 @@ function getWheelDataURL() {
                 Math.sin(angle) *
                 labelRadius;
 
-            exportCtx.fillStyle =
-                "#111111";
 
-            exportCtx.font =
-                "22px Arial";
+            ctx.save();
 
-            exportCtx.textAlign =
-                "center";
-
-            exportCtx.textBaseline =
-                "middle";
-
-            exportCtx.fillText(
-                category,
+            ctx.translate(
                 x,
                 y
             );
+
+
+            ctx.fillStyle =
+                "#ffffff";
+
+            ctx.font =
+                "10px Arial";
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+
+            /*
+             * Для длинных названий
+             * уменьшаем шрифт.
+             */
+
+            if (
+                category.length > 16
+            ) {
+
+                ctx.font =
+                    "8px Arial";
+
+            }
+
+
+            ctx.fillText(
+                category,
+                0,
+                0
+            );
+
+
+            ctx.restore();
+
         }
     );
 
 
-    exportCtx.restore();
+    /*
+     * Центральная точка
+     */
 
-    return exportCanvas.toDataURL(
-        "image/png"
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        4,
+        0,
+        Math.PI * 2
     );
+
+    ctx.fillStyle =
+        "#ffffff";
+
+    ctx.fill();
+
+
+    ctx.restore();
+
 }
 
 
@@ -1075,10 +1133,15 @@ function getJournal() {
     }
 
     try {
+
         return JSON.parse(saved);
+
     } catch {
+
         return [];
+
     }
+
 }
 
 
@@ -1086,6 +1149,14 @@ function saveJournal() {
 
     const journal =
         getJournal();
+
+
+    const average =
+        values.reduce(
+            (a, b) => a + b,
+            0
+        ) / values.length;
+
 
     const record = {
 
@@ -1098,29 +1169,21 @@ function saveJournal() {
             [...values],
 
         average:
-            (
-                values.reduce(
-                    (a, b) => a + b,
-                    0
-                ) / values.length
-            ).toFixed(1)
+            average.toFixed(1)
+
     };
 
 
     journal.unshift(record);
 
 
-    /*
-     * Храним последние 100 результатов
-     */
-
-    const limited =
-        journal.slice(0, 100);
-
     localStorage.setItem(
         "wheelBalanceJournal",
-        JSON.stringify(limited)
+        JSON.stringify(
+            journal.slice(0, 100)
+        )
     );
+
 
     renderJournal();
 
@@ -1133,7 +1196,9 @@ function saveJournal() {
         tg.HapticFeedback.notificationOccurred(
             "success"
         );
+
     }
+
 }
 
 
@@ -1142,17 +1207,24 @@ function renderJournal() {
     const journal =
         getJournal();
 
-    journalContainer.innerHTML = "";
+
+    journalContainer.innerHTML =
+        "";
 
 
-    if (journal.length === 0) {
+    if (
+        journal.length === 0
+    ) {
 
         journalContainer.innerHTML =
-            `<div class="empty">
+            `
+            <div class="empty">
                 Сохранённых результатов пока нет.
-            </div>`;
+            </div>
+            `;
 
         return;
+
     }
 
 
@@ -1164,15 +1236,18 @@ function renderJournal() {
                     "div"
                 );
 
+
             entry.className =
                 "journal-entry";
 
 
             const details =
-                categories.map(
-                    (category, i) =>
-                        `${category}: ${record.values[i]}`
-                ).join("<br>");
+                categories
+                    .map(
+                        (category, i) =>
+                            `${category}: ${record.values[i]}`
+                    )
+                    .join("<br>");
 
 
             entry.innerHTML = `
@@ -1182,9 +1257,15 @@ function renderJournal() {
                 </div>
 
                 <div class="journal-score">
-                    <b>Среднее: ${record.average}</b>
+
+                    <b>
+                        Среднее: ${record.average}
+                    </b>
+
                     <br><br>
+
                     ${details}
+
                 </div>
 
                 <br>
@@ -1202,91 +1283,105 @@ function renderJournal() {
                 >
                     Удалить
                 </button>
+
             `;
 
 
             journalContainer.appendChild(
                 entry
             );
+
         }
     );
 
 
-    document.querySelectorAll(
-        ".load-record"
-    ).forEach(
-        button => {
+    document
+        .querySelectorAll(".load-record")
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                    const index =
-                        Number(
-                            button.dataset.index
-                        );
+                        const index =
+                            Number(
+                                button.dataset.index
+                            );
 
-                    const journal =
-                        getJournal();
+                        const journal =
+                            getJournal();
 
-                    if (
-                        journal[index]
-                    ) {
 
-                        values =
-                            [
-                                ...journal[index].values
-                            ];
+                        if (
+                            journal[index]
+                        ) {
 
-                        saveValues();
+                            values =
+                                [
+                                    ...journal[index].values
+                                ];
 
-                        createSliders();
-                        updateStats();
-                        drawWheel();
+                            saveValues();
 
-                        window.scrollTo({
-                            top: 0,
-                            behavior: "smooth"
-                        });
+                            createSliders();
+
+                            updateStats();
+
+                            drawWheel();
+
+                            window.scrollTo({
+                                top: 0,
+                                behavior: "smooth"
+                            });
+
+                        }
+
                     }
-                }
-            );
-        }
-    );
+                );
+
+            }
+        );
 
 
-    document.querySelectorAll(
-        ".delete-record"
-    ).forEach(
-        button => {
+    document
+        .querySelectorAll(".delete-record")
+        .forEach(
+            button => {
 
-            button.addEventListener(
-                "click",
-                () => {
+                button.addEventListener(
+                    "click",
+                    () => {
 
-                    const index =
-                        Number(
-                            button.dataset.index
+                        const index =
+                            Number(
+                                button.dataset.index
+                            );
+
+                        const journal =
+                            getJournal();
+
+
+                        journal.splice(
+                            index,
+                            1
                         );
 
-                    const journal =
-                        getJournal();
 
-                    journal.splice(
-                        index,
-                        1
-                    );
+                        localStorage.setItem(
+                            "wheelBalanceJournal",
+                            JSON.stringify(journal)
+                        );
 
-                    localStorage.setItem(
-                        "wheelBalanceJournal",
-                        JSON.stringify(journal)
-                    );
 
-                    renderJournal();
-                }
-            );
-        }
-    );
+                        renderJournal();
+
+                    }
+                );
+
+            }
+        );
+
 }
 
 
@@ -1312,16 +1407,21 @@ document
                 return;
             }
 
+
             values =
                 Array(
                     categories.length
                 ).fill(5);
 
+
             saveValues();
 
             createSliders();
+
             updateStats();
+
             drawWheel();
+
         }
     );
 
@@ -1335,12 +1435,15 @@ document
             const dataURL =
                 getWheelDataURL();
 
+
             pngPreview.src =
                 dataURL;
+
 
             modal.classList.add(
                 "active"
             );
+
         }
     );
 
@@ -1354,6 +1457,7 @@ document
             modal.classList.remove(
                 "active"
             );
+
         }
     );
 
@@ -1369,13 +1473,15 @@ modal.addEventListener(
             modal.classList.remove(
                 "active"
             );
+
         }
+
     }
 );
 
 
 /*
- * Управление колесом пальцем/мышью
+ * Управление колесом пальцем / мышью
  */
 
 function updateValueFromPointer(
@@ -1385,6 +1491,7 @@ function updateValueFromPointer(
     const rect =
         canvas.getBoundingClientRect();
 
+
     const x =
         event.clientX -
         rect.left;
@@ -1393,11 +1500,13 @@ function updateValueFromPointer(
         event.clientY -
         rect.top;
 
+
     const centerX =
         rect.width / 2;
 
     const centerY =
         rect.height / 2;
+
 
     let angle =
         Math.atan2(
@@ -1405,16 +1514,26 @@ function updateValueFromPointer(
             x - centerX
         );
 
-    angle += Math.PI / 2;
 
-    if (angle < 0) {
-        angle += Math.PI * 2;
+    angle +=
+        Math.PI / 2;
+
+
+    if (
+        angle < 0
+    ) {
+
+        angle +=
+            Math.PI * 2;
+
     }
+
 
     const count =
         categories.length;
 
-    let index =
+
+    const index =
         Math.round(
             angle /
             (Math.PI * 2 / count)
@@ -1433,13 +1552,16 @@ function updateValueFromPointer(
             )
         );
 
+
     const radius =
-        rect.width * 0.36;
+        rect.width * 0.33;
+
 
     let value =
         Math.round(
             (distance / radius) * 10
         );
+
 
     value =
         Math.max(
@@ -1450,32 +1572,45 @@ function updateValueFromPointer(
             )
         );
 
+
     values[index] =
         value;
+
 
     const slider =
         document.getElementById(
             `slider-${index}`
         );
 
+
     if (slider) {
+
         slider.value =
             value;
+
     }
+
 
     const valueLabel =
         document.getElementById(
             `value-${index}`
         );
 
+
     if (valueLabel) {
+
         valueLabel.textContent =
             value;
+
     }
 
+
     saveValues();
+
     updateStats();
+
     drawWheel();
+
 }
 
 
@@ -1490,6 +1625,7 @@ canvas.addEventListener(
         updateValueFromPointer(
             event
         );
+
     }
 );
 
@@ -1505,7 +1641,9 @@ canvas.addEventListener(
             updateValueFromPointer(
                 event
             );
+
         }
+
     }
 );
 
@@ -1517,7 +1655,334 @@ window.addEventListener(
 
 
 /*
- * Запуск
+ * PNG
+ */
+
+function getWheelDataURL() {
+
+    /*
+     * Создаём отдельное большое
+     * изображение для экспорта.
+     */
+
+    const exportCanvas =
+        document.createElement("canvas");
+
+    const size = 1400;
+
+    exportCanvas.width =
+        size;
+
+    exportCanvas.height =
+        size;
+
+
+    const exportCtx =
+        exportCanvas.getContext("2d");
+
+
+    exportCtx.fillStyle =
+        "#ffffff";
+
+    exportCtx.fillRect(
+        0,
+        0,
+        size,
+        size
+    );
+
+
+    const center =
+        size / 2;
+
+    const radius =
+        size * 0.35;
+
+    const count =
+        categories.length;
+
+    const step =
+        Math.PI * 2 / count;
+
+
+    exportCtx.save();
+
+    exportCtx.translate(
+        center,
+        center
+    );
+
+
+    /*
+     * Сетка 1–10
+     */
+
+    for (
+        let level = 1;
+        level <= 10;
+        level++
+    ) {
+
+        const r =
+            radius * level / 10;
+
+
+        exportCtx.beginPath();
+
+        exportCtx.arc(
+            0,
+            0,
+            r,
+            0,
+            Math.PI * 2
+        );
+
+
+        exportCtx.strokeStyle =
+            "#b5bfd0";
+
+        exportCtx.lineWidth =
+            level === 5 || level === 10
+                ? 3
+                : 2;
+
+        exportCtx.stroke();
+
+
+        /*
+         * Числа шкалы
+         */
+
+        exportCtx.fillStyle =
+            "#555555";
+
+        exportCtx.font =
+            level === 5 || level === 10
+                ? "bold 25px Arial"
+                : "21px Arial";
+
+        exportCtx.textAlign =
+            "left";
+
+        exportCtx.textBaseline =
+            "middle";
+
+
+        exportCtx.fillText(
+            String(level),
+            12,
+            -r
+        );
+
+    }
+
+
+    /*
+     * Радиальные линии
+     */
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        const angle =
+            -Math.PI / 2 +
+            i * step;
+
+
+        exportCtx.beginPath();
+
+        exportCtx.moveTo(
+            0,
+            0
+        );
+
+        exportCtx.lineTo(
+            Math.cos(angle) * radius,
+            Math.sin(angle) * radius
+        );
+
+
+        exportCtx.strokeStyle =
+            "#b5bfd0";
+
+        exportCtx.lineWidth =
+            2;
+
+        exportCtx.stroke();
+
+    }
+
+
+    /*
+     * Фигура
+     */
+
+    exportCtx.beginPath();
+
+
+    values.forEach(
+        (value, index) => {
+
+            const angle =
+                -Math.PI / 2 +
+                index * step;
+
+            const r =
+                radius * value / 10;
+
+            const x =
+                Math.cos(angle) * r;
+
+            const y =
+                Math.sin(angle) * r;
+
+
+            if (
+                index === 0
+            ) {
+
+                exportCtx.moveTo(
+                    x,
+                    y
+                );
+
+            } else {
+
+                exportCtx.lineTo(
+                    x,
+                    y
+                );
+
+            }
+
+        }
+    );
+
+
+    exportCtx.closePath();
+
+
+    exportCtx.fillStyle =
+        "rgba(70, 120, 200, 0.30)";
+
+    exportCtx.fill();
+
+
+    exportCtx.strokeStyle =
+        "#315fa8";
+
+    exportCtx.lineWidth =
+        6;
+
+    exportCtx.stroke();
+
+
+    /*
+     * Точки
+     */
+
+    values.forEach(
+        (value, index) => {
+
+            const angle =
+                -Math.PI / 2 +
+                index * step;
+
+            const r =
+                radius * value / 10;
+
+            const x =
+                Math.cos(angle) * r;
+
+            const y =
+                Math.sin(angle) * r;
+
+
+            exportCtx.beginPath();
+
+            exportCtx.arc(
+                x,
+                y,
+                10,
+                0,
+                Math.PI * 2
+            );
+
+
+            exportCtx.fillStyle =
+                "#315fa8";
+
+            exportCtx.fill();
+
+        }
+    );
+
+
+    /*
+     * Названия сфер
+     */
+
+    categories.forEach(
+        (category, index) => {
+
+            const angle =
+                -Math.PI / 2 +
+                index * step;
+
+
+            const labelRadius =
+                radius + 65;
+
+
+            const x =
+                Math.cos(angle) *
+                labelRadius;
+
+            const y =
+                Math.sin(angle) *
+                labelRadius;
+
+
+            exportCtx.fillStyle =
+                "#111111";
+
+            exportCtx.font =
+                category.length > 16
+                    ? "16px Arial"
+                    : "20px Arial";
+
+            exportCtx.textAlign =
+                "center";
+
+            exportCtx.textBaseline =
+                "middle";
+
+
+            exportCtx.fillText(
+                category,
+                x,
+                y
+            );
+
+        }
+    );
+
+
+    exportCtx.restore();
+
+
+    return exportCanvas.toDataURL(
+        "image/png"
+    );
+
+}
+
+
+/*
+ * Запуск приложения
  */
 
 loadValues();
