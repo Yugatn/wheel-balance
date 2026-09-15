@@ -19,15 +19,21 @@
         .subtitle { text-align: center; color: #aab4c3; font-size: 14px; line-height: 1.45; margin-bottom: 15px; }
         .card { background: #111a2e; border: 1px solid #26324a; border-radius: 20px; padding: 16px; margin-bottom: 14px; }
         .hidden { display: none !important; }
+
+        /* ПРОГРЕСС */
         .progress-wrapper { margin-bottom: 14px; }
         .progress-top { display: flex; justify-content: space-between; color: #9da9bb; font-size: 13px; margin-bottom: 7px; }
         .progress-track { width: 100%; height: 8px; background: #24314b; border-radius: 20px; overflow: hidden; }
         .progress-bar { height: 100%; width: 12.5%; background: #6ea8fe; border-radius: 20px; transition: width 0.25s ease; }
+
+        /* ТЕСТ */
         .sphere-number { color: #7faeff; font-size: 13px; font-weight: 700; margin-bottom: 5px; }
         .sphere-title { font-size: 25px; font-weight: 700; margin-bottom: 12px; }
         .question { color: #c1cada; font-size: 16px; line-height: 1.55; margin-bottom: 20px; }
         .scale-label { text-align: center; color: #9da9bb; font-size: 13px; margin-bottom: 9px; }
         .score-display { text-align: center; font-size: 52px; line-height: 1; font-weight: 800; margin: 12px 0 18px; }
+
+        /* ПОЛЗУНОК */
         .slider-wrapper { position: relative; margin-top: 12px; padding-top: 34px; }
         .score-slider { width: 100%; height: 42px; accent-color: #6ea8fe; cursor: pointer; }
         .slider-current-value { position: absolute; top: 0; background: #315fa8; color: #fff; padding: 4px 10px; border-radius: 9px; font-size: 14px; font-weight: 700; white-space: nowrap; opacity: 0; transition: opacity 0.15s ease; pointer-events: none; z-index: 10; }
@@ -38,13 +44,23 @@
         .navigation { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
         .nav-button { padding: 14px 10px; border-radius: 14px; background: #24314b; font-size: 15px; font-weight: 700; }
         .nav-button.primary { background: #315fa8; }
+
+        /* КОЛЕСО */
         .wheel-wrapper { width: 100%; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         canvas { display: block; width: min(96vw, 700px); height: min(96vw, 700px); max-width: 100%; touch-action: none; }
         .scale-info { text-align: center; color: #9da9bb; font-size: 13px; margin-top: 3px; }
+        .wheel-legend { display: flex; justify-content: center; gap: 20px; margin-top: 6px; color: #9da9bb; font-size: 13px; }
+        .legend-item { display: inline-flex; align-items: center; gap: 6px; }
+        .legend-swatch-fill { width: 14px; height: 14px; border-radius: 3px; }
+        .legend-swatch-line { width: 14px; height: 3px; border-radius: 2px; }
+
+        /* СТАТИСТИКА */
         .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 13px; }
         .stat { background: #18233a; border-radius: 13px; padding: 10px 4px; text-align: center; }
         .stat-value { font-size: 20px; font-weight: 800; }
         .stat-label { color: #9da9bb; font-size: 11px; margin-top: 3px; }
+
+        /* ИНТЕРПРЕТАЦИЯ */
         .interpretation { color: #c2ccda; font-size: 15px; line-height: 1.6; }
         .interpretation p { margin: 0 0 11px; }
         .range-list { display: grid; gap: 8px; margin-top: 12px; }
@@ -53,10 +69,14 @@
         .sphere-result { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #18233a; border-radius: 13px; padding: 11px 12px; margin-top: 8px; }
         .sphere-result-name { font-size: 14px; }
         .sphere-result-score { min-width: 38px; text-align: center; background: #315fa8; padding: 5px 7px; border-radius: 9px; font-weight: 800; }
+
+        /* ПРИОРИТЕТЫ */
         .priority-item { display: flex; align-items: center; gap: 10px; background: #18233a; padding: 11px; border-radius: 12px; margin-top: 8px; }
         .priority-item input { width: 20px; height: 20px; accent-color: #6ea8fe; flex-shrink: 0; }
         .priority-name { flex: 1; font-size: 14px; }
         .priority-score { color: #8fa0b8; font-size: 12px; }
+
+        /* ФОРМЫ */
         .goal-box { margin-top: 15px; }
         .goal-box label { display: block; color: #b5c0d0; font-size: 13px; margin-bottom: 7px; }
         textarea, input[type="date"] { width: 100%; border: 1px solid #33425f; border-radius: 12px; background: #0e1729; color: #fff; padding: 11px; font-size: 14px; outline: none; }
@@ -67,14 +87,20 @@
         .desired-header { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 7px; }
         .desired-name { font-size: 14px; font-weight: 600; }
         .desired-value { font-weight: 800; color: #7faeff; }
+
+        /* ПЛАН */
         .plan { background: #18233a; border-radius: 15px; padding: 13px; margin-top: 9px; }
         .plan-title { font-weight: 700; margin-bottom: 9px; }
         .plan-line { color: #b7c2d2; font-size: 13px; line-height: 1.5; margin: 5px 0; }
         .plan-line strong { color: #fff; }
+
+        /* КНОПКИ */
         .buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
         .main-button { padding: 14px 10px; border-radius: 14px; background: #24314b; font-size: 14px; font-weight: 700; }
         .main-button.primary { background: #315fa8; }
         .main-button.danger { background: #713c49; }
+
+        /* ИСТОРИЯ */
         .journal-entry { background: #18233a; border-radius: 14px; padding: 13px; margin-top: 10px; }
         .journal-date { color: #8fa0b8; font-size: 12px; margin-bottom: 7px; }
         .journal-score { font-size: 14px; line-height: 1.5; }
@@ -82,13 +108,18 @@
         .journal-buttons button { padding: 10px; border-radius: 11px; background: #24314b; font-size: 13px; }
         .journal-buttons .delete { background: #5b3440; }
         .empty { color: #8fa0b8; text-align: center; padding: 10px; font-size: 14px; }
+
+        /* МОДАЛЬНОЕ ОКНО */
         .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 1000; }
         .modal.active { display: flex; }
         .modal-content { width: 100%; max-width: 720px; max-height: 95vh; overflow: auto; background: #111a2e; border-radius: 20px; padding: 13px; text-align: center; }
         .modal img { width: 100%; max-height: 72vh; object-fit: contain; border-radius: 12px; background: #fff; }
         .modal-text { color: #b6c0cf; font-size: 13px; line-height: 1.45; margin: 9px 0; }
+
+        /* УВЕДОМЛЕНИЕ */
         .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%) translateY(100px); background: #263653; color: #fff; padding: 11px 16px; border-radius: 13px; font-size: 13px; z-index: 2000; opacity: 0; transition: all 0.25s ease; max-width: calc(100vw - 30px); text-align: center; pointer-events: none; }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
+
         @media (max-width: 600px) {
             body { padding: 8px; }
             h1 { font-size: 24px; }
@@ -193,6 +224,16 @@
         <div class="card hidden" id="desiredWheelCard">
             <h2>🌱 Текущее и желаемое</h2>
             <div class="wheel-wrapper"><canvas id="desiredWheel"></canvas></div>
+            <div class="wheel-legend">
+                <span class="legend-item">
+                    <span class="legend-swatch-fill" style="background: hsla(120, 60%, 45%, 0.65);"></span>
+                    Текущее
+                </span>
+                <span class="legend-item">
+                    <span class="legend-swatch-fill" style="background: hsla(135, 75%, 55%, 0.45); border: 2px solid #6ea8fe; box-sizing: border-box;"></span>
+                    Желаемое
+                </span>
+            </div>
             <div class="scale-info">Сравнение текущих и желаемых значений</div>
         </div>
         <div class="card hidden" id="planCard">
@@ -243,7 +284,7 @@ const spheres = [
     { name: "Работа и карьера", question: "Насколько вас устраивает ваша текущая работа, профессиональное развитие и карьерная ситуация?" },
     { name: "Финансы", question: "Насколько вас устраивает ваше текущее финансовое положение и ощущение финансовой устойчивости?" },
     { name: "Отношения и семья", question: "Насколько вас удовлетворяют ваши близкие отношения и семейная жизнь?" },
-    { name: "Друзья и социальная жизнь", question: "Насколько вы удовлетворены общением с друзьями, знакомыми и своим социальным окружением?" },
+    { name: "Друзья и общение", question: "Насколько вы удовлетворены общением с друзьями, знакомыми и своим социальным окружением?" },
     { name: "Личное развитие", question: "Насколько вы удовлетворены своим обучением, развитием навыков и личностным ростом?" },
     { name: "Отдых и восстановление", question: "Насколько вам хватает отдыха, восстановления и времени для себя?" },
     { name: "Творчество и самореализация", question: "Насколько вы чувствуете возможность заниматься творчеством, реализовывать свои идеи и способности?" }
@@ -259,20 +300,6 @@ let selectedPriorities = [];
 
 /* === DOM === */
 const $ = id => document.getElementById(id);
-const testSection = $("testSection");
-const resultSection = $("resultSection");
-const sphereNumber = $("sphereNumber");
-const sphereTitle = $("sphereTitle");
-const questionEl = $("question");
-const scoreDisplay = $("scoreDisplay");
-const scoreSlider = $("scoreSlider");
-const sliderBubble = $("sliderBubble");
-const sliderMarks = $("sliderMarks");
-const progressText = $("progressText");
-const progressPercent = $("progressPercent");
-const progressBar = $("progressBar");
-const backBtn = $("backBtn");
-const nextBtn = $("nextBtn");
 
 /* === STORAGE === */
 const VALUES_KEY = "wheelBalanceV2Values";
@@ -339,26 +366,26 @@ function showToast(text) {
     toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
 }
 
-/* === SLIDER MARKS (числа 0–10) === */
+/* === ЧИСЛОВЫЕ МЕТКИ 0–10 === */
 function createSliderMarks() {
-    sliderMarks.innerHTML = "";
+    const container = $("sliderMarks");
+    container.innerHTML = "";
     for (let i = 0; i <= 10; i++) {
         const mark = document.createElement("span");
         mark.className = "slider-mark";
         mark.textContent = i;
-        sliderMarks.appendChild(mark);
+        container.appendChild(mark);
     }
 }
 
-/* === BUBBLE POSITION === */
+/* === ПОЗИЦИЯ ВСПЛЫВАЮЩЕЙ ПОДСКАЗКИ === */
 function updateBubblePosition() {
-    const slider = scoreSlider;
-    const bubble = sliderBubble;
+    const slider = $("scoreSlider");
+    const bubble = $("sliderBubble");
     const min = Number(slider.min);
     const max = Number(slider.max);
     const val = Number(slider.value);
     const percent = (val - min) / (max - min);
-    // Учитываем ширину bubble, чтобы не вылезал за края
     const sliderWidth = slider.offsetWidth;
     const bubbleWidth = bubble.offsetWidth || 30;
     const offset = percent * (sliderWidth - bubbleWidth);
@@ -367,53 +394,49 @@ function updateBubblePosition() {
     bubble.textContent = val;
 }
 
-/* === UPDATE QUESTION UI === */
+/* === ОБНОВЛЕНИЕ UI ВОПРОСА === */
 function updateQuestionUI() {
     const idx = currentQuestion;
     const sphere = spheres[idx];
 
-    sphereNumber.textContent = "СФЕРА " + (idx + 1);
-    sphereTitle.textContent = sphere.name;
-    questionEl.textContent = sphere.question;
+    $("sphereNumber").textContent = "СФЕРА " + (idx + 1);
+    $("sphereTitle").textContent = sphere.name;
+    $("question").textContent = sphere.question;
 
-    // Восстанавливаем сохранённое значение
-    scoreSlider.value = values[idx];
-    scoreDisplay.textContent = values[idx];
-    sliderBubble.textContent = values[idx];
-
+    $("scoreSlider").value = values[idx];
+    $("scoreDisplay").textContent = values[idx];
+    $("sliderBubble").textContent = values[idx];
     updateBubblePosition();
 
-    // Прогресс
     const progress = Math.round(((idx + 1) / spheres.length) * 100);
-    progressText.textContent = "Сфера " + (idx + 1) + " из " + spheres.length;
-    progressPercent.textContent = progress + "%";
-    progressBar.style.width = progress + "%";
+    $("progressText").textContent = "Сфера " + (idx + 1) + " из " + spheres.length;
+    $("progressPercent").textContent = progress + "%";
+    $("progressBar").style.width = progress + "%";
 
-    // Кнопки
-    backBtn.style.visibility = idx === 0 ? "hidden" : "visible";
-    nextBtn.textContent = idx === spheres.length - 1 ? "Готово ✓" : "Далее →";
+    $("backBtn").style.visibility = idx === 0 ? "hidden" : "visible";
+    $("nextBtn").textContent = idx === spheres.length - 1 ? "Готово ✓" : "Далее →";
 }
 
-/* === SLIDER EVENT === */
-scoreSlider.addEventListener("input", function() {
+/* === ПОЛЗУНОК: СОБЫТИЯ === */
+$("scoreSlider").addEventListener("input", function() {
     const val = Number(this.value);
-    scoreDisplay.textContent = val;
-    sliderBubble.textContent = val;
+    $("scoreDisplay").textContent = val;
+    $("sliderBubble").textContent = val;
     values[currentQuestion] = val;
     saveValues();
     updateBubblePosition();
-    sliderBubble.classList.add("show");
+    $("sliderBubble").classList.add("show");
     haptic("selection");
 });
 
-scoreSlider.addEventListener("mousedown", function() { sliderBubble.classList.add("show"); });
-scoreSlider.addEventListener("touchstart", function() { sliderBubble.classList.add("show"); });
-scoreSlider.addEventListener("mouseup", function() { setTimeout(() => sliderBubble.classList.remove("show"), 1200); });
-scoreSlider.addEventListener("touchend", function() { setTimeout(() => sliderBubble.classList.remove("show"), 1200); });
-scoreSlider.addEventListener("mouseleave", function() { setTimeout(() => sliderBubble.classList.remove("show"), 1200); });
+$("scoreSlider").addEventListener("mousedown", function() { $("sliderBubble").classList.add("show"); });
+$("scoreSlider").addEventListener("touchstart", function() { $("sliderBubble").classList.add("show"); }, { passive: true });
+$("scoreSlider").addEventListener("mouseup", function() { setTimeout(() => $("sliderBubble").classList.remove("show"), 1200); });
+$("scoreSlider").addEventListener("touchend", function() { setTimeout(() => $("sliderBubble").classList.remove("show"), 1200); });
+$("scoreSlider").addEventListener("mouseleave", function() { setTimeout(() => $("sliderBubble").classList.remove("show"), 1200); });
 
-/* === NAVIGATION === */
-backBtn.addEventListener("click", function() {
+/* === НАВИГАЦИЯ === */
+$("backBtn").addEventListener("click", function() {
     if (currentQuestion > 0) {
         currentQuestion--;
         updateQuestionUI();
@@ -421,8 +444,8 @@ backBtn.addEventListener("click", function() {
     }
 });
 
-nextBtn.addEventListener("click", function() {
-    values[currentQuestion] = Number(scoreSlider.value);
+$("nextBtn").addEventListener("click", function() {
+    values[currentQuestion] = Number($("scoreSlider").value);
     saveValues();
 
     if (currentQuestion < spheres.length - 1) {
@@ -430,16 +453,16 @@ nextBtn.addEventListener("click", function() {
         updateQuestionUI();
         haptic("selection");
     } else {
-        // Последний вопрос — показываем результат
+        localStorage.setItem("wheelCompleted", "1");
         testCompleted = true;
-        testSection.classList.add("hidden");
-        resultSection.classList.remove("hidden");
+        $("testSection").classList.add("hidden");
+        $("resultSection").classList.remove("hidden");
         showResults();
         haptic("success");
     }
 });
 
-/* === WHEEL DRAWING === */
+/* === РИСОВАНИЕ КОЛЕСА === */
 function drawWheel(canvas, vals, desiredVals) {
     const ctx = canvas.getContext("2d");
     const size = 700;
@@ -448,7 +471,7 @@ function drawWheel(canvas, vals, desiredVals) {
 
     const cx = size / 2;
     const cy = size / 2;
-    const radius = size / 2 - 30;
+    const radius = size / 2 - 40;
     const n = categories.length;
     const angleStep = (Math.PI * 2) / n;
 
@@ -463,11 +486,11 @@ function drawWheel(canvas, vals, desiredVals) {
         ctx.stroke();
     }
 
-    // Сектора
+    // Текущие значения — цветные полупрозрачные секторы
     for (let i = 0; i < n; i++) {
         const angle = i * angleStep - Math.PI / 2;
         const val = vals[i];
-        const r = (radius * val) / 10;
+        const r = Math.max(0.1, (radius * val) / 10);
 
         ctx.beginPath();
         ctx.moveTo(cx, cy);
@@ -475,7 +498,7 @@ function drawWheel(canvas, vals, desiredVals) {
         ctx.closePath();
 
         const hue = (i / n) * 360;
-        ctx.fillStyle = "hsla(" + hue + ", 55%, 45%, 0.75)";
+        ctx.fillStyle = `hsla(${hue}, 60%, 45%, 0.65)`;
         ctx.fill();
 
         ctx.strokeStyle = "rgba(255,255,255,0.15)";
@@ -483,18 +506,28 @@ function drawWheel(canvas, vals, desiredVals) {
         ctx.stroke();
     }
 
-    // Желаемые значения (пунктирная линия)
+    // Желаемые значения — полупрозрачная заливка + яркая контурная линия
     if (desiredVals) {
         for (let i = 0; i < n; i++) {
             const angle = i * angleStep - Math.PI / 2;
-            const r = (radius * desiredVals[i]) / 10;
+            const valDesired = desiredVals[i];
+            const rDesired = Math.max(0.1, (radius * valDesired) / 10);
+
+            // Полупрозрачная заливка — чуть другой оттенок, прозрачнее
             ctx.beginPath();
-            ctx.arc(cx, cy, r, angle, angle + angleStep);
-            ctx.strokeStyle = "rgba(126, 174, 255, 0.7)";
-            ctx.lineWidth = 2;
-            ctx.setLineDash([5, 4]);
+            ctx.moveTo(cx, cy);
+            ctx.arc(cx, cy, rDesired, angle, angle + angleStep);
+            ctx.closePath();
+            const hue = (i / n) * 360;
+            ctx.fillStyle = `hsla(${hue + 15}, 75%, 55%, 0.30)`;
+            ctx.fill();
+
+            // Яркая контурная линия — хорошо видна поверх текущего
+            ctx.beginPath();
+            ctx.arc(cx, cy, rDesired, angle, angle + angleStep);
+            ctx.strokeStyle = "#6ea8fe";
+            ctx.lineWidth = 3;
             ctx.stroke();
-            ctx.setLineDash([]);
         }
     }
 
@@ -509,7 +542,7 @@ function drawWheel(canvas, vals, desiredVals) {
         ctx.stroke();
     }
 
-    // Подписи
+    // Подписи сфер
     ctx.fillStyle = "#ffffff";
     ctx.font = "bold 13px -apple-system, Arial, sans-serif";
     ctx.textAlign = "center";
@@ -517,11 +550,10 @@ function drawWheel(canvas, vals, desiredVals) {
 
     for (let i = 0; i < n; i++) {
         const angle = i * angleStep - Math.PI / 2 + angleStep / 2;
-        const labelR = radius + 18;
+        const labelR = radius + 22;
         const x = cx + Math.cos(angle) * labelR;
         const y = cy + Math.sin(angle) * labelR;
 
-        // Разбиваем название на строки
         const words = categories[i].split(" ");
         if (words.length > 1) {
             ctx.fillText(words[0], x, y - 7);
@@ -532,7 +564,7 @@ function drawWheel(canvas, vals, desiredVals) {
     }
 }
 
-/* === RESULTS === */
+/* === ПОКАЗ РЕЗУЛЬТАТОВ === */
 function showResults() {
     const avg = (values.reduce((a, b) => a + b, 0) / values.length).toFixed(1);
     const max = Math.max(...values);
@@ -547,11 +579,11 @@ function showResults() {
     // Интерпретация
     let interp = "";
     if (avg >= 7) {
-        interp = "<p>В целом, вы оцениваете разные сферы жизни довольно высоко. Это хороший показатель общего баланса.</p>";
+        interp = "<p>В целом вы оцениваете разные сферы жизни довольно высоко — это хороший показатель общего баланса.</p>";
     } else if (avg >= 5) {
         interp = "<p>Ваш баланс средний — есть сферы, которые вас устраивают, и те, что требуют внимания.</p>";
     } else {
-        interp = "<p>Похоже, вы переживаете непростый период. Несколько сфер вызывают серьёзное недовольство — стоит начать с небольших шагов в самых важных из них.</p>";
+        interp = "<p>Похоже, вы переживаете непростой период. Несколько сфер вызывают серьёзное недовольство — стоит начать с небольших шагов в самых важных из них.</p>";
     }
     if (gap >= 5) {
         interp += "<p>Заметный разрыв между сферами говорит о неравномерном распределении энергии и внимания.</p>";
@@ -601,7 +633,7 @@ function showResults() {
     loadJournal();
 }
 
-/* === DESIRED SECTION === */
+/* === ЖЕЛАЕМЫЕ ЗНАЧЕНИЯ === */
 function updateDesiredSection() {
     const desiredList = $("desiredList");
     desiredList.innerHTML = "";
@@ -626,6 +658,8 @@ function updateDesiredSection() {
             desiredValues[idx] = Number(this.value);
             row.querySelector(".desired-value").textContent = "Цель: " + this.value;
             saveDesiredValues();
+            drawDesiredWheel();
+            buildPlan();
         });
         desiredList.appendChild(row);
     });
@@ -655,7 +689,7 @@ function buildPlan() {
     });
 }
 
-/* === SAVE / PNG / RESTART / RESET === */
+/* === СОХРАНИТЬ / PNG / ЗАНОВО / ОЧИСТИТЬ === */
 $("saveBtn").addEventListener("click", function() {
     const entry = {
         date: new Date().toISOString(),
@@ -685,8 +719,8 @@ $("closeModal").addEventListener("click", function() { $("modal").classList.remo
 $("restartBtn").addEventListener("click", function() {
     currentQuestion = 0;
     testCompleted = false;
-    testSection.classList.remove("hidden");
-    resultSection.classList.add("hidden");
+    $("testSection").classList.remove("hidden");
+    $("resultSection").classList.add("hidden");
     updateQuestionUI();
     haptic("selection");
 });
@@ -698,14 +732,14 @@ $("resetBtn").addEventListener("click", function() {
     saveValues();
     saveDesiredValues();
     currentQuestion = 0;
-    testSection.classList.remove("hidden");
-    resultSection.classList.add("hidden");
+    $("testSection").classList.remove("hidden");
+    $("resultSection").classList.add("hidden");
     updateQuestionUI();
     haptic("selection");
     showToast("Результат очищен");
 });
 
-/* === JOURNAL === */
+/* === ИСТОРИЯ === */
 function loadJournal() {
     const journal = JSON.parse(localStorage.getItem(JOURNAL_KEY) || "[]");
     const container = $("journal");
@@ -738,8 +772,8 @@ window.loadJournalEntry = function(i) {
     $("reflectionText").value = entry.reflection || "";
     $("firstStepText").value = entry.firstStep || "";
     $("startDate").value = entry.startDate || "";
-    testSection.classList.add("hidden");
-    resultSection.classList.remove("hidden");
+    $("testSection").classList.add("hidden");
+    $("resultSection").classList.remove("hidden");
     showResults();
     haptic("selection");
     showToast("Запись загружена");
@@ -754,12 +788,12 @@ window.deleteJournalEntry = function(i) {
     showToast("Запись удалена");
 };
 
-/* === TEXT AUTOSAVE === */
+/* === АВТОСОХРАНЕНИЕ ТЕКСТОВ === */
 $("reflectionText").addEventListener("input", saveTexts);
 $("firstStepText").addEventListener("input", saveTexts);
 $("startDate").addEventListener("change", saveTexts);
 
-/* === INIT === */
+/* === ИНИЦИАЛИЗАЦИЯ === */
 loadValues();
 loadDesiredValues();
 loadTexts();
@@ -767,18 +801,11 @@ createSliderMarks();
 updateQuestionUI();
 
 // Если тест уже пройден — показать результат
-if (values.some(v => v !== 5) && localStorage.getItem("wheelCompleted")) {
-    testSection.classList.add("hidden");
-    resultSection.classList.remove("hidden");
+if (localStorage.getItem("wheelCompleted")) {
+    $("testSection").classList.add("hidden");
+    $("resultSection").classList.remove("hidden");
     showResults();
 }
-
-// Сохраняем флаг прохождения
-nextBtn.addEventListener("click", function() {
-    if (currentQuestion === spheres.length - 1) {
-        localStorage.setItem("wheelCompleted", "1");
-    }
-});
 </script>
 </body>
 </html>
