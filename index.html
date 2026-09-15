@@ -8,37 +8,33 @@
 
     <title>Колесо баланса</title>
 
+    <!-- SDK Telegram WebApp — даёт доступ к haptic, теме, кнопкам и т.д. -->
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
+        /* === СБРОС И БАЗОВЫЕ СТИЛИ === */
+
         * {
             box-sizing: border-box;
             -webkit-tap-highlight-color: transparent;
         }
 
-        html,
-        body {
+        html, body {
             margin: 0;
             padding: 0;
             min-height: 100%;
             background: #0b1120;
             color: #fff;
-            font-family:
-                -apple-system,
-                BlinkMacSystemFont,
-                "Segoe UI",
-                Arial,
-                sans-serif;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
         }
 
+        /* dvh — корректная высота на мобильных с динамической панелью браузера */
         body {
             min-height: 100dvh;
             padding: 10px;
         }
 
-        button,
-        input,
-        textarea {
+        button, input, textarea {
             font-family: inherit;
         }
 
@@ -58,21 +54,9 @@
             margin: 0 auto;
         }
 
-        h1 {
-            text-align: center;
-            font-size: 27px;
-            margin: 8px 0 5px;
-        }
-
-        h2 {
-            font-size: 20px;
-            margin: 0 0 15px;
-        }
-
-        h3 {
-            font-size: 17px;
-            margin: 0 0 10px;
-        }
+        h1 { text-align: center; font-size: 27px; margin: 8px 0 5px; }
+        h2 { font-size: 20px; margin: 0 0 15px; }
+        h3 { font-size: 17px; margin: 0 0 10px; }
 
         .subtitle {
             text-align: center;
@@ -90,12 +74,12 @@
             margin-bottom: 14px;
         }
 
-        .hidden {
-            display: none !important;
-        }
+        .hidden { display: none !important; }
 
-        /* ПРОГРЕСС */
+        /* === ПРОГРЕСС-БАР (сфера N из 8) === */
+
         .progress-wrapper { margin-bottom: 14px; }
+
         .progress-top {
             display: flex;
             justify-content: space-between;
@@ -103,6 +87,7 @@
             font-size: 13px;
             margin-bottom: 7px;
         }
+
         .progress-track {
             width: 100%;
             height: 9px;
@@ -110,6 +95,7 @@
             border-radius: 20px;
             overflow: hidden;
         }
+
         .progress-bar {
             height: 100%;
             width: 12.5%;
@@ -118,30 +104,36 @@
             transition: width 0.25s ease;
         }
 
-        /* ТЕСТ */
+        /* === ТЕСТ — карточка вопроса === */
+
         .sphere-number {
             color: #7faeff;
             font-size: 13px;
             font-weight: 700;
             margin-bottom: 5px;
         }
+
         .sphere-title {
             font-size: 25px;
             font-weight: 700;
             margin-bottom: 12px;
         }
+
         .question {
             color: #c1cada;
             font-size: 16px;
             line-height: 1.55;
             margin-bottom: 20px;
         }
+
         .scale-label {
             text-align: center;
             color: #9da9bb;
             font-size: 13px;
             margin-bottom: 9px;
         }
+
+        /* Большая цифра — текущая оценка */
         .score-display {
             text-align: center;
             font-size: 56px;
@@ -150,18 +142,22 @@
             margin: 12px 0 18px;
         }
 
-        /* ПОЛЗУНОК */
+        /* === ПОЛЗУНОК === */
+
         .slider-wrapper {
             position: relative;
             margin-top: 12px;
-            padding-top: 34px;
+            padding-top: 34px; /* место для всплывающей подсказки */
         }
+
         .score-slider {
             width: 100%;
             height: 44px;
             accent-color: #6ea8fe;
             cursor: pointer;
         }
+
+        /* Всплывающая подсказка над ползунком */
         .slider-current-value {
             position: absolute;
             top: 0;
@@ -177,14 +173,17 @@
             pointer-events: none;
             z-index: 10;
         }
+
         .slider-current-value.show { opacity: 1; }
 
+        /* Числовые метки 0–10 под ползунком */
         .slider-marks {
             display: grid;
             grid-template-columns: repeat(11, 1fr);
             gap: 2px;
             margin-top: 5px;
         }
+
         .slider-mark {
             color: #9da9bb;
             font-size: 12px;
@@ -193,6 +192,7 @@
             padding: 5px 0;
             cursor: pointer;
         }
+
         .slider-mark.active {
             color: #fff;
             background: #315fa8;
@@ -206,12 +206,16 @@
             font-size: 11px;
             margin-top: 6px;
         }
+
+        /* === КНОПКИ НАВИГАЦИИ (Назад / Далее) === */
+
         .navigation {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 10px;
             margin-top: 18px;
         }
+
         .nav-button {
             padding: 14px 10px;
             border-radius: 14px;
@@ -219,9 +223,11 @@
             font-size: 15px;
             font-weight: 700;
         }
+
         .nav-button.primary { background: #315fa8; }
 
-        /* КОЛЕСО */
+        /* === КОЛЕСО (canvas) === */
+
         .wheel-wrapper {
             width: 100%;
             display: flex;
@@ -230,6 +236,7 @@
             overflow: hidden;
             padding: 4px 0;
         }
+
         canvas {
             display: block;
             width: min(96vw, 720px);
@@ -237,6 +244,7 @@
             max-width: 100%;
             touch-action: none;
         }
+
         .scale-info {
             text-align: center;
             color: #9da9bb;
@@ -244,6 +252,7 @@
             margin-top: 3px;
             line-height: 1.45;
         }
+
         .wheel-help {
             text-align: center;
             color: #b8c3d3;
@@ -251,6 +260,8 @@
             line-height: 1.45;
             margin-top: 8px;
         }
+
+        /* Легенда «Текущее / Желаемое» */
         .wheel-legend {
             display: flex;
             justify-content: center;
@@ -260,15 +271,27 @@
             color: #9da9bb;
             font-size: 13px;
         }
-        .legend-item { display: inline-flex; align-items: center; gap: 6px; }
-        .legend-swatch-fill { width: 15px; height: 15px; border-radius: 4px; }
 
+        .legend-item {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .legend-swatch-fill {
+            width: 15px;
+            height: 15px;
+            border-radius: 4px;
+        }
+
+        /* Шкала 0–10 под колесом */
         .wheel-scale {
             display: flex;
             justify-content: center;
             gap: 4px;
             margin-top: 10px;
         }
+
         .wheel-scale-item {
             min-width: 24px;
             height: 24px;
@@ -282,26 +305,37 @@
             font-weight: 700;
         }
 
-        /* СТАТИСТИКА */
+        /* === СТАТИСТИКА (Среднее / Макс / Мин / Разрыв) === */
+
         .stats {
             display: grid;
             grid-template-columns: repeat(4, 1fr);
             gap: 7px;
             margin-top: 13px;
         }
+
         .stat {
             background: #18233a;
             border-radius: 13px;
             padding: 10px 4px;
             text-align: center;
         }
+
         .stat-value { font-size: 20px; font-weight: 800; }
         .stat-label { color: #9da9bb; font-size: 11px; margin-top: 3px; }
 
-        /* ИНТЕРПРЕТАЦИЯ */
-        .interpretation { color: #c2ccda; font-size: 15px; line-height: 1.6; }
+        /* === ИНТЕРПРЕТАЦИЯ РЕЗУЛЬТАТА === */
+
+        .interpretation {
+            color: #c2ccda;
+            font-size: 15px;
+            line-height: 1.6;
+        }
+
         .interpretation p { margin: 0 0 11px; }
+
         .range-list { display: grid; gap: 8px; margin-top: 12px; }
+
         .range-item {
             background: #18233a;
             border-radius: 12px;
@@ -310,8 +344,10 @@
             font-size: 13px;
             line-height: 1.45;
         }
+
         .range-item strong { color: #fff; }
 
+        /* Карточка сферы в результатах */
         .sphere-result {
             display: flex;
             align-items: center;
@@ -322,7 +358,9 @@
             padding: 11px 12px;
             margin-top: 8px;
         }
+
         .sphere-result-name { font-size: 14px; }
+
         .sphere-result-score {
             min-width: 42px;
             text-align: center;
@@ -332,7 +370,8 @@
             font-weight: 800;
         }
 
-        /* ПРИОРИТЕТЫ */
+        /* === ПРИОРИТЕТЫ (чекбоксы) === */
+
         .priority-item {
             display: flex;
             align-items: center;
@@ -342,23 +381,28 @@
             border-radius: 12px;
             margin-top: 8px;
         }
+
         .priority-item input {
             width: 21px;
             height: 21px;
             accent-color: #6ea8fe;
             flex-shrink: 0;
         }
+
         .priority-name { flex: 1; font-size: 14px; }
         .priority-score { color: #8fa0b8; font-size: 12px; }
 
-        /* ФОРМЫ */
+        /* === ФОРМЫ (текстовые поля, даты) === */
+
         .goal-box { margin-top: 15px; }
+
         .goal-box label {
             display: block;
             color: #b5c0d0;
             font-size: 13px;
             margin-bottom: 7px;
         }
+
         textarea,
         input[type="date"],
         input[type="text"],
@@ -372,11 +416,17 @@
             font-size: 14px;
             outline: none;
         }
+
         textarea { min-height: 90px; resize: vertical; }
+
         input[type="date"],
         input[type="text"],
         input[type="email"] { min-height: 45px; }
-        textarea:focus, input:focus { border-color: #6ea8fe; }
+
+        textarea:focus,
+        input:focus { border-color: #6ea8fe; }
+
+        /* === ЖЕЛАЕМЫЕ ЗНАЧЕНИЯ (слайдеры) === */
 
         .desired-row {
             background: #18233a;
@@ -384,28 +434,38 @@
             padding: 12px;
             margin-top: 9px;
         }
+
         .desired-header {
             display: flex;
             justify-content: space-between;
             gap: 8px;
             margin-bottom: 7px;
         }
+
         .desired-name { font-size: 14px; font-weight: 600; }
         .desired-value { font-weight: 800; color: #7faeff; }
 
-        /* ПЛАН */
+        /* === МИНИ-ПЛАН === */
+
         .plan {
             background: #18233a;
             border-radius: 15px;
             padding: 13px;
             margin-top: 9px;
         }
+
         .plan-title { font-weight: 700; margin-bottom: 9px; }
         .plan-line { color: #b7c2d2; font-size: 13px; line-height: 1.5; margin: 5px 0; }
         .plan-line strong { color: #fff; }
 
-        /* КНОПКИ */
-        .buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+        /* === КНОПКИ ДЕЙСТВИЙ === */
+
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 9px;
+        }
+
         .main-button {
             padding: 14px 10px;
             border-radius: 14px;
@@ -413,35 +473,43 @@
             font-size: 14px;
             font-weight: 700;
         }
+
         .main-button.primary { background: #315fa8; }
         .main-button.success { background: #285d55; }
-        .main-button.danger { background: #713c49; }
+        .main-button.danger  { background: #713c49; }
 
-        /* ИСТОРИЯ */
+        /* === ИСТОРИЯ (журнал сохранений) === */
+
         .journal-entry {
             background: #18233a;
             border-radius: 14px;
             padding: 13px;
             margin-top: 10px;
         }
+
         .journal-date { color: #8fa0b8; font-size: 12px; margin-bottom: 7px; }
         .journal-score { font-size: 14px; line-height: 1.5; }
+
         .journal-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 8px;
             margin-top: 10px;
         }
+
         .journal-buttons button {
             padding: 10px;
             border-radius: 11px;
             background: #24314b;
             font-size: 13px;
         }
+
         .journal-buttons .delete { background: #5b3440; }
+
         .empty { color: #8fa0b8; text-align: center; padding: 10px; font-size: 14px; }
 
-        /* МОДАЛЬНЫЕ ОКНА */
+        /* === МОДАЛЬНЫЕ ОКНА (PNG, Share) === */
+
         .modal {
             position: fixed;
             inset: 0;
@@ -452,7 +520,9 @@
             padding: 15px;
             z-index: 1000;
         }
+
         .modal.active { display: flex; }
+
         .modal-content {
             width: 100%;
             max-width: 720px;
@@ -462,20 +532,25 @@
             border-radius: 20px;
             padding: 15px;
         }
+
         .modal-title { font-size: 20px; font-weight: 800; margin-bottom: 8px; }
+
         .modal-description {
             color: #aeb9ca;
             font-size: 13px;
             line-height: 1.5;
             margin-bottom: 14px;
         }
+
         .modal-section { margin-bottom: 14px; }
+
         .modal-section label {
             display: block;
             color: #b5c0d0;
             font-size: 13px;
             margin-bottom: 7px;
         }
+
         .share-preview {
             background: #0e1729;
             border: 1px solid #33425f;
@@ -488,16 +563,18 @@
             max-height: 230px;
             overflow: auto;
         }
+
         .share-buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
             gap: 9px;
             margin-top: 12px;
         }
-        .share-buttons .full { grid-column: 1 / -1; }
-        .modal-close { width: 100%; margin-top: 10px; }
 
-        /* TOAST */
+        .share-buttons .full { grid-column: 1 / -1; }
+
+        /* === TOAST (всплывающее уведомление) === */
+
         .toast {
             position: fixed;
             left: 50%;
@@ -515,12 +592,16 @@
             text-align: center;
             pointer-events: none;
         }
+
         .toast.show {
             opacity: 1;
             transform: translateX(-50%) translateY(0);
         }
 
+        /* === АДАПТАЦИЯ ПОД МОБИЛЬНЫЕ === */
+
         @media (max-width: 600px) {
+
             body { padding: 8px; }
             h1 { font-size: 24px; }
             .card { padding: 12px; border-radius: 17px; }
@@ -534,18 +615,27 @@
         }
     </style>
 </head>
+
 <body>
 
 <div class="container">
+
     <h1>🌀 Колесо баланса</h1>
+
     <div class="subtitle">
         Небольшая рефлексия о том, как вы воспринимаете
         разные сферы своей жизни сейчас.
     </div>
 
-    <!-- ТЕСТ -->
+    <!-- =========================
+         СЕКЦИЯ ТЕСТА (вопросы)
+    ========================== -->
+
     <section id="testSection">
+
         <div class="card">
+
+            <!-- Прогресс-бар -->
             <div class="progress-wrapper">
                 <div class="progress-top">
                     <span id="progressText">Сфера 1 из 8</span>
@@ -555,29 +645,46 @@
                     <div class="progress-bar" id="progressBar"></div>
                 </div>
             </div>
+
+            <!-- Название сферы и вопрос -->
             <div class="sphere-number" id="sphereNumber">СФЕРА 1</div>
             <div class="sphere-title" id="sphereTitle">Здоровье</div>
             <div class="question" id="question"></div>
+
+            <!-- Большая цифра — текущая оценка -->
             <div class="scale-label">Насколько вы удовлетворены этой сферой сейчас?</div>
             <div class="score-display" id="scoreDisplay">5</div>
+
+            <!-- Ползунок 0–10 + всплывающая подсказка + числовые метки -->
             <div class="slider-wrapper">
                 <div class="slider-current-value" id="sliderBubble">5</div>
                 <input type="range" class="score-slider" id="scoreSlider" min="0" max="10" step="1" value="5">
                 <div class="slider-marks" id="sliderMarks"></div>
             </div>
+
+            <!-- Подписи краёв шкалы -->
             <div class="scale-ends">
                 <span>0 — совсем не устраивает</span>
                 <span>10 — полностью устраивает</span>
             </div>
+
+            <!-- Кнопки навигации -->
             <div class="navigation">
                 <button class="nav-button" id="backBtn">← Назад</button>
                 <button class="nav-button primary" id="nextBtn">Далее →</button>
             </div>
+
         </div>
+
     </section>
 
-    <!-- РЕЗУЛЬТАТ -->
+    <!-- =========================
+         СЕКЦИЯ РЕЗУЛЬТАТА
+    ========================== -->
+
     <section id="resultSection" class="hidden">
+
+        <!-- Колесо баланса (canvas) + статистика -->
         <div class="card">
             <h2>🌀 Ваше колесо баланса</h2>
             <div class="wheel-wrapper"><canvas id="wheel"></canvas></div>
@@ -586,6 +693,8 @@
                 Чем дальше точка от центра, тем выше ваша текущая оценка.
                 Число рядом с точкой показывает конкретное значение.
             </div>
+
+            <!-- Шкала 0–10 -->
             <div class="wheel-scale">
                 <span class="wheel-scale-item">0</span>
                 <span class="wheel-scale-item">1</span>
@@ -599,6 +708,8 @@
                 <span class="wheel-scale-item">9</span>
                 <span class="wheel-scale-item">10</span>
             </div>
+
+            <!-- Статистика: среднее, максимум, минимум, разрыв -->
             <div class="stats">
                 <div class="stat"><div class="stat-value" id="average">5.0</div><div class="stat-label">Среднее</div></div>
                 <div class="stat"><div class="stat-value" id="maximum">5</div><div class="stat-label">Максимум</div></div>
@@ -607,6 +718,7 @@
             </div>
         </div>
 
+        <!-- Интерпретация результата -->
         <div class="card">
             <h2>📊 Что показывает результат</h2>
             <div class="interpretation" id="interpretation"></div>
@@ -618,6 +730,7 @@
             </div>
         </div>
 
+        <!-- Сферы: сильные и требующие внимания -->
         <div class="card">
             <h2>🔎 Сферы результата</h2>
             <h3>Относительно сильные</h3>
@@ -626,16 +739,26 @@
             <div id="bottomSpheres"></div>
         </div>
 
+        <!-- Приоритеты — выбор до 3 сфер -->
         <div class="card">
             <h2>🎯 Приоритеты</h2>
-            <div class="interpretation">Выберите до трёх сфер, которым вы хотели бы уделить больше внимания.</div>
+            <div class="interpretation">
+                Выберите до трёх сфер, которым вы хотели бы
+                уделить больше внимания.
+            </div>
             <div id="priorityList"></div>
         </div>
 
+        <!-- Желаемые значения для выбранных приоритетов -->
         <div class="card" id="desiredCard">
             <h2>🌱 Желаемые изменения</h2>
-            <div class="interpretation">Для выбранных приоритетов укажите, какого уровня вы хотели бы достичь.</div>
+            <div class="interpretation">
+                Для выбранных приоритетов укажите,
+                какого уровня вы хотели бы достичь.
+            </div>
             <div id="desiredList"></div>
+
+            <!-- Текстовые поля для рефлексии -->
             <div class="goal-box">
                 <label for="reflectionText">Что вы хотели бы изменить?</label>
                 <textarea id="reflectionText" placeholder="Например: хочу уделять больше времени отдыху, наладить режим сна..."></textarea>
@@ -650,6 +773,7 @@
             </div>
         </div>
 
+        <!-- Сравнительное колесо: текущее + желаемое -->
         <div class="card hidden" id="desiredWheelCard">
             <h2>🌱 Текущее и желаемое</h2>
             <div class="wheel-wrapper"><canvas id="desiredWheel"></canvas></div>
@@ -666,11 +790,13 @@
             <div class="scale-info">Сравнение текущих и желаемых значений</div>
         </div>
 
+        <!-- Мини-план по приоритетам -->
         <div class="card hidden" id="planCard">
             <h2>🧭 Мини-план</h2>
             <div id="planList"></div>
         </div>
 
+        <!-- Кнопки действий -->
         <div class="card">
             <div class="buttons">
                 <button class="main-button primary" id="saveBtn">💾 Сохранить результат</button>
@@ -681,31 +807,46 @@
             </div>
         </div>
 
+        <!-- История сохранений -->
         <div class="card">
             <h2>📖 История</h2>
             <div id="journal"></div>
         </div>
 
+        <!-- Дисклеймер -->
         <div class="card">
             <div class="interpretation">
-                <p><strong>Важно:</strong> результат отражает ваше текущее субъективное восприятие различных сфер жизни.</p>
-                <p>Это не оценка качества вашей жизни и не психологическая диагностика.</p>
+                <p><strong>Важно:</strong> результат отражает ваше текущее субъективное
+                восприятие различных сфер жизни.</p>
+                <p>Это не оценка качества вашей жизни
+                и не психологическая диагностика.</p>
             </div>
         </div>
+
     </section>
+
 </div>
 
-<!-- PNG MODAL -->
+<!-- =========================
+     МОДАЛКА: ПРОСМОТР PNG
+========================= -->
+
 <div class="modal" id="modal">
     <div class="modal-content">
         <div class="modal-title">🖼 Ваш результат</div>
         <img id="pngPreview" alt="Колесо баланса" style="width:100%; border-radius:12px; background:#fff;">
-        <div class="modal-description">На iPhone можно нажать и удерживать изображение, чтобы сохранить его.</div>
+        <div class="modal-description">
+            На iPhone можно нажать и удерживать изображение,
+            чтобы сохранить его.
+        </div>
         <button class="main-button primary" id="closeModal">Закрыть</button>
     </div>
 </div>
 
-<!-- SHARE MODAL -->
+<!-- =========================
+     МОДАЛКА: ПОДЕЛИТЬСЯ С ДРУГОМ
+========================= -->
+
 <div class="modal" id="shareModal">
     <div class="modal-content">
         <div class="modal-title">🤝 Зафиксировать результат с другом</div>
@@ -713,26 +854,32 @@
             Выберите дату, до которой хотите вернуться к результату,
             и отправьте другу небольшую фиксацию договорённости.
         </div>
+
         <div class="modal-section">
             <label for="friendName">Имя друга</label>
             <input type="text" id="friendName" placeholder="Например: Алексей">
         </div>
+
         <div class="modal-section">
             <label for="shareDeadline">Дедлайн повторного взгляда на результат</label>
             <input type="date" id="shareDeadline">
         </div>
+
         <div class="modal-section">
             <label for="friendEmail">Email друга — необязательно</label>
             <input type="email" id="friendEmail" placeholder="friend@example.com">
         </div>
+
         <div class="modal-section">
             <label for="friendComment">Что хотите зафиксировать?</label>
             <textarea id="friendComment" placeholder="Например: через две недели сравнить результат и обсудить, что изменилось."></textarea>
         </div>
+
         <div class="modal-section">
             <label>Предпросмотр сообщения</label>
             <div class="share-preview" id="sharePreview"></div>
         </div>
+
         <div class="share-buttons">
             <button class="main-button success" id="telegramShareBtn">✈️ Отправить в Telegram</button>
             <button class="main-button primary" id="emailShareBtn">✉️ Отправить по Email</button>
@@ -742,98 +889,175 @@
     </div>
 </div>
 
+<!-- Toast-уведомление -->
 <div class="toast" id="toast"></div>
 
+
 <script>
-/* === TELEGRAM === */
-const tg = window.Telegram && window.Telegram.WebApp ? window.Telegram.WebApp : null;
-if (tg) { try { tg.ready(); tg.expand(); } catch {} }
+/* =========================================================
+   TELEGRAM WEB APP
+   Подключаем SDK, инициализируем
+   ========================================================= */
 
-/* === DATA === */
-const spheres = [
-    { name: "Здоровье", question: "Насколько вы довольны своим физическим состоянием и заботой о здоровье сейчас?" },
-    { name: "Работа и карьера", question: "Насколько вас устраивает ваша текущая работа, профессиональное развитие и карьерная ситуация?" },
-    { name: "Финансы", question: "Насколько вас устраивает ваше текущее финансовое положение и ощущение финансовой устойчивости?" },
-    { name: "Отношения и семья", question: "Насколько вас удовлетворяют ваши близкие отношения и семейная жизнь?" },
-    { name: "Друзья и общение", question: "Насколько вы удовлетворены общением с друзьями, знакомыми и своим социальным окружением?" },
-    { name: "Личное развитие", question: "Насколько вы удовлетворены своим обучением, развитием навыков и личностным ростом?" },
-    { name: "Отдых и восстановление", question: "Насколько вам хватает отдыха, восстановления и времени для себя?" },
-    { name: "Творчество и самореализация", question: "Насколько вы чувствуете возможность заниматься творчеством, реализовывать свои идеи и способности?" }
-];
-const categories = spheres.map(s => s.name);
+const tg = window.Telegram && window.Telegram.WebApp
+    ? window.Telegram.WebApp
+    : null;
 
-/* === STATE === */
-let values = Array(categories.length).fill(5);
-let desiredValues = Array(categories.length).fill(5);
-let currentQuestion = 0;
-let selectedPriorities = [];
-
-/* === DOM === */
-const $ = id => document.getElementById(id);
-
-/* === STORAGE === */
-const VALUES_KEY = "wheelBalanceV3Values";
-const DESIRED_KEY = "wheelBalanceV3Desired";
-const JOURNAL_KEY = "wheelBalanceV3Journal";
-const TEXT_KEY = "wheelBalanceV3Texts";
-const SHARE_KEY = "wheelBalanceV3Share";
-
-function safeParse(v, fb) { try { return JSON.parse(v); } catch { return fb; } }
-
-function saveValues() { localStorage.setItem(VALUES_KEY, JSON.stringify(values)); }
-function loadValues() {
-    const s = localStorage.getItem(VALUES_KEY);
-    if (!s) return;
-    const p = safeParse(s, null);
-    if (Array.isArray(p) && p.length === categories.length)
-        values = p.map(v => Math.max(0, Math.min(10, Number(v) || 0)));
-}
-function saveDesiredValues() { localStorage.setItem(DESIRED_KEY, JSON.stringify(desiredValues)); }
-function loadDesiredValues() {
-    const s = localStorage.getItem(DESIRED_KEY);
-    if (!s) return;
-    const p = safeParse(s, null);
-    if (Array.isArray(p) && p.length === categories.length)
-        desiredValues = p.map(v => Math.max(0, Math.min(10, Number(v) || 0)));
-}
-function saveTexts() {
-    localStorage.setItem(TEXT_KEY, JSON.stringify({
-        reflection: $("reflectionText").value,
-        firstStep: $("firstStepText").value,
-        startDate: $("startDate").value
-    }));
-}
-function loadTexts() {
-    const s = localStorage.getItem(TEXT_KEY);
-    if (!s) return;
-    const d = safeParse(s, {});
-    $("reflectionText").value = d.reflection || "";
-    $("firstStepText").value = d.firstStep || "";
-    $("startDate").value = d.startDate || "";
-}
-
-/* === HAPTIC === */
-function haptic(type) {
+if (tg) {
     try {
-        if (!tg || !tg.HapticFeedback) return;
-        if (type === "success" && tg.HapticFeedback.notificationOccurred)
-            tg.HapticFeedback.notificationOccurred("success");
-        else if (typeof tg.HapticFeedback.selectionChanged === "function")
-            tg.HapticFeedback.selectionChanged();
+        tg.ready();
+        tg.expand();
     } catch {}
 }
 
-/* === TOAST === */
-let toastTimer = null;
-function showToast(text) {
-    const t = $("toast");
-    t.textContent = text;
-    t.classList.add("show");
-    clearTimeout(toastTimer);
-    toastTimer = setTimeout(() => t.classList.remove("show"), 2400);
+
+/* =========================================================
+   ДАННЫЕ: СФЕРЫ И ВОПРОСЫ
+   Массив из 8 сфер — каждая содержит название и вопрос
+   ========================================================= */
+
+const spheres = [
+    { name: "Здоровье",
+      question: "Насколько вы довольны своим физическим состоянием и заботой о здоровье сейчас?" },
+    { name: "Работа и карьера",
+      question: "Насколько вас устраивает ваша текущая работа, профессиональное развитие и карьерная ситуация?" },
+    { name: "Финансы",
+      question: "Насколько вас устраивает ваше текущее финансовое положение и ощущение финансовой устойчивости?" },
+    { name: "Отношения и семья",
+      question: "Насколько вас удовлетворяют ваши близкие отношения и семейная жизнь?" },
+    { name: "Друзья и общение",
+      question: "Насколько вы удовлетворены общением с друзьями, знакомыми и своим социальным окружением?" },
+    { name: "Личное развитие",
+      question: "Насколько вы удовлетворены своим обучением, развитием навыков и личностным ростом?" },
+    { name: "Отдых и восстановление",
+      question: "Насколько вам хватает отдыха, восстановления и времени для себя?" },
+    { name: "Творчество и самореализация",
+      question: "Насколько вы чувствуете возможность заниматься творчеством, реализовывать свои идеи и способности?" }
+];
+
+const categories = spheres.map(s => s.name);
+
+
+/* =========================================================
+   СОСТОЯНИЕ ПРИЛОЖЕНИЯ
+   ========================================================= */
+
+let values = Array(categories.length).fill(5);       // текущие оценки 0–10
+let desiredValues = Array(categories.length).fill(5);  // желаемые оценки
+let currentQuestion = 0;                                 // индекс текущего вопроса
+let selectedPriorities = [];                              // выбранные приоритеты
+
+
+/* =========================================================
+   УТИЛИТА: ДОСТУП К DOM
+   ========================================================= */
+
+const $ = id => document.getElementById(id);
+
+
+/* =========================================================
+   ХРАНЕНИЕ: КЛЮЧИ localStorage
+   ========================================================= */
+
+const VALUES_KEY  = "wheelBalanceV3Values";
+const DESIRED_KEY = "wheelBalanceV3Desired";
+const JOURNAL_KEY = "wheelBalanceV3Journal";
+const TEXT_KEY    = "wheelBalanceV3Texts";
+const SHARE_KEY   = "wheelBalanceV3Share";
+
+/* Безопасный парсинг JSON с fallback */
+function safeParse(value, fallback) {
+    try { return JSON.parse(value); }
+    catch { return fallback; }
 }
 
-/* === DATE HELPERS === */
+/* --- Сохранение / загрузка текущих оценок --- */
+
+function saveValues() {
+    localStorage.setItem(VALUES_KEY, JSON.stringify(values));
+}
+
+function loadValues() {
+    const saved = localStorage.getItem(VALUES_KEY);
+    if (!saved) return;
+    const parsed = safeParse(saved, null);
+    if (Array.isArray(parsed) && parsed.length === categories.length) {
+        values = parsed.map(v => Math.max(0, Math.min(10, Number(v) || 0)));
+    }
+}
+
+/* --- Сохранение / загрузка желаемых оценок --- */
+
+function saveDesiredValues() {
+    localStorage.setItem(DESIRED_KEY, JSON.stringify(desiredValues));
+}
+
+function loadDesiredValues() {
+    const saved = localStorage.getItem(DESIRED_KEY);
+    if (!saved) return;
+    const parsed = safeParse(saved, null);
+    if (Array.isArray(parsed) && parsed.length === categories.length) {
+        desiredValues = parsed.map(v => Math.max(0, Math.min(10, Number(v) || 0)));
+    }
+}
+
+/* --- Сохранение / загрузка текстовых полей --- */
+
+function saveTexts() {
+    localStorage.setItem(TEXT_KEY, JSON.stringify({
+        reflection: $("reflectionText").value,
+        firstStep:  $("firstStepText").value,
+        startDate:  $("startDate").value
+    }));
+}
+
+function loadTexts() {
+    const saved = localStorage.getItem(TEXT_KEY);
+    if (!saved) return;
+    const data = safeParse(saved, {});
+    $("reflectionText").value = data.reflection || "";
+    $("firstStepText").value  = data.firstStep  || "";
+    $("startDate").value      = data.startDate  || "";
+}
+
+
+/* =========================================================
+   HAPTIC — ВИБРООТКЛИК (если доступен в Telegram)
+   ========================================================= */
+
+function haptic(type) {
+    try {
+        if (!tg || !tg.HapticFeedback) return;
+
+        if (type === "success" && typeof tg.HapticFeedback.notificationOccurred === "function") {
+            tg.HapticFeedback.notificationOccurred("success");
+        } else if (typeof tg.HapticFeedback.selectionChanged === "function") {
+            tg.HapticFeedback.selectionChanged();
+        }
+    } catch {}
+}
+
+
+/* =========================================================
+   TOAST — ВСПЛЫВАЮЩЕЕ УВЕДОМЛЕНИЕ
+   ========================================================= */
+
+let toastTimer = null;
+
+function showToast(text) {
+    const toast = $("toast");
+    toast.textContent = text;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2400);
+}
+
+
+/* =========================================================
+   ДАТЫ: ВСПОМОГАТЕЛЬНЫЕ ФУНКЦИИ
+   ========================================================= */
+
+/* Возвращает дату в формате YYYY-MM-DD */
 function localDateISO(date) {
     date = date || new Date();
     const y = date.getFullYear();
@@ -841,27 +1065,40 @@ function localDateISO(date) {
     const d = String(date.getDate()).padStart(2, "0");
     return y + "-" + m + "-" + d;
 }
+
+/* Добавляет N дней к дате */
 function addDays(date, days) {
-    const r = new Date(date);
-    r.setDate(r.getDate() + days);
-    return r;
-}
-function formatDate(s) {
-    if (!s) return "";
-    const p = s.split("-");
-    return p.length === 3 ? p[2] + "." + p[1] + "." + p[0] : s;
+    const result = new Date(date);
+    result.setDate(result.getDate() + days);
+    return result;
 }
 
-/* === SLIDER MARKS === */
+/* Форматирует YYYY-MM-DD в DD.MM.YYYY */
+function formatDate(dateString) {
+    if (!dateString) return "";
+    const parts = dateString.split("-");
+    if (parts.length !== 3) return dateString;
+    return parts[2] + "." + parts[1] + "." + parts[0];
+}
+
+
+/* =========================================================
+   ЧИСЛОВЫЕ МЕТКИ 0–10 ПОД ПОЛЗУНКОМ
+   Создаёт 11 кликабельных меток, синхронизированных с ползунком
+   ========================================================= */
+
 function createSliderMarks() {
-    const c = $("sliderMarks");
-    c.innerHTML = "";
+    const container = $("sliderMarks");
+    container.innerHTML = "";
+
     for (let i = 0; i <= 10; i++) {
-        const m = document.createElement("span");
-        m.className = "slider-mark";
-        m.textContent = i;
-        m.dataset.value = i;
-        m.addEventListener("click", () => {
+        const mark = document.createElement("span");
+        mark.className = "slider-mark";
+        mark.textContent = i;
+        mark.dataset.value = i;
+
+        /* Клик по метке — устанавливает значение ползунка */
+        mark.addEventListener("click", () => {
             $("scoreSlider").value = i;
             values[currentQuestion] = i;
             $("scoreDisplay").textContent = i;
@@ -871,77 +1108,129 @@ function createSliderMarks() {
             saveValues();
             haptic("selection");
         });
-        c.appendChild(m);
+
+        container.appendChild(mark);
     }
 }
+
+/* Подсвечивает активную метку (ту, что совпадает с ползунком) */
 function updateSliderMarkActive() {
-    const cur = Number($("scoreSlider").value);
-    document.querySelectorAll(".slider-mark").forEach(m => {
-        m.classList.toggle("active", Number(m.dataset.value) === cur);
+    const current = Number($("scoreSlider").value);
+    document.querySelectorAll(".slider-mark").forEach(mark => {
+        mark.classList.toggle("active", Number(mark.dataset.value) === current);
     });
 }
 
-/* === BUBBLE === */
+
+/* =========================================================
+   ВСПЛЫВАЮЩАЯ ПОДСКАЗКА ПОЛЗУНКА (bubble)
+   Позиционируется над ползунком соответственно значению
+   ========================================================= */
+
 function updateBubblePosition() {
-    const sl = $("scoreSlider"), bu = $("sliderBubble");
-    const min = Number(sl.min), max = Number(sl.max), val = Number(sl.value);
-    const pct = (val - min) / (max - min);
-    const sw = sl.offsetWidth, bw = bu.offsetWidth || 30;
-    const off = pct * (sw - bw);
-    bu.style.left = (off + bw / 2) + "px";
-    bu.style.transform = "translateX(-50%)";
-    bu.textContent = val;
+    const slider = $("scoreSlider");
+    const bubble = $("sliderBubble");
+    const min = Number(slider.min);
+    const max = Number(slider.max);
+    const val = Number(slider.value);
+    const percent = (val - min) / (max - min);
+    const sliderWidth = slider.offsetWidth;
+    const bubbleWidth = bubble.offsetWidth || 30;
+    const offset = percent * (sliderWidth - bubbleWidth);
+    bubble.style.left = (offset + bubbleWidth / 2) + "px";
+    bubble.style.transform = "translateX(-50%)";
+    bubble.textContent = val;
 }
 
-/* === QUESTION UI === */
+
+/* =========================================================
+   ОБНОВЛЕНИЕ UI ВОПРОСА
+   Переключает сферу, вопрос, ползунок, прогресс
+   ========================================================= */
+
 function updateQuestionUI() {
-    const idx = currentQuestion, sp = spheres[idx];
+    const idx = currentQuestion;
+    const sphere = spheres[idx];
+
     $("sphereNumber").textContent = "СФЕРА " + (idx + 1);
-    $("sphereTitle").textContent = sp.name;
-    $("question").textContent = sp.question;
-    $("scoreSlider").value = values[idx];
+    $("sphereTitle").textContent   = sphere.name;
+    $("question").textContent      = sphere.question;
+
+    /* Восстанавливаем сохранённое значение */
+    $("scoreSlider").value    = values[idx];
     $("scoreDisplay").textContent = values[idx];
     $("sliderBubble").textContent = values[idx];
+
     updateBubblePosition();
     updateSliderMarkActive();
-    const pr = Math.round(((idx + 1) / spheres.length) * 100);
-    $("progressText").textContent = "Сфера " + (idx + 1) + " из " + spheres.length;
-    $("progressPercent").textContent = pr + "%";
-    $("progressBar").style.width = pr + "%";
+
+    /* Прогресс-бар */
+    const progress = Math.round(((idx + 1) / spheres.length) * 100);
+    $("progressText").textContent   = "Сфера " + (idx + 1) + " из " + spheres.length;
+    $("progressPercent").textContent = progress + "%";
+    $("progressBar").style.width    = progress + "%";
+
+    /* Кнопки: на первом вопросе прячем «Назад» */
     $("backBtn").style.visibility = idx === 0 ? "hidden" : "visible";
+    /* На последнем — меняем текст кнопки */
     $("nextBtn").textContent = idx === spheres.length - 1 ? "Готово ✓" : "Далее →";
 }
 
-/* === SLIDER EVENTS === */
+
+/* =========================================================
+   СОБЫТИЯ ПОЛЗУНКА
+   ========================================================= */
+
+/* Движение ползунка — обновляем всё */
 $("scoreSlider").addEventListener("input", function() {
-    const v = Number(this.value);
-    $("scoreDisplay").textContent = v;
-    $("sliderBubble").textContent = v;
-    values[currentQuestion] = v;
+    const val = Number(this.value);
+    $("scoreDisplay").textContent = val;
+    $("sliderBubble").textContent = val;
+    values[currentQuestion] = val;
     saveValues();
     updateBubblePosition();
     updateSliderMarkActive();
     $("sliderBubble").classList.add("show");
     haptic("selection");
 });
-$("scoreSlider").addEventListener("mousedown", () => $("sliderBubble").classList.add("show"));
-$("scoreSlider").addEventListener("touchstart", () => $("sliderBubble").classList.add("show"), { passive: true });
-function hideBubble() { setTimeout(() => $("sliderBubble").classList.remove("show"), 1200); }
-$("scoreSlider").addEventListener("mouseup", hideBubble);
-$("scoreSlider").addEventListener("touchend", hideBubble);
 
-/* === NAVIGATION === */
-$("backBtn").addEventListener("click", () => {
-    if (currentQuestion > 0) { currentQuestion--; updateQuestionUI(); haptic("selection"); }
+/* Показ bubble при касании */
+$("scoreSlider").addEventListener("mousedown",  () => $("sliderBubble").classList.add("show"));
+$("scoreSlider").addEventListener("touchstart", () => $("sliderBubble").classList.add("show"), { passive: true });
+
+/* Скрытие bubble через 1.2 сек после отпускания */
+function hideSliderBubble() {
+    setTimeout(() => $("sliderBubble").classList.remove("show"), 1200);
+}
+
+$("scoreSlider").addEventListener("mouseup",  hideSliderBubble);
+$("scoreSlider").addEventListener("touchend", hideSliderBubble);
+
+
+/* =========================================================
+   НАВИГАЦИЯ: НАЗАД / ДАЛЕЕ
+   ========================================================= */
+
+$("backBtn").addEventListener("click", function() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        updateQuestionUI();
+        haptic("selection");
+    }
 });
-$("nextBtn").addEventListener("click", () => {
+
+$("nextBtn").addEventListener("click", function() {
+    /* Сохраняем значение текущего вопроса */
     values[currentQuestion] = Number($("scoreSlider").value);
     saveValues();
+
     if (currentQuestion < spheres.length - 1) {
+        /* Переход к следующему вопросу */
         currentQuestion++;
         updateQuestionUI();
         haptic("selection");
     } else {
+        /* Последний вопрос — показываем результат */
         localStorage.setItem("wheelCompleted", "1");
         $("testSection").classList.add("hidden");
         $("resultSection").classList.remove("hidden");
@@ -951,7 +1240,15 @@ $("nextBtn").addEventListener("click", () => {
     }
 });
 
-/* === ROUNDED RECT (безопасная замена ctx.roundRect) === */
+
+/* =========================================================
+   БЕЗОПАСНАЯ ЗАМЕНА ctx.roundRect()
+   Оригинальный метод canvas.roundRect() доступен только в
+   новых браузерах (Chrome 99+, Safari 16+). В Telegram WebView
+   на старых устройствах его нет — весь drawWheel падает.
+   Эта функция через arcTo работает везде.
+   ========================================================= */
+
 function drawRoundRect(ctx, x, y, w, h, r) {
     ctx.beginPath();
     ctx.moveTo(x + r, y);
@@ -966,7 +1263,14 @@ function drawRoundRect(ctx, x, y, w, h, r) {
     ctx.closePath();
 }
 
-/* === WHEEL === */
+
+/* =========================================================
+   ОТРИСОВКА КОЛЕСА БАЛАНСА (canvas)
+   Рисует фон, кольца, оси, текущий профиль, желаемый
+   профиль (если передан), точки с числами, подписи сфер
+   ========================================================= */
+
+/* Вычисляет координаты точки на оси для заданного значения */
 function getScorePoint(cx, cy, radius, angle, value) {
     const r = radius * (value / 10);
     return { x: cx + Math.cos(angle) * r, y: cy + Math.sin(angle) * r };
@@ -977,28 +1281,30 @@ function drawWheel(canvas, vals, desiredVals) {
     const size = 760;
     canvas.width = size;
     canvas.height = size;
-    const cx = size / 2, cy = size / 2;
+
+    const cx = size / 2;
+    const cy = size / 2;
     const radius = size / 2 - 100;
     const n = categories.length;
     const angleStep = (Math.PI * 2) / n;
 
     ctx.clearRect(0, 0, size, size);
 
-    /* ФОН */
+    /* --- Фон --- */
     ctx.fillStyle = "#111a2e";
     ctx.fillRect(0, 0, size, size);
 
-    /* КОЛЬЦА */
+    /* --- Кольца 1–10 (фоновая сетка) --- */
     for (let r = 1; r <= 10; r++) {
-        const rr = radius * r / 10;
+        const ringRadius = radius * r / 10;
         ctx.beginPath();
-        ctx.arc(cx, cy, rr, 0, Math.PI * 2);
+        ctx.arc(cx, cy, ringRadius, 0, Math.PI * 2);
         ctx.strokeStyle = r === 10 ? "rgba(255,255,255,0.24)" : "rgba(255,255,255,0.085)";
         ctx.lineWidth = (r === 5 || r === 10) ? 2 : 1;
         ctx.stroke();
     }
 
-    /* ЦИФРЫ ШКАЛЫ */
+    /* --- Цифры шкалы (1–10 по вертикали) --- */
     ctx.font = "bold 11px Arial";
     ctx.textAlign = "center";
     ctx.textBaseline = "middle";
@@ -1007,22 +1313,22 @@ function drawWheel(canvas, vals, desiredVals) {
         ctx.fillText(String(r), cx + 16, cy - radius * r / 10);
     }
 
-    /* ОСИ */
+    /* --- Оси (спицы от центра к краю) --- */
     for (let i = 0; i < n; i++) {
-        const a = i * angleStep - Math.PI / 2;
+        const angle = i * angleStep - Math.PI / 2;
         ctx.beginPath();
         ctx.moveTo(cx, cy);
-        ctx.lineTo(cx + Math.cos(a) * radius, cy + Math.sin(a) * radius);
+        ctx.lineTo(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius);
         ctx.strokeStyle = "rgba(255,255,255,0.13)";
         ctx.lineWidth = 1;
         ctx.stroke();
     }
 
-    /* ТЕКУЩИЙ ПРОФИЛЬ */
+    /* --- Текущий профиль: вычисляем точки --- */
     const points = [];
     for (let i = 0; i < n; i++) {
-        const a = i * angleStep - Math.PI / 2;
-        points.push(getScorePoint(cx, cy, radius, a, vals[i]));
+        const angle = i * angleStep - Math.PI / 2;
+        points.push(getScorePoint(cx, cy, radius, angle, vals[i]));
     }
 
     /* Заливка + контур одним путём */
@@ -1036,15 +1342,15 @@ function drawWheel(canvas, vals, desiredVals) {
     ctx.lineJoin = "round";
     ctx.stroke();
 
-    /* ЖЕЛАЕМОЕ */
+    /* --- Желаемый профиль (если передан) --- */
     if (desiredVals) {
-        const dp = [];
+        const desiredPoints = [];
         for (let i = 0; i < n; i++) {
-            const a = i * angleStep - Math.PI / 2;
-            dp.push(getScorePoint(cx, cy, radius, a, desiredVals[i]));
+            const angle = i * angleStep - Math.PI / 2;
+            desiredPoints.push(getScorePoint(cx, cy, radius, angle, desiredVals[i]));
         }
         ctx.beginPath();
-        dp.forEach((p, i) => { if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
+        desiredPoints.forEach((p, i) => { if (i === 0) ctx.moveTo(p.x, p.y); else ctx.lineTo(p.x, p.y); });
         ctx.closePath();
         ctx.fillStyle = "rgba(194,140,255,0.18)";
         ctx.fill();
@@ -1055,45 +1361,49 @@ function drawWheel(canvas, vals, desiredVals) {
         ctx.setLineDash([]);
     }
 
-    /* ТОЧКИ И ЗНАЧЕНИЯ */
+    /* --- Точки и подписи значений --- */
     for (let i = 0; i < n; i++) {
-        const a = i * angleStep - Math.PI / 2;
-        const p = points[i];
+        const angle = i * angleStep - Math.PI / 2;
+        const point = points[i];
 
-        /* свечение */
+        /* Внешнее свечение точки */
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 11, 0, Math.PI * 2);
+        ctx.arc(point.x, point.y, 11, 0, Math.PI * 2);
         ctx.fillStyle = "#6ea8fe";
         ctx.fill();
 
-        /* белая середина */
+        /* Белая середина точки */
         ctx.beginPath();
-        ctx.arc(p.x, p.y, 5, 0, Math.PI * 2);
+        ctx.arc(point.x, point.y, 5, 0, Math.PI * 2);
         ctx.fillStyle = "#ffffff";
         ctx.fill();
 
-        /* значение — безопасный roundRect */
-        const vt = String(vals[i]);
-        const lx = p.x + Math.cos(a) * 27;
-        const ly = p.y + Math.sin(a) * 27;
-        ctx.font = "bold 16px Arial";
-        const tw = ctx.measureText(vt).width;
-        const bw = tw + 14, bh = 25;
+        /* Числовая метка рядом с точкой */
+        const valueText = String(vals[i]);
+        const labelX = point.x + Math.cos(angle) * 27;
+        const labelY = point.y + Math.sin(angle) * 27;
 
+        ctx.font = "bold 16px Arial";
+        const metrics = ctx.measureText(valueText);
+        const boxWidth = metrics.width + 14;
+        const boxHeight = 25;
+
+        /* Фон метки — используем безопасный drawRoundRect */
         ctx.fillStyle = "rgba(11,17,32,0.94)";
-        drawRoundRect(ctx, lx - bw / 2, ly - bh / 2, bw, bh, 7);
+        drawRoundRect(ctx, labelX - boxWidth / 2, labelY - boxHeight / 2, boxWidth, boxHeight, 7);
         ctx.fill();
         ctx.strokeStyle = "#6ea8fe";
         ctx.lineWidth = 1.5;
         ctx.stroke();
 
+        /* Текст метки */
         ctx.fillStyle = "#ffffff";
         ctx.textAlign = "center";
         ctx.textBaseline = "middle";
-        ctx.fillText(vt, lx, ly);
+        ctx.fillText(valueText, labelX, labelY);
     }
 
-    /* ЦЕНТР */
+    /* --- Центр колеса --- */
     ctx.beginPath();
     ctx.arc(cx, cy, 27, 0, Math.PI * 2);
     ctx.fillStyle = "#0b1120";
@@ -1107,14 +1417,16 @@ function drawWheel(canvas, vals, desiredVals) {
     ctx.textBaseline = "middle";
     ctx.fillText("0", cx, cy);
 
-    /* ПОДПИСИ */
+    /* --- Подписи сфер по краям --- */
     ctx.font = "bold 14px Arial";
     ctx.fillStyle = "#ffffff";
     for (let i = 0; i < n; i++) {
-        const a = i * angleStep - Math.PI / 2 + angleStep / 2;
-        const lr = radius + 43;
-        const x = cx + Math.cos(a) * lr;
-        const y = cy + Math.sin(a) * lr;
+        const angle = i * angleStep - Math.PI / 2 + angleStep / 2;
+        const labelR = radius + 43;
+        const x = cx + Math.cos(angle) * labelR;
+        const y = cy + Math.sin(angle) * labelR;
+
+        /* Разбиваем название на строки, если длинное */
         const words = categories[i].split(" ");
         let lines;
         if (words.length <= 2) {
@@ -1129,53 +1441,85 @@ function drawWheel(canvas, vals, desiredVals) {
     }
 }
 
-/* === RESULTS === */
+
+/* =========================================================
+   ПОКАЗ РЕЗУЛЬТАТОВ
+   Заполняет статистику, интерпретацию, списки сфер,
+   приоритеты, рисует колесо
+   ========================================================= */
+
 function showResults() {
+
+    /* --- Статистика --- */
     const avg = (values.reduce((a, b) => a + b, 0) / values.length).toFixed(1);
     const max = Math.max(...values);
     const min = Math.min(...values);
     const gap = max - min;
+
     $("average").textContent = avg;
     $("maximum").textContent = max;
     $("minimum").textContent = min;
-    $("gap").textContent = gap;
+    $("gap").textContent     = gap;
 
+    /* --- Текстовая интерпретация --- */
     let interp = "";
     if (avg >= 8) {
-        interp = "<p>В текущей самооценке большинство сфер находятся на достаточно высоком уровне. При этом отдельные различия между сферами всё равно могут быть полезны для размышления.</p>";
+        interp = "<p>В текущей самооценке большинство сфер находятся на достаточно высоком уровне. "
+               + "При этом отдельные различия между сферами всё равно могут быть полезны для размышления.</p>";
     } else if (avg >= 6) {
-        interp = "<p>В целом многие сферы воспринимаются относительно устойчиво. При этом есть направления, которым вы можете захотеть уделить дополнительное внимание.</p>";
+        interp = "<p>В целом многие сферы воспринимаются относительно устойчиво. "
+               + "При этом есть направления, которым вы можете захотеть уделить дополнительное внимание.</p>";
     } else if (avg >= 4) {
-        interp = "<p>Сейчас оценки распределены достаточно неравномерно. Возможно, есть несколько сфер, которые особенно привлекают ваше внимание.</p>";
+        interp = "<p>Сейчас оценки распределены достаточно неравномерно. "
+               + "Возможно, есть несколько сфер, которые особенно привлекают ваше внимание.</p>";
     } else {
-        interp = "<p>Текущая самооценка многих сфер находится в нижней части шкалы. Можно рассмотреть небольшие и реалистичные изменения, начиная с наиболее значимых для вас сфер.</p>";
+        interp = "<p>Текущая самооценка многих сфер находится в нижней части шкалы. "
+               + "Можно рассмотреть небольшие и реалистичные изменения, начиная с наиболее значимых для вас сфер.</p>";
     }
     if (gap >= 5) {
-        interp += "<p>Между наиболее высокой и наиболее низкой оценкой есть заметный разрыв — <strong>" + gap + " баллов</strong>. Это показывает различие в вашем восприятии отдельных сфер сейчас.</p>";
+        interp += "<p>Между наиболее высокой и наиболее низкой оценкой есть заметный разрыв — "
+                + "<strong>" + gap + " баллов</strong>. Это показывает различие в вашем восприятии отдельных сфер сейчас.</p>";
     }
     $("interpretation").innerHTML = interp;
 
-    const sorted = categories.map((name, i) => ({ name, val: values[i], index: i })).sort((a, b) => b.val - a.val);
-    const top = sorted.filter(s => s.val >= 6);
+    /* --- Сортировка сфер по оценке --- */
+    const sorted = categories
+        .map((name, i) => ({ name, val: values[i], index: i }))
+        .sort((a, b) => b.val - a.val);
+
+    const top    = sorted.filter(s => s.val >= 6);
     const bottom = [...sorted].filter(s => s.val <= 5).reverse();
 
+    /* Сильные сферы */
     $("topSpheres").innerHTML = top.length
-        ? top.map(s => '<div class="sphere-result"><span class="sphere-result-name">' + s.name + '</span><span class="sphere-result-score">' + s.val + '</span></div>').join("")
+        ? top.map(s => '<div class="sphere-result"><span class="sphere-result-name">' + s.name + '</span>'
+                     + '<span class="sphere-result-score">' + s.val + '</span></div>').join("")
         : '<div class="empty">Нет сфер с оценкой 6+</div>';
 
+    /* Слабые сферы */
     $("bottomSpheres").innerHTML = bottom.length
-        ? bottom.map(s => '<div class="sphere-result"><span class="sphere-result-name">' + s.name + '</span><span class="sphere-result-score">' + s.val + '</span></div>').join("")
+        ? bottom.map(s => '<div class="sphere-result"><span class="sphere-result-name">' + s.name + '</span>'
+                       + '<span class="sphere-result-score">' + s.val + '</span></div>').join("")
         : '<div class="empty">Нет сфер с оценкой 5 и ниже</div>';
 
+    /* --- Приоритеты (чекбоксы) --- */
     selectedPriorities = [];
-    const pl = $("priorityList");
-    pl.innerHTML = "";
+    const priList = $("priorityList");
+    priList.innerHTML = "";
+
     categories.forEach((name, i) => {
         const item = document.createElement("div");
         item.className = "priority-item";
-        item.innerHTML = '<input type="checkbox" data-idx="' + i + '"><span class="priority-name">' + name + '</span><span class="priority-score">' + values[i] + '/10</span>';
-        item.querySelector("input").addEventListener("change", function() {
+        item.innerHTML =
+            '<input type="checkbox" data-idx="' + i + '">'
+            + '<span class="priority-name">' + name + '</span>'
+            + '<span class="priority-score">' + values[i] + '/10</span>';
+
+        const cb = item.querySelector("input");
+
+        cb.addEventListener("change", function() {
             if (this.checked) {
+                /* Ограничение: не более 3 приоритетов */
                 if (selectedPriorities.length >= 3) {
                     this.checked = false;
                     showToast("Можно выбрать не более 3 сфер");
@@ -1188,65 +1532,95 @@ function showResults() {
             updateDesiredSection();
             haptic("selection");
         });
-        pl.appendChild(item);
+
+        priList.appendChild(item);
     });
 
+    /* Рисуем колесо и загружаем историю */
     drawWheel($("wheel"), values);
     loadJournal();
 }
 
-/* === DESIRED === */
+
+/* =========================================================
+   ЖЕЛАЕМЫЕ ЗНАЧЕНИЯ
+   Создаёт слайдеры для каждого приоритета,
+   обновляет сравнительное колесо и мини-план
+   ========================================================= */
+
 function updateDesiredSection() {
-    const dl = $("desiredList");
-    dl.innerHTML = "";
+    const desiredList = $("desiredList");
+    desiredList.innerHTML = "";
+
     if (selectedPriorities.length === 0) {
-        dl.innerHTML = '<div class="empty">Сначала выберите приоритеты выше</div>';
+        desiredList.innerHTML = '<div class="empty">Сначала выберите приоритеты выше</div>';
         $("desiredWheelCard").classList.add("hidden");
         $("planCard").classList.add("hidden");
         return;
     }
+
+    /* Для каждого приоритета — слайдер желаемого значения */
     selectedPriorities.forEach(idx => {
         const row = document.createElement("div");
         row.className = "desired-row";
         row.innerHTML =
-            '<div class="desired-header"><span class="desired-name">' + categories[idx] + '</span><span class="desired-value">Цель: ' + desiredValues[idx] + '</span></div>' +
-            '<input type="range" min="0" max="10" step="1" value="' + desiredValues[idx] + '" data-idx="' + idx + '" style="width:100%;height:40px;accent-color:#c28cff;cursor:pointer;">' +
-            '<div style="display:flex;justify-content:space-between;color:#718099;font-size:11px;margin-top:2px;"><span>0</span><span>10</span></div>';
-        row.querySelector('input[type="range"]').addEventListener("input", function() {
+            '<div class="desired-header">'
+            +   '<span class="desired-name">' + categories[idx] + '</span>'
+            +   '<span class="desired-value">Цель: ' + desiredValues[idx] + '</span>'
+            + '</div>'
+            + '<input type="range" min="0" max="10" step="1" value="' + desiredValues[idx] + '" data-idx="' + idx + '" '
+            +   'style="width:100%;height:40px;accent-color:#c28cff;cursor:pointer;">'
+            + '<div style="display:flex;justify-content:space-between;color:#718099;font-size:11px;margin-top:2px;">'
+            +   '<span>0</span><span>10</span>'
+            + '</div>';
+
+        const slider = row.querySelector('input[type="range"]');
+        slider.addEventListener("input", function() {
             desiredValues[idx] = Number(this.value);
             row.querySelector(".desired-value").textContent = "Цель: " + this.value;
             saveDesiredValues();
             drawDesiredWheel();
             buildPlan();
         });
-        dl.appendChild(row);
+
+        desiredList.appendChild(row);
     });
+
+    /* Показываем сравнительное колесо и план */
     $("desiredWheelCard").classList.remove("hidden");
     $("planCard").classList.remove("hidden");
     drawDesiredWheel();
     buildPlan();
 }
 
-function drawDesiredWheel() { drawWheel($("desiredWheel"), values, desiredValues); }
+/* Рисует колесо с текущими + желаемыми значениями */
+function drawDesiredWheel() {
+    drawWheel($("desiredWheel"), values, desiredValues);
+}
 
+/* Строит мини-план по приоритетам */
 function buildPlan() {
-    const pl = $("planList");
-    pl.innerHTML = "";
+    const planList = $("planList");
+    planList.innerHTML = "";
     selectedPriorities.forEach(idx => {
-        const diff = desiredValues[idx] - values[idx];
-        const p = document.createElement("div");
-        p.className = "plan";
-        p.innerHTML =
-            '<div class="plan-title">' + categories[idx] + '</div>' +
-            '<div class="plan-line">Текущая оценка: <strong>' + values[idx] + '/10</strong></div>' +
-            '<div class="plan-line">Желаемая оценка: <strong>' + desiredValues[idx] + '/10</strong></div>' +
-            '<div class="plan-line">Разница: <strong>' + (diff > 0 ? "+" : "") + diff + '</strong></div>';
-        pl.appendChild(p);
+        const difference = desiredValues[idx] - values[idx];
+        const plan = document.createElement("div");
+        plan.className = "plan";
+        plan.innerHTML =
+            '<div class="plan-title">' + categories[idx] + '</div>'
+            + '<div class="plan-line">Текущая оценка: <strong>' + values[idx] + '/10</strong></div>'
+            + '<div class="plan-line">Желаемая оценка: <strong>' + desiredValues[idx] + '/10</strong></div>'
+            + '<div class="plan-line">Разница: <strong>' + (difference > 0 ? "+" : "") + difference + '</strong></div>';
+        planList.appendChild(plan);
     });
 }
 
-/* === SAVE === */
-$("saveBtn").addEventListener("click", () => {
+
+/* =========================================================
+   СОХРАНЕНИЕ РЕЗУЛЬТАТА В ИСТОРИЮ
+   ========================================================= */
+
+$("saveBtn").addEventListener("click", function() {
     const entry = {
         date: new Date().toISOString(),
         values: [...values],
@@ -1255,23 +1629,44 @@ $("saveBtn").addEventListener("click", () => {
         firstStep: $("firstStepText").value,
         startDate: $("startDate").value
     };
-    const j = safeParse(localStorage.getItem(JOURNAL_KEY) || "[]", []);
-    j.unshift(entry);
-    localStorage.setItem(JOURNAL_KEY, JSON.stringify(j));
+
+    const journal = safeParse(localStorage.getItem(JOURNAL_KEY) || "[]", []);
+    journal.unshift(entry);
+    localStorage.setItem(JOURNAL_KEY, JSON.stringify(journal));
+
     loadJournal();
     haptic("success");
     showToast("Результат сохранён в историю");
 });
 
-/* === PNG === */
-$("pngBtn").addEventListener("click", () => {
-    $("pngPreview").src = $("wheel").toDataURL("image/png");
+
+/* =========================================================
+   СОХРАНЕНИЕ PNG
+   Открывает модалку с картинкой колеса
+   ========================================================= */
+
+$("pngBtn").addEventListener("click", function() {
+    const dataUrl = $("wheel").toDataURL("image/png");
+    $("pngPreview").src = dataUrl;
     $("modal").classList.add("active");
 });
-$("closeModal").addEventListener("click", () => $("modal").classList.remove("active"));
 
-/* === RESTART / RESET === */
-$("restartBtn").addEventListener("click", () => {
+$("closeModal").addEventListener("click", function() {
+    $("modal").classList.remove("active");
+});
+
+/* Закрытие по клику на фон */
+$("modal").addEventListener("click", function(e) {
+    if (e.target === $("modal")) $("modal").classList.remove("active");
+});
+
+
+/* =========================================================
+   ПРОЙТИ ЗАНОВО
+   Возвращает к первому вопросу без сброса значений
+   ========================================================= */
+
+$("restartBtn").addEventListener("click", function() {
     currentQuestion = 0;
     $("testSection").classList.remove("hidden");
     $("resultSection").classList.add("hidden");
@@ -1280,7 +1675,13 @@ $("restartBtn").addEventListener("click", () => {
     haptic("selection");
 });
 
-$("resetBtn").addEventListener("click", () => {
+
+/* =========================================================
+   ОЧИСТИТЬ РЕЗУЛЬТАТ
+   Сбрасывает все значения к 5, удаляет флаг прохождения
+   ========================================================= */
+
+$("resetBtn").addEventListener("click", function() {
     values = Array(categories.length).fill(5);
     desiredValues = Array(categories.length).fill(5);
     selectedPriorities = [];
@@ -1300,33 +1701,65 @@ $("resetBtn").addEventListener("click", () => {
     showToast("Результат очищен");
 });
 
-/* === JOURNAL === */
+
+/* =========================================================
+   ИСТОРИЯ (ЖУРНАЛ)
+   Загрузка, отображение, удаление записей
+   ========================================================= */
+
 function loadJournal() {
-    const j = safeParse(localStorage.getItem(JOURNAL_KEY) || "[]", []);
-    const c = $("journal");
-    if (j.length === 0) { c.innerHTML = '<div class="empty">История пуста</div>'; return; }
-    c.innerHTML = j.map((e, i) => {
-        const d = e.date ? new Date(e.date).toLocaleDateString("ru-RU") : "—";
-        const ev = Array.isArray(e.values) ? e.values : Array(categories.length).fill(0);
-        const avg = (ev.reduce((a, b) => a + Number(b || 0), 0) / ev.length).toFixed(1);
-        const sc = categories.map((n, k) => n + ": " + (ev[k] ?? 0)).join(" · ");
-        return '<div class="journal-entry"><div class="journal-date">' + d + ' · Среднее: ' + avg + '</div>' +
-            '<div class="journal-score">' + sc + '</div>' +
-            '<div class="journal-buttons"><button onclick="loadJournalEntry(' + i + ')">Загрузить</button>' +
-            '<button class="delete" onclick="deleteJournalEntry(' + i + ')">Удалить</button></div></div>';
+    const journal = safeParse(localStorage.getItem(JOURNAL_KEY) || "[]", []);
+    const container = $("journal");
+
+    if (journal.length === 0) {
+        container.innerHTML = '<div class="empty">История пуста</div>';
+        return;
+    }
+
+    container.innerHTML = journal.map((entry, i) => {
+        const date = entry.date
+            ? new Date(entry.date).toLocaleDateString("ru-RU")
+            : "—";
+
+        const entryValues = Array.isArray(entry.values)
+            ? entry.values
+            : Array(categories.length).fill(0);
+
+        const avg = (entryValues.reduce((a, b) => a + Number(b || 0), 0) / entryValues.length).toFixed(1);
+
+        const scores = categories
+            .map((name, j) => name + ": " + (entryValues[j] ?? 0))
+            .join(" · ");
+
+        return '<div class="journal-entry">'
+            +  '<div class="journal-date">' + date + ' · Среднее: ' + avg + '</div>'
+            +  '<div class="journal-score">' + scores + '</div>'
+            +  '<div class="journal-buttons">'
+            +    '<button onclick="loadJournalEntry(' + i + ')">Загрузить</button>'
+            +    '<button class="delete" onclick="deleteJournalEntry(' + i + ')">Удалить</button>'
+            +  '</div>'
+            + '</div>';
     }).join("");
 }
 
+/* Загрузка записи из истории */
 window.loadJournalEntry = function(i) {
-    const j = safeParse(localStorage.getItem(JOURNAL_KEY) || "[]", []);
-    const e = j[i];
-    if (!e) return;
-    if (Array.isArray(e.values)) values = e.values.map(v => Math.max(0, Math.min(10, Number(v) || 0)));
-    if (Array.isArray(e.desired)) desiredValues = e.desired.map(v => Math.max(0, Math.min(10, Number(v) || 0)));
-    saveValues(); saveDesiredValues();
-    $("reflectionText").value = e.reflection || "";
-    $("firstStepText").value = e.firstStep || "";
-    $("startDate").value = e.startDate || "";
+    const journal = safeParse(localStorage.getItem(JOURNAL_KEY) || "[]", []);
+    const entry = journal[i];
+    if (!entry) return;
+
+    if (Array.isArray(entry.values))
+        values = entry.values.map(v => Math.max(0, Math.min(10, Number(v) || 0)));
+    if (Array.isArray(entry.desired))
+        desiredValues = entry.desired.map(v => Math.max(0, Math.min(10, Number(v) || 0)));
+
+    saveValues();
+    saveDesiredValues();
+
+    $("reflectionText").value = entry.reflection || "";
+    $("firstStepText").value  = entry.firstStep  || "";
+    $("startDate").value      = entry.startDate  || "";
+
     $("testSection").classList.add("hidden");
     $("resultSection").classList.remove("hidden");
     showResults();
@@ -1335,136 +1768,195 @@ window.loadJournalEntry = function(i) {
     window.scrollTo({ top: 0, behavior: "smooth" });
 };
 
+/* Удаление записи из истории */
 window.deleteJournalEntry = function(i) {
-    const j = safeParse(localStorage.getItem(JOURNAL_KEY) || "[]", []);
-    j.splice(i, 1);
-    localStorage.setItem(JOURNAL_KEY, JSON.stringify(j));
+    const journal = safeParse(localStorage.getItem(JOURNAL_KEY) || "[]", []);
+    journal.splice(i, 1);
+    localStorage.setItem(JOURNAL_KEY, JSON.stringify(journal));
     loadJournal();
     haptic("selection");
     showToast("Запись удалена");
 };
 
-/* === AUTOSAVE TEXTS === */
-$("reflectionText").addEventListener("input", saveTexts);
-$("firstStepText").addEventListener("input", saveTexts);
-$("startDate").addEventListener("change", saveTexts);
 
-/* === SHARE === */
+/* =========================================================
+   АВТОСОХРАНЕНИЕ ТЕКСТОВЫХ ПОЛЕЙ
+   ========================================================= */
+
+$("reflectionText").addEventListener("input", saveTexts);
+$("firstStepText").addEventListener("input",  saveTexts);
+$("startDate").addEventListener("change",     saveTexts);
+
+
+/* =========================================================
+   ПОДЕЛИТЬСЯ С ДРУГОМ
+   Формирует сообщение, отправляет через Telegram / Email /
+   копирует в буфер обмена
+   ========================================================= */
+
 function getAverage() {
     return (values.reduce((a, b) => a + Number(b), 0) / values.length).toFixed(1);
 }
 
+/* Собирает текст сообщения для отправки другу */
 function buildShareMessage() {
-    const friend = $("friendName").value.trim();
+    const friend   = $("friendName").value.trim();
     const deadline = $("shareDeadline").value;
-    const comment = $("friendComment").value.trim();
-    const appUrl = "https://yugatn.github.io/wheel-balance/";
+    const comment  = $("friendComment").value.trim();
+    const appUrl   = "https://yugatn.github.io/wheel-balance/";
+
     let msg = "🌀 Колесо баланса\n\n";
     msg += friend ? ("Привет, " + friend + "!\n\n") : "Привет!\n\n";
     msg += "Я заполнил(а) «Колесо баланса» " + formatDate(localDateISO()) + ".\n\n";
     msg += "Моё среднее значение: " + getAverage() + "/10.\n\n";
     msg += "Мои оценки:\n";
-    categories.forEach((n, i) => { msg += "• " + n + " — " + values[i] + "/10\n"; });
+    categories.forEach((name, i) => {
+        msg += "• " + name + " — " + values[i] + "/10\n";
+    });
     if (deadline) msg += "\n📅 Предлагаю вернуться к этому результату до " + formatDate(deadline) + ".";
-    if (comment) msg += "\n\n💬 Договорённость:\n" + comment;
+    if (comment)  msg += "\n\n💬 Договорённость:\n" + comment;
     msg += "\n\n🔗 Открыть «Колесо баланса»:\n" + appUrl;
     return msg;
 }
 
-function updateSharePreview() { $("sharePreview").textContent = buildShareMessage(); }
+/* Обновляет предпросмотр в модалке */
+function updateSharePreview() {
+    $("sharePreview").textContent = buildShareMessage();
+}
 
+/* Сохранение настроек шеринга */
 function saveShareSettings() {
     localStorage.setItem(SHARE_KEY, JSON.stringify({
         friendName: $("friendName").value,
-        deadline: $("shareDeadline").value,
-        email: $("friendEmail").value,
-        comment: $("friendComment").value
+        deadline:   $("shareDeadline").value,
+        email:      $("friendEmail").value,
+        comment:    $("friendComment").value
     }));
 }
 
+/* Загрузка настроек шеринга (с дефолтом дедлайна +14 дней) */
 function loadShareSettings() {
-    const s = safeParse(localStorage.getItem(SHARE_KEY), null);
-    const dd = addDays(new Date(), 14);
-    if (s) {
-        $("friendName").value = s.friendName || "";
-        $("shareDeadline").value = s.deadline || localDateISO(dd);
-        $("friendEmail").value = s.email || "";
-        $("friendComment").value = s.comment || "";
+    const saved = safeParse(localStorage.getItem(SHARE_KEY), null);
+    const defaultDeadline = addDays(new Date(), 14);
+
+    if (saved) {
+        $("friendName").value    = saved.friendName || "";
+        $("shareDeadline").value = saved.deadline   || localDateISO(defaultDeadline);
+        $("friendEmail").value   = saved.email      || "";
+        $("friendComment").value = saved.comment    || "";
     } else {
-        $("shareDeadline").value = localDateISO(dd);
+        $("shareDeadline").value = localDateISO(defaultDeadline);
     }
     updateSharePreview();
 }
 
-$("shareFriendBtn").addEventListener("click", () => { loadShareSettings(); $("shareModal").classList.add("active"); haptic("selection"); });
-
-["friendName", "shareDeadline", "friendEmail", "friendComment"].forEach(id => {
-    $(id).addEventListener("input", () => { updateSharePreview(); saveShareSettings(); });
+/* Открытие модалки шеринга */
+$("shareFriendBtn").addEventListener("click", function() {
+    loadShareSettings();
+    $("shareModal").classList.add("active");
+    haptic("selection");
 });
 
-/* TELEGRAM SHARE */
-$("telegramShareBtn").addEventListener("click", () => {
+/* Автообновление предпросмотра при вводе */
+["friendName", "shareDeadline", "friendEmail", "friendComment"].forEach(id => {
+    $(id).addEventListener("input", function() {
+        updateSharePreview();
+        saveShareSettings();
+    });
+});
+
+/* --- Отправка через Telegram --- */
+$("telegramShareBtn").addEventListener("click", function() {
     const text = buildShareMessage();
-    const url = "https://t.me/share/url?url=" + encodeURIComponent("https://yugatn.github.io/wheel-balance/") + "&text=" + encodeURIComponent(text);
-    if (tg && tg.openTelegramLink) { try { tg.openTelegramLink(url); } catch { window.open(url, "_blank"); } }
-    else { window.open(url, "_blank"); }
+    const shareUrl =
+        "https://t.me/share/url"
+        + "?url=" + encodeURIComponent("https://yugatn.github.io/wheel-balance/")
+        + "&text=" + encodeURIComponent(text);
+
+    if (tg && typeof tg.openTelegramLink === "function") {
+        try { tg.openTelegramLink(shareUrl); }
+        catch { window.open(shareUrl, "_blank"); }
+    } else {
+        window.open(shareUrl, "_blank");
+    }
     haptic("success");
 });
 
-/* EMAIL SHARE */
-$("emailShareBtn").addEventListener("click", () => {
+/* --- Отправка по Email (с валидацией) --- */
+$("emailShareBtn").addEventListener("click", function() {
     const email = $("friendEmail").value.trim();
+
+    /* Проверка email, если указан */
     if (email && !/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(email)) {
         showToast("Проверьте email адрес");
         return;
     }
-    const mailto = "mailto:" + encodeURIComponent(email) +
-        "?subject=" + encodeURIComponent("Мой результат — Колесо баланса") +
-        "&body=" + encodeURIComponent(buildShareMessage());
+
+    const mailto =
+        "mailto:" + encodeURIComponent(email)
+        + "?subject=" + encodeURIComponent("Мой результат — Колесо баланса")
+        + "&body=" + encodeURIComponent(buildShareMessage());
+
     window.location.href = mailto;
     haptic("success");
 });
 
-/* COPY */
-$("copyShareBtn").addEventListener("click", async () => {
+/* --- Копирование текста в буфер обмена --- */
+$("copyShareBtn").addEventListener("click", async function() {
     const text = buildShareMessage();
     try {
         await navigator.clipboard.writeText(text);
         showToast("Текст скопирован");
     } catch {
-        const ta = document.createElement("textarea");
-        ta.value = text;
-        ta.style.position = "fixed";
-        ta.style.opacity = "0";
-        document.body.appendChild(ta);
-        ta.select();
+        /* Fallback для старых WebView */
+        const textarea = document.createElement("textarea");
+        textarea.value = text;
+        textarea.style.position = "fixed";
+        textarea.style.opacity = "0";
+        document.body.appendChild(textarea);
+        textarea.select();
         try { document.execCommand("copy"); showToast("Текст скопирован"); }
         catch { showToast("Не удалось скопировать текст"); }
-        ta.remove();
+        textarea.remove();
     }
     haptic("selection");
 });
 
-$("closeShareModal").addEventListener("click", () => { saveShareSettings(); $("shareModal").classList.remove("active"); });
+/* --- Закрытие модалки шеринга --- */
+$("closeShareModal").addEventListener("click", function() {
+    saveShareSettings();
+    $("shareModal").classList.remove("active");
+});
 
-/* MODAL CLOSE BY BACKGROUND */
-$("modal").addEventListener("click", e => { if (e.target === $("modal")) $("modal").classList.remove("active"); });
-$("shareModal").addEventListener("click", e => { if (e.target === $("shareModal")) { saveShareSettings(); $("shareModal").classList.remove("active"); } });
+/* Закрытие по клику на фон */
+$("shareModal").addEventListener("click", function(e) {
+    if (e.target === $("shareModal")) {
+        saveShareSettings();
+        $("shareModal").classList.remove("active");
+    }
+});
 
-/* === INIT === */
+
+/* =========================================================
+   ИНИЦИАЛИЗАЦИЯ
+   ========================================================= */
+
 loadValues();
 loadDesiredValues();
 loadTexts();
 createSliderMarks();
 updateQuestionUI();
 
+/* Если тест уже пройден — показываем результат */
 if (localStorage.getItem("wheelCompleted")) {
     $("testSection").classList.add("hidden");
     $("resultSection").classList.remove("hidden");
     showResults();
 }
 
-window.addEventListener("resize", () => { updateBubblePosition(); });
+/* Пересчёт позиции bubble при изменении размера окна */
+window.addEventListener("resize", updateBubblePosition);
 </script>
+
 </body>
 </html>
