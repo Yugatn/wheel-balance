@@ -6,455 +6,91 @@
     <title>Колесо баланса</title>
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
-        * {
-            box-sizing: border-box;
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        html, body {
-            margin: 0;
-            padding: 0;
-            min-height: 100%;
-            background: #0b1120;
-            color: #ffffff;
-            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
-        }
-
-        body {
-            min-height: 100vh;
-            min-height: 100dvh;
-            padding: 10px;
-        }
-
-        button, input, textarea {
-            font-family: inherit;
-        }
-
-        button {
-            border: none;
-            cursor: pointer;
-            color: #ffffff;
-        }
-
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .container {
-            width: 100%;
-            max-width: 900px;
-            margin: 0 auto;
-        }
-
-        h1 {
-            text-align: center;
-            font-size: 27px;
-            margin: 8px 0 5px;
-        }
-
-        h2 {
-            font-size: 20px;
-            margin: 0 0 15px;
-        }
-
-        h3 {
-            font-size: 17px;
-            margin: 0 0 10px;
-        }
-
-        .subtitle {
-            text-align: center;
-            color: #aab4c3;
-            font-size: 14px;
-            line-height: 1.45;
-            margin-bottom: 15px;
-        }
-
-        .card {
-            background: #111a2e;
-            border: 1px solid #26324a;
-            border-radius: 20px;
-            padding: 16px;
-            margin-bottom: 14px;
-        }
-
-        .hidden {
-            display: none !important;
-        }
+        * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
+        html, body { margin: 0; padding: 0; min-height: 100%; background: #0b1120; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+        body { min-height: 100vh; min-height: 100dvh; padding: 10px; }
+        button, input, textarea { font-family: inherit; }
+        button { border: none; cursor: pointer; color: #ffffff; }
+        button:active { transform: scale(0.98); }
+        .container { width: 100%; max-width: 900px; margin: 0 auto; }
+        h1 { text-align: center; font-size: 27px; margin: 8px 0 5px; }
+        h2 { font-size: 20px; margin: 0 0 15px; }
+        h3 { font-size: 17px; margin: 0 0 10px; }
+        .subtitle { text-align: center; color: #aab4c3; font-size: 14px; line-height: 1.45; margin-bottom: 15px; }
+        .card { background: #111a2e; border: 1px solid #26324a; border-radius: 20px; padding: 16px; margin-bottom: 14px; }
+        .hidden { display: none !important; }
 
         /* ПРОГРЕСС */
-        .progress-wrapper {
-            margin-bottom: 14px;
-        }
-
-        .progress-top {
-            display: flex;
-            justify-content: space-between;
-            color: #9da9bb;
-            font-size: 13px;
-            margin-bottom: 7px;
-        }
-
-        .progress-track {
-            width: 100%;
-            height: 8px;
-            background: #24314b;
-            border-radius: 20px;
-            overflow: hidden;
-        }
-
-        .progress-bar {
-            height: 100%;
-            width: 12.5%;
-            background: #6ea8fe;
-            border-radius: 20px;
-            transition: width 0.25s ease;
-        }
+        .progress-wrapper { margin-bottom: 14px; }
+        .progress-top { display: flex; justify-content: space-between; color: #9da9bb; font-size: 13px; margin-bottom: 7px; }
+        .progress-track { width: 100%; height: 8px; background: #24314b; border-radius: 20px; overflow: hidden; }
+        .progress-bar { height: 100%; width: 12.5%; background: #6ea8fe; border-radius: 20px; transition: width 0.25s ease; }
 
         /* ТЕСТ */
-        .sphere-number {
-            color: #7faeff;
-            font-size: 13px;
-            font-weight: 700;
-            margin-bottom: 5px;
-        }
+        .sphere-number { color: #7faeff; font-size: 13px; font-weight: 700; margin-bottom: 5px; }
+        .sphere-title { font-size: 25px; font-weight: 700; margin-bottom: 12px; }
+        .question { color: #c1cada; font-size: 16px; line-height: 1.55; margin-bottom: 20px; }
+        .scale-label { text-align: center; color: #9da9bb; font-size: 13px; margin-bottom: 9px; }
+        .score-display { text-align: center; font-size: 52px; line-height: 1; font-weight: 800; margin: 12px 0 18px; }
+        .slider-wrapper { position: relative; margin-top: 12px; }
+        .score-slider { width: 100%; height: 42px; accent-color: #6ea8fe; cursor: pointer; }
+        .slider-current-value { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: #315fa8; color: #ffffff; padding: 4px 8px; border-radius: 9px; font-size: 14px; font-weight: 700; white-space: nowrap; opacity: 0; transition: opacity 0.15s ease; pointer-events: none; z-index: 10; }
+        .slider-current-value.show { opacity: 1; }
+        .slider-track-values { display: flex; justify-content: space-between; align-items: center; color: #9da9bb; font-size: 11px; margin-top: 4px; user-select: none; }
+        .scale-ends { display: flex; justify-content: space-between; color: #718099; font-size: 11px; margin-top: 6px; }
+        .navigation { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
+        .nav-button { padding: 14px 10px; border-radius: 14px; background: #24314b; font-size: 15px; font-weight: 700; }
+        .nav-button.primary { background: #315fa8; }
 
-        .sphere-title {
-            font-size: 25px;
-            font-weight: 700;
-            margin-bottom: 12px;
-        }
+        /* КОЛЕСО И СТАТИСТИКА */
+        .wheel-wrapper { width: 100%; display: flex; justify-content: center; align-items: center; overflow: hidden; }
+        canvas { display: block; width: min(96vw, 700px); height: min(96vw, 700px); max-width: 100%; touch-action: none; }
+        .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 13px; }
+        .stat { background: #18233a; border-radius: 13px; padding: 10px 4px; text-align: center; }
+        .stat-value { font-size: 20px; font-weight: 800; }
+        .stat-label { color: #9da9bb; font-size: 11px; margin-top: 3px; }
 
-        .question {
-            color: #c1cada;
-            font-size: 16px;
-            line-height: 1.55;
-            margin-bottom: 20px;
-        }
+        /* ИНТЕРПРЕТАЦИЯ И СПИСКИ */
+        .interpretation { color: #c2ccda; font-size: 15px; line-height: 1.6; }
+        .range-list { display: grid; gap: 8px; margin-top: 12px; }
+        .range-item { background: #18233a; border-radius: 12px; padding: 10px 12px; color: #b9c4d5; font-size: 13px; line-height: 1.45; }
+        .range-item strong { color: #ffffff; }
+        .priority-item { display: flex; align-items: center; gap: 10px; background: #18233a; padding: 11px; border-radius: 12px; margin-top: 8px; }
+        .priority-name { flex: 1; font-size: 14px; }
 
-        .scale-label {
-            text-align: center;
-            color: #9da9bb;
-            font-size: 13px;
-            margin-bottom: 9px;
-        }
-
-        .score-display {
-            text-align: center;
-            font-size: 52px;
-            line-height: 1;
-            font-weight: 800;
-            margin: 12px 0 18px;
-        }
-
-        .slider-wrapper {
-            position: relative;
-            margin-top: 12px;
-        }
-
-        .score-slider {
-            width: 100%;
-            height: 42px;
-            accent-color: #6ea8fe;
-            cursor: pointer;
-        }
-
-        .slider-current-value {
-            position: absolute;
-            top: -30px;
-            left: 50%;
-            transform: translateX(-50%);
-            background: #315fa8;
-            color: #ffffff;
-            padding: 4px 8px;
-            border-radius: 9px;
-            font-size: 14px;
-            font-weight: 700;
-            white-space: nowrap;
-            opacity: 0;
-            transition: opacity 0.15s ease;
-            pointer-events: none;
-            z-index: 10;
-        }
-
-        .slider-current-value.show {
-            opacity: 1;
-        }
-
-        .slider-track-values {
-            display: flex;
-            justify-content: space-between;
-            align-items: center;
-            color: #9da9bb;
-            font-size: 11px;
-            margin-top: 4px;
-            user-select: none;
-        }
-
-        .scale-ends {
-            display: flex;
-            justify-content: space-between;
-            color: #718099;
-            font-size: 11px;
-            margin-top: 6px;
-        }
-
-        .navigation {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 10px;
-            margin-top: 18px;
-        }
-
-        .nav-button {
-            padding: 14px 10px;
-            border-radius: 14px;
-            background: #24314b;
-            font-size: 15px;
-            font-weight: 700;
-        }
-
-        .nav-button.primary {
-            background: #315fa8;
-        }
-
-        /* КОЛЕСО */
-        .wheel-wrapper {
-            width: 100%;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            overflow: hidden;
-        }
-
-        canvas {
-            display: block;
-            width: min(96vw, 700px);
-            height: min(96vw, 700px);
-            max-width: 100%;
-            touch-action: none;
-        }
-
-        .stats {
-            display: grid;
-            grid-template-columns: repeat(4, 1fr);
-            gap: 7px;
-            margin-top: 13px;
-        }
-
-        .stat {
-            background: #18233a;
-            border-radius: 13px;
-            padding: 10px 4px;
-            text-align: center;
-        }
-
-        .stat-value {
-            font-size: 20px;
-            font-weight: 800;
-        }
-
-        .stat-label {
-            color: #9da9bb;
-            font-size: 11px;
-            margin-top: 3px;
-        }
-
-        /* ИНТЕРПРЕТАЦИЯ */
-        .interpretation {
-            color: #c2ccda;
-            font-size: 15px;
-            line-height: 1.6;
-        }
-
-        .range-list {
-            display: grid;
-            gap: 8px;
-            margin-top: 12px;
-        }
-
-        .range-item {
-            background: #18233a;
-            border-radius: 12px;
-            padding: 10px 12px;
-            color: #b9c4d5;
-            font-size: 13px;
-            line-height: 1.45;
-        }
-
-        .range-item strong {
-            color: #ffffff;
-        }
-
-        /* ПРИОРИТЕТЫ */
-        .priority-item {
-            display: flex;
-            align-items: center;
-            gap: 10px;
-            background: #18233a;
-            padding: 11px;
-            border-radius: 12px;
-            margin-top: 8px;
-        }
-
-        .priority-name {
-            flex: 1;
-            font-size: 14px;
-        }
-
-        .goal-box {
-            margin-top: 15px;
-        }
-
-        textarea, input[type="date"] {
-            width: 100%;
-            border: 1px solid #33425f;
-            border-radius: 12px;
-            background: #0e1729;
-            color: #ffffff;
-            padding: 11px;
-            font-size: 14px;
-            outline: none;
-        }
-
-        textarea {
-            min-height: 90px;
-            resize: vertical;
-        }
-
-        input[type="date"] {
-            min-height: 45px;
-        }
-
-        textarea:focus, input[type="date"]:focus {
-            border-color: #6ea8fe;
-        }
+        /* ФОРМЫ */
+        .goal-box { margin-top: 15px; }
+        textarea, input[type="date"] { width: 100%; border: 1px solid #33425f; border-radius: 12px; background: #0e1729; color: #ffffff; padding: 11px; font-size: 14px; outline: none; }
+        textarea { min-height: 90px; resize: vertical; }
+        input[type="date"] { min-height: 45px; }
+        textarea:focus, input[type="date"]:focus { border-color: #6ea8fe; }
 
         /* ПЛАН */
-        .plan {
-            background: #18233a;
-            border-radius: 15px;
-            padding: 13px;
-            margin-top: 9px;
-        }
-
-        .plan-title {
-            font-weight: 700;
-            margin-bottom: 9px;
-        }
-
-        .plan-line {
-            color: #b7c2d2;
-            font-size: 13px;
-            line-height: 1.5;
-            margin: 5px 0;
-        }
-
-        .plan-line strong {
-            color: #ffffff;
-        }
+        .plan { background: #18233a; border-radius: 15px; padding: 13px; margin-top: 9px; }
+        .plan-title { font-weight: 700; margin-bottom: 9px; }
+        .plan-line { color: #b7c2d2; font-size: 13px; line-height: 1.5; margin: 5px 0; }
+        .plan-line strong { color: #ffffff; }
 
         /* КНОПКИ */
-        .buttons {
-            display: grid;
-            grid-template-columns: 1fr 1fr;
-            gap: 9px;
-        }
-
-        .main-button {
-            padding: 14px 10px;
-            border-radius: 14px;
-            background: #24314b;
-            font-size: 14px;
-            font-weight: 700;
-        }
-
-        .main-button.primary {
-            background: #315fa8;
-        }
-
-        .main-button.danger {
-            background: #713c49;
-        }
+        .buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
+        .main-button { padding: 14px 10px; border-radius: 14px; background: #24314b; font-size: 14px; font-weight: 700; }
+        .main-button.primary { background: #315fa8; }
+        .main-button.danger { background: #713c49; }
 
         /* ИСТОРИЯ */
-        .journal-entry {
-            background: #18233a;
-            border-radius: 14px;
-            padding: 13px;
-            margin-top: 10px;
-        }
-
-        .journal-date {
-            color: #8fa0b8;
-            font-size: 12px;
-            margin-bottom: 7px;
-        }
+        .journal-entry { background: #18233a; border-radius: 14px; padding: 13px; margin-top: 10px; }
+        .journal-date { color: #8fa0b8; font-size: 12px; margin-bottom: 7px; }
 
         /* МОДАЛЬНОЕ ОКНО */
-        .modal {
-            position: fixed;
-            inset: 0;
-            background: rgba(0, 0, 0, 0.9);
-            display: none;
-            align-items: center;
-            justify-content: center;
-            padding: 15px;
-            z-index: 1000;
-        }
-
-        .modal.active {
-            display: flex;
-        }
-
-        .modal-content {
-            width: 100%;
-            max-width: 720px;
-            max-height: 95vh;
-            overflow: auto;
-            background: #111a2e;
-            border-radius: 20px;
-            padding: 13px;
-            text-align: center;
-        }
-
-        .modal img {
-            width: 100%;
-            max-height: 72vh;
-            object-fit: contain;
-            border-radius: 12px;
-        }
-
-        .modal-text {
-            color: #b6c0cf;
-            font-size: 13px;
-            line-height: 1.45;
-            margin: 9px 0;
-        }
+        .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 1000; }
+        .modal.active { display: flex; }
+        .modal-content { width: 100%; max-width: 720px; max-height: 95vh; overflow: auto; background: #111a2e; border-radius: 20px; padding: 13px; text-align: center; }
+        .modal img { width: 100%; max-height: 72vh; object-fit: contain; border-radius: 12px; }
+        .modal-text { color: #b6c0cf; font-size: 13px; line-height: 1.45; margin: 9px 0; }
 
         /* УВЕДОМЛЕНИЕ */
-        .toast {
-            position: fixed;
-            left: 50%;
-            bottom: 20px;
-            transform: translateX(-50%) translateY(100px);
-            background: #263653;
-            color: #ffffff;
-            padding: 11px 16px;
-            border-radius: 13px;
-            font-size: 13px;
-            z-index: 2000;
-            opacity: 0;
-            transition: all 0.25s ease;
-            max-width: calc(100vw - 30px);
-            text-align: center;
-            pointer-events: none;
-        }
-
-        .toast.show {
-            opacity: 1;
-            transform: translateX(-50%) translateY(0);
-        }
+        .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%) translateY(100px); background: #263653; color: #ffffff; padding: 11px 16px; border-radius: 13px; font-size: 13px; z-index: 2000; opacity: 0; transition: all 0.25s ease; max-width: calc(100vw - 30px); text-align: center; pointer-events: none; }
+        .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
 
         @media (max-width: 600px) {
             body { padding: 8px; }
@@ -470,10 +106,7 @@
 <body>
     <div class="container">
         <h1>🌀 Колесо баланса</h1>
-        <div class="subtitle">
-            Небольшая рефлексия о том, как вы воспринимаете
-            разные сферы своей жизни сейчас.
-        </div>
+        <div class="subtitle">Небольшая рефлексия о том, как вы воспринимаете разные сферы своей жизни сейчас.</div>
 
         <!-- ТЕСТ -->
         <section id="testSection">
@@ -500,4 +133,60 @@
                     <div class="slider-current-value" id="sliderBubble">5</div>
                 </div>
 
-                <!-- Числовые метки 0–10
+                <!-- Метки 0–10 -->
+                <div class="slider-track-values" id="sliderTrackValues"></div>
+
+                <div class="scale-ends">
+                    <span>0 — совсем не удовлетворён</span>
+                    <span>10 — полностью удовлетворён</span>
+                </div>
+
+                <div class="navigation">
+                    <button class="nav-button" id="backBtn">← Назад</button>
+                    <button class="nav-button primary" id="nextBtn">Далее →</button>
+                </div>
+            </div>
+        </section>
+
+        <!-- РЕЗУЛЬТАТ -->
+        <section id="resultSection" class="hidden">
+            <div class="card">
+                <h2>🌀 Ваше колесо баланса</h2>
+                <div class="wheel-wrapper"><canvas id="wheel"></canvas></div>
+                <div style="text-align:center; color:#9da9bb; font-size:13px;">Центр = 0 · Внешний круг = 10</div>
+                <div class="stats">
+                    <div class="stat"><div class="stat-value" id="average">5.0</div><div class="stat-label">Среднее</div></div>
+                    <div class="stat"><div class="stat-value" id="maximum">5</div><div class="stat-label">Максимум</div></div>
+                    <div class="stat"><div class="stat-value" id="minimum">5</div><div class="stat-label">Минимум</div></div>
+                    <div class="stat"><div class="stat-value" id="gap">0</div><div class="stat-label">Разрыв</div></div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>📊 Что показывает результат</h2>
+                <div class="interpretation" id="interpretation"></div>
+                <div class="range-list">
+                    <div class="range-item"><strong>8–10</strong> — относительно сильная сфера.</div>
+                    <div class="range-item"><strong>6–7</strong> — относительно стабильная сфера.</div>
+                    <div class="range-item"><strong>4–5</strong> — сфера, которой может быть полезно уделить внимание.</div>
+                    <div class="range-item"><strong>0–3</strong> — выраженный текущий приоритет для размышления.</div>
+                </div>
+            </div>
+
+            <div class="card">
+                <h2>🔎 Сферы результата</h2>
+                <h3>Относительно сильные</h3>
+                <div id="topSpheres"></div>
+                <h3 style="margin-top:18px;">Требующие внимания</h3>
+                <div id="bottomSpheres"></div>
+            </div>
+
+            <div class="card">
+                <h2>🎯 Приоритеты</h2>
+                <div class="interpretation">Выберите до трёх сфер, которым вы хотели бы уделить больше внимания.</div>
+                <div id="priorityList"></div>
+            </div>
+
+            <div class="card" id="desiredCard">
+                <h2>🌱 Желаемые изменения</h2>
+                <div class="interpretation">Для выбранных приоритетов укажите, какого
