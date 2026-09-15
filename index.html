@@ -7,10 +7,10 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
     <style>
         * { box-sizing: border-box; -webkit-tap-highlight-color: transparent; }
-        html, body { margin: 0; padding: 0; min-height: 100%; background: #0b1120; color: #ffffff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
+        html, body { margin: 0; padding: 0; min-height: 100%; background: #0b1120; color: #fff; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif; }
         body { min-height: 100vh; min-height: 100dvh; padding: 10px; }
         button, input, textarea { font-family: inherit; }
-        button { border: none; cursor: pointer; color: #ffffff; }
+        button { border: none; cursor: pointer; color: #fff; }
         button:active { transform: scale(0.98); }
         .container { width: 100%; max-width: 900px; margin: 0 auto; }
         h1 { text-align: center; font-size: 27px; margin: 8px 0 5px; }
@@ -19,79 +19,76 @@
         .subtitle { text-align: center; color: #aab4c3; font-size: 14px; line-height: 1.45; margin-bottom: 15px; }
         .card { background: #111a2e; border: 1px solid #26324a; border-radius: 20px; padding: 16px; margin-bottom: 14px; }
         .hidden { display: none !important; }
-
-        /* ПРОГРЕСС */
         .progress-wrapper { margin-bottom: 14px; }
         .progress-top { display: flex; justify-content: space-between; color: #9da9bb; font-size: 13px; margin-bottom: 7px; }
         .progress-track { width: 100%; height: 8px; background: #24314b; border-radius: 20px; overflow: hidden; }
         .progress-bar { height: 100%; width: 12.5%; background: #6ea8fe; border-radius: 20px; transition: width 0.25s ease; }
-
-        /* ТЕСТ */
         .sphere-number { color: #7faeff; font-size: 13px; font-weight: 700; margin-bottom: 5px; }
         .sphere-title { font-size: 25px; font-weight: 700; margin-bottom: 12px; }
         .question { color: #c1cada; font-size: 16px; line-height: 1.55; margin-bottom: 20px; }
         .scale-label { text-align: center; color: #9da9bb; font-size: 13px; margin-bottom: 9px; }
         .score-display { text-align: center; font-size: 52px; line-height: 1; font-weight: 800; margin: 12px 0 18px; }
-        .slider-wrapper { position: relative; margin-top: 12px; }
+        .slider-wrapper { position: relative; margin-top: 12px; padding-top: 34px; }
         .score-slider { width: 100%; height: 42px; accent-color: #6ea8fe; cursor: pointer; }
-        .slider-current-value { position: absolute; top: -30px; left: 50%; transform: translateX(-50%); background: #315fa8; color: #ffffff; padding: 4px 8px; border-radius: 9px; font-size: 14px; font-weight: 700; white-space: nowrap; opacity: 0; transition: opacity 0.15s ease; pointer-events: none; z-index: 10; }
+        .slider-current-value { position: absolute; top: 0; background: #315fa8; color: #fff; padding: 4px 10px; border-radius: 9px; font-size: 14px; font-weight: 700; white-space: nowrap; opacity: 0; transition: opacity 0.15s ease; pointer-events: none; z-index: 10; }
         .slider-current-value.show { opacity: 1; }
-        .slider-track-values { display: flex; justify-content: space-between; align-items: center; color: #9da9bb; font-size: 11px; margin-top: 4px; user-select: none; }
+        .slider-marks { display: flex; justify-content: space-between; margin-top: 6px; user-select: none; }
+        .slider-mark { color: #9da9bb; font-size: 12px; font-weight: 600; text-align: center; flex: 1; }
         .scale-ends { display: flex; justify-content: space-between; color: #718099; font-size: 11px; margin-top: 6px; }
         .navigation { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; margin-top: 18px; }
         .nav-button { padding: 14px 10px; border-radius: 14px; background: #24314b; font-size: 15px; font-weight: 700; }
         .nav-button.primary { background: #315fa8; }
-
-        /* КОЛЕСО И СТАТИСТИКА */
         .wheel-wrapper { width: 100%; display: flex; justify-content: center; align-items: center; overflow: hidden; }
         canvas { display: block; width: min(96vw, 700px); height: min(96vw, 700px); max-width: 100%; touch-action: none; }
+        .scale-info { text-align: center; color: #9da9bb; font-size: 13px; margin-top: 3px; }
         .stats { display: grid; grid-template-columns: repeat(4, 1fr); gap: 7px; margin-top: 13px; }
         .stat { background: #18233a; border-radius: 13px; padding: 10px 4px; text-align: center; }
         .stat-value { font-size: 20px; font-weight: 800; }
         .stat-label { color: #9da9bb; font-size: 11px; margin-top: 3px; }
-
-        /* ИНТЕРПРЕТАЦИЯ И СПИСКИ */
         .interpretation { color: #c2ccda; font-size: 15px; line-height: 1.6; }
+        .interpretation p { margin: 0 0 11px; }
         .range-list { display: grid; gap: 8px; margin-top: 12px; }
         .range-item { background: #18233a; border-radius: 12px; padding: 10px 12px; color: #b9c4d5; font-size: 13px; line-height: 1.45; }
-        .range-item strong { color: #ffffff; }
+        .range-item strong { color: #fff; }
+        .sphere-result { display: flex; align-items: center; justify-content: space-between; gap: 10px; background: #18233a; border-radius: 13px; padding: 11px 12px; margin-top: 8px; }
+        .sphere-result-name { font-size: 14px; }
+        .sphere-result-score { min-width: 38px; text-align: center; background: #315fa8; padding: 5px 7px; border-radius: 9px; font-weight: 800; }
         .priority-item { display: flex; align-items: center; gap: 10px; background: #18233a; padding: 11px; border-radius: 12px; margin-top: 8px; }
+        .priority-item input { width: 20px; height: 20px; accent-color: #6ea8fe; flex-shrink: 0; }
         .priority-name { flex: 1; font-size: 14px; }
-
-        /* ФОРМЫ */
+        .priority-score { color: #8fa0b8; font-size: 12px; }
         .goal-box { margin-top: 15px; }
-        textarea, input[type="date"] { width: 100%; border: 1px solid #33425f; border-radius: 12px; background: #0e1729; color: #ffffff; padding: 11px; font-size: 14px; outline: none; }
+        .goal-box label { display: block; color: #b5c0d0; font-size: 13px; margin-bottom: 7px; }
+        textarea, input[type="date"] { width: 100%; border: 1px solid #33425f; border-radius: 12px; background: #0e1729; color: #fff; padding: 11px; font-size: 14px; outline: none; }
         textarea { min-height: 90px; resize: vertical; }
         input[type="date"] { min-height: 45px; }
         textarea:focus, input[type="date"]:focus { border-color: #6ea8fe; }
-
-        /* ПЛАН */
+        .desired-row { background: #18233a; border-radius: 13px; padding: 12px; margin-top: 9px; }
+        .desired-header { display: flex; justify-content: space-between; gap: 8px; margin-bottom: 7px; }
+        .desired-name { font-size: 14px; font-weight: 600; }
+        .desired-value { font-weight: 800; color: #7faeff; }
         .plan { background: #18233a; border-radius: 15px; padding: 13px; margin-top: 9px; }
         .plan-title { font-weight: 700; margin-bottom: 9px; }
         .plan-line { color: #b7c2d2; font-size: 13px; line-height: 1.5; margin: 5px 0; }
-        .plan-line strong { color: #ffffff; }
-
-        /* КНОПКИ */
+        .plan-line strong { color: #fff; }
         .buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 9px; }
         .main-button { padding: 14px 10px; border-radius: 14px; background: #24314b; font-size: 14px; font-weight: 700; }
         .main-button.primary { background: #315fa8; }
         .main-button.danger { background: #713c49; }
-
-        /* ИСТОРИЯ */
         .journal-entry { background: #18233a; border-radius: 14px; padding: 13px; margin-top: 10px; }
         .journal-date { color: #8fa0b8; font-size: 12px; margin-bottom: 7px; }
-
-        /* МОДАЛЬНОЕ ОКНО */
-        .modal { position: fixed; inset: 0; background: rgba(0, 0, 0, 0.9); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 1000; }
+        .journal-score { font-size: 14px; line-height: 1.5; }
+        .journal-buttons { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-top: 10px; }
+        .journal-buttons button { padding: 10px; border-radius: 11px; background: #24314b; font-size: 13px; }
+        .journal-buttons .delete { background: #5b3440; }
+        .empty { color: #8fa0b8; text-align: center; padding: 10px; font-size: 14px; }
+        .modal { position: fixed; inset: 0; background: rgba(0,0,0,0.9); display: none; align-items: center; justify-content: center; padding: 15px; z-index: 1000; }
         .modal.active { display: flex; }
         .modal-content { width: 100%; max-width: 720px; max-height: 95vh; overflow: auto; background: #111a2e; border-radius: 20px; padding: 13px; text-align: center; }
-        .modal img { width: 100%; max-height: 72vh; object-fit: contain; border-radius: 12px; }
+        .modal img { width: 100%; max-height: 72vh; object-fit: contain; border-radius: 12px; background: #fff; }
         .modal-text { color: #b6c0cf; font-size: 13px; line-height: 1.45; margin: 9px 0; }
-
-        /* УВЕДОМЛЕНИЕ */
-        .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%) translateY(100px); background: #263653; color: #ffffff; padding: 11px 16px; border-radius: 13px; font-size: 13px; z-index: 2000; opacity: 0; transition: all 0.25s ease; max-width: calc(100vw - 30px); text-align: center; pointer-events: none; }
+        .toast { position: fixed; left: 50%; bottom: 20px; transform: translateX(-50%) translateY(100px); background: #263653; color: #fff; padding: 11px 16px; border-radius: 13px; font-size: 13px; z-index: 2000; opacity: 0; transition: all 0.25s ease; max-width: calc(100vw - 30px); text-align: center; pointer-events: none; }
         .toast.show { opacity: 1; transform: translateX(-50%) translateY(0); }
-
         @media (max-width: 600px) {
             body { padding: 8px; }
             h1 { font-size: 24px; }
@@ -99,94 +96,689 @@
             .sphere-title { font-size: 22px; }
             .question { font-size: 15px; }
             .stats { grid-template-columns: repeat(2, 1fr); }
-            .buttons, .navigation { grid-template-columns: 1fr; }
+            .buttons, .navigation { grid-template-columns: 1fr 1fr; }
         }
     </style>
 </head>
 <body>
-    <div class="container">
-        <h1>🌀 Колесо баланса</h1>
-        <div class="subtitle">Небольшая рефлексия о том, как вы воспринимаете разные сферы своей жизни сейчас.</div>
+<div class="container">
+    <h1>🌀 Колесо баланса</h1>
+    <div class="subtitle">Небольшая рефлексия о том, как вы воспринимаете разные сферы своей жизни сейчас.</div>
 
-        <!-- ТЕСТ -->
-        <section id="testSection">
-            <div class="card">
-                <div class="progress-wrapper">
-                    <div class="progress-top">
-                        <span id="progressText">Сфера 1 из 8</span>
-                        <span id="progressPercent">13%</span>
-                    </div>
-                    <div class="progress-track">
-                        <div class="progress-bar" id="progressBar"></div>
-                    </div>
+    <!-- ТЕСТ -->
+    <section id="testSection">
+        <div class="card">
+            <div class="progress-wrapper">
+                <div class="progress-top">
+                    <span id="progressText">Сфера 1 из 8</span>
+                    <span id="progressPercent">13%</span>
                 </div>
-
-                <div class="sphere-number" id="sphereNumber">СФЕРА 1</div>
-                <div class="sphere-title" id="sphereTitle">Здоровье</div>
-                <div class="question" id="question">Насколько вы довольны своим физическим состоянием и заботой о здоровье сейчас?</div>
-
-                <div class="scale-label">Выберите значение от 0 до 10</div>
-                <div class="score-display" id="scoreDisplay">5</div>
-
-                <div class="slider-wrapper">
-                    <input type="range" class="score-slider" id="scoreSlider" min="0" max="10" step="1" value="5">
-                    <div class="slider-current-value" id="sliderBubble">5</div>
-                </div>
-
-                <!-- Метки 0–10 -->
-                <div class="slider-track-values" id="sliderTrackValues"></div>
-
-                <div class="scale-ends">
-                    <span>0 — совсем не удовлетворён</span>
-                    <span>10 — полностью удовлетворён</span>
-                </div>
-
-                <div class="navigation">
-                    <button class="nav-button" id="backBtn">← Назад</button>
-                    <button class="nav-button primary" id="nextBtn">Далее →</button>
+                <div class="progress-track">
+                    <div class="progress-bar" id="progressBar"></div>
                 </div>
             </div>
-        </section>
-
-        <!-- РЕЗУЛЬТАТ -->
-        <section id="resultSection" class="hidden">
-            <div class="card">
-                <h2>🌀 Ваше колесо баланса</h2>
-                <div class="wheel-wrapper"><canvas id="wheel"></canvas></div>
-                <div style="text-align:center; color:#9da9bb; font-size:13px;">Центр = 0 · Внешний круг = 10</div>
-                <div class="stats">
-                    <div class="stat"><div class="stat-value" id="average">5.0</div><div class="stat-label">Среднее</div></div>
-                    <div class="stat"><div class="stat-value" id="maximum">5</div><div class="stat-label">Максимум</div></div>
-                    <div class="stat"><div class="stat-value" id="minimum">5</div><div class="stat-label">Минимум</div></div>
-                    <div class="stat"><div class="stat-value" id="gap">0</div><div class="stat-label">Разрыв</div></div>
-                </div>
+            <div class="sphere-number" id="sphereNumber">СФЕРА 1</div>
+            <div class="sphere-title" id="sphereTitle">Здоровье</div>
+            <div class="question" id="question"></div>
+            <div class="scale-label">Выберите значение от 0 до 10</div>
+            <div class="score-display" id="scoreDisplay">5</div>
+            <div class="slider-wrapper">
+                <div class="slider-current-value" id="sliderBubble">5</div>
+                <input type="range" class="score-slider" id="scoreSlider" min="0" max="10" step="1" value="5">
+                <div class="slider-marks" id="sliderMarks"></div>
             </div>
-
-            <div class="card">
-                <h2>📊 Что показывает результат</h2>
-                <div class="interpretation" id="interpretation"></div>
-                <div class="range-list">
-                    <div class="range-item"><strong>8–10</strong> — относительно сильная сфера.</div>
-                    <div class="range-item"><strong>6–7</strong> — относительно стабильная сфера.</div>
-                    <div class="range-item"><strong>4–5</strong> — сфера, которой может быть полезно уделить внимание.</div>
-                    <div class="range-item"><strong>0–3</strong> — выраженный текущий приоритет для размышления.</div>
-                </div>
+            <div class="scale-ends">
+                <span>0 — совсем не удовлетворён</span>
+                <span>10 — полностью удовлетворён</span>
             </div>
-
-            <div class="card">
-                <h2>🔎 Сферы результата</h2>
-                <h3>Относительно сильные</h3>
-                <div id="topSpheres"></div>
-                <h3 style="margin-top:18px;">Требующие внимания</h3>
-                <div id="bottomSpheres"></div>
+            <div class="navigation">
+                <button class="nav-button" id="backBtn">← Назад</button>
+                <button class="nav-button primary" id="nextBtn">Далее →</button>
             </div>
+        </div>
+    </section>
 
-            <div class="card">
-                <h2>🎯 Приоритеты</h2>
-                <div class="interpretation">Выберите до трёх сфер, которым вы хотели бы уделить больше внимания.</div>
-                <div id="priorityList"></div>
+    <!-- РЕЗУЛЬТАТ -->
+    <section id="resultSection" class="hidden">
+        <div class="card">
+            <h2>🌀 Ваше колесо баланса</h2>
+            <div class="wheel-wrapper"><canvas id="wheel"></canvas></div>
+            <div class="scale-info">Центр = 0 · Внешний круг = 10</div>
+            <div class="stats">
+                <div class="stat"><div class="stat-value" id="average">5.0</div><div class="stat-label">Среднее</div></div>
+                <div class="stat"><div class="stat-value" id="maximum">5</div><div class="stat-label">Максимум</div></div>
+                <div class="stat"><div class="stat-value" id="minimum">5</div><div class="stat-label">Минимум</div></div>
+                <div class="stat"><div class="stat-value" id="gap">0</div><div class="stat-label">Разрыв</div></div>
             </div>
+        </div>
+        <div class="card">
+            <h2>📊 Что показывает результат</h2>
+            <div class="interpretation" id="interpretation"></div>
+            <div class="range-list">
+                <div class="range-item"><strong>8–10</strong> — относительно сильная сфера.</div>
+                <div class="range-item"><strong>6–7</strong> — относительно стабильная сфера.</div>
+                <div class="range-item"><strong>4–5</strong> — сфера, которой может быть полезно уделить внимание.</div>
+                <div class="range-item"><strong>0–3</strong> — выраженный текущий приоритет для размышления.</div>
+            </div>
+        </div>
+        <div class="card">
+            <h2>🔎 Сферы результата</h2>
+            <h3>Относительно сильные</h3>
+            <div id="topSpheres"></div>
+            <h3 style="margin-top:18px;">Требующие внимания</h3>
+            <div id="bottomSpheres"></div>
+        </div>
+        <div class="card">
+            <h2>🎯 Приоритеты</h2>
+            <div class="interpretation">Выберите до трёх сфер, которым вы хотели бы уделить больше внимания.</div>
+            <div id="priorityList"></div>
+        </div>
+        <div class="card" id="desiredCard">
+            <h2>🌱 Желаемые изменения</h2>
+            <div class="interpretation">Для выбранных приоритетов укажите, какого уровня вы хотели бы достичь.</div>
+            <div id="desiredList"></div>
+            <div class="goal-box">
+                <label for="reflectionText">Что вы хотели бы изменить?</label>
+                <textarea id="reflectionText" placeholder="Например: хочу уделять больше времени отдыху, наладить режим сна..."></textarea>
+            </div>
+            <div class="goal-box">
+                <label for="firstStepText">Какой первый шаг вы готовы сделать?</label>
+                <textarea id="firstStepText" placeholder="Опишите небольшое конкретное действие..."></textarea>
+            </div>
+            <div class="goal-box">
+                <label for="startDate">Дата начала</label>
+                <input type="date" id="startDate">
+            </div>
+        </div>
+        <div class="card hidden" id="desiredWheelCard">
+            <h2>🌱 Текущее и желаемое</h2>
+            <div class="wheel-wrapper"><canvas id="desiredWheel"></canvas></div>
+            <div class="scale-info">Сравнение текущих и желаемых значений</div>
+        </div>
+        <div class="card hidden" id="planCard">
+            <h2>🧭 Мини-план</h2>
+            <div id="planList"></div>
+        </div>
+        <div class="card">
+            <div class="buttons">
+                <button class="main-button primary" id="saveBtn">💾 Сохранить результат</button>
+                <button class="main-button" id="pngBtn">🖼 Сохранить PNG</button>
+                <button class="main-button" id="restartBtn">🔄 Пройти заново</button>
+                <button class="main-button danger" id="resetBtn">🗑 Очистить текущий результат</button>
+            </div>
+        </div>
+        <div class="card">
+            <h2>📖 История</h2>
+            <div id="journal"></div>
+        </div>
+        <div class="card">
+            <div class="interpretation">
+                <p><strong>Важно:</strong> результат отражает ваше текущее субъективное восприятие различных сфер жизни.</p>
+                <p>Это не оценка качества вашей жизни и не психологическая диагностика.</p>
+            </div>
+        </div>
+    </section>
+</div>
 
-            <div class="card" id="desiredCard">
-                <h2>🌱 Желаемые изменения</h2>
-                <div class="interpretation">Для выбранных приоритетов укажите, какого
+<!-- PNG MODAL -->
+<div class="modal" id="modal">
+    <div class="modal-content">
+        <img id="pngPreview" alt="Колесо баланса">
+        <div class="modal-text">На iPhone можно нажать и удерживать изображение, чтобы сохранить его.</div>
+        <button class="main-button primary" id="closeModal">Закрыть</button>
+    </div>
+</div>
+
+<div class="toast" id="toast"></div>
+
+<script>
+/* === TELEGRAM === */
+const tg = window.Telegram.WebApp;
+tg.ready();
+tg.expand();
+
+/* === DATA === */
+const spheres = [
+    { name: "Здоровье", question: "Насколько вы довольны своим физическим состоянием и заботой о здоровье сейчас?" },
+    { name: "Работа и карьера", question: "Насколько вас устраивает ваша текущая работа, профессиональное развитие и карьерная ситуация?" },
+    { name: "Финансы", question: "Насколько вас устраивает ваше текущее финансовое положение и ощущение финансовой устойчивости?" },
+    { name: "Отношения и семья", question: "Насколько вас удовлетворяют ваши близкие отношения и семейная жизнь?" },
+    { name: "Друзья и социальная жизнь", question: "Насколько вы удовлетворены общением с друзьями, знакомыми и своим социальным окружением?" },
+    { name: "Личное развитие", question: "Насколько вы удовлетворены своим обучением, развитием навыков и личностным ростом?" },
+    { name: "Отдых и восстановление", question: "Насколько вам хватает отдыха, восстановления и времени для себя?" },
+    { name: "Творчество и самореализация", question: "Насколько вы чувствуете возможность заниматься творчеством, реализовывать свои идеи и способности?" }
+];
+const categories = spheres.map(s => s.name);
+
+/* === STATE === */
+let values = Array(categories.length).fill(5);
+let desiredValues = Array(categories.length).fill(5);
+let currentQuestion = 0;
+let testCompleted = false;
+let selectedPriorities = [];
+
+/* === DOM === */
+const $ = id => document.getElementById(id);
+const testSection = $("testSection");
+const resultSection = $("resultSection");
+const sphereNumber = $("sphereNumber");
+const sphereTitle = $("sphereTitle");
+const questionEl = $("question");
+const scoreDisplay = $("scoreDisplay");
+const scoreSlider = $("scoreSlider");
+const sliderBubble = $("sliderBubble");
+const sliderMarks = $("sliderMarks");
+const progressText = $("progressText");
+const progressPercent = $("progressPercent");
+const progressBar = $("progressBar");
+const backBtn = $("backBtn");
+const nextBtn = $("nextBtn");
+
+/* === STORAGE === */
+const VALUES_KEY = "wheelBalanceV2Values";
+const DESIRED_KEY = "wheelBalanceV2Desired";
+const JOURNAL_KEY = "wheelBalanceV2Journal";
+const TEXT_KEY = "wheelBalanceV2Texts";
+
+function saveValues() { localStorage.setItem(VALUES_KEY, JSON.stringify(values)); }
+function loadValues() {
+    const saved = localStorage.getItem(VALUES_KEY);
+    if (!saved) return;
+    try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length === categories.length)
+            values = parsed.map(v => Math.max(0, Math.min(10, Number(v))));
+    } catch { values = Array(categories.length).fill(5); }
+}
+function saveDesiredValues() { localStorage.setItem(DESIRED_KEY, JSON.stringify(desiredValues)); }
+function loadDesiredValues() {
+    const saved = localStorage.getItem(DESIRED_KEY);
+    if (!saved) return;
+    try {
+        const parsed = JSON.parse(saved);
+        if (Array.isArray(parsed) && parsed.length === categories.length)
+            desiredValues = parsed.map(v => Math.max(0, Math.min(10, Number(v))));
+    } catch { desiredValues = Array(categories.length).fill(5); }
+}
+function saveTexts() {
+    localStorage.setItem(TEXT_KEY, JSON.stringify({
+        reflection: $("reflectionText").value,
+        firstStep: $("firstStepText").value,
+        startDate: $("startDate").value
+    }));
+}
+function loadTexts() {
+    const saved = localStorage.getItem(TEXT_KEY);
+    if (!saved) return;
+    try {
+        const data = JSON.parse(saved);
+        $("reflectionText").value = data.reflection || "";
+        $("firstStepText").value = data.firstStep || "";
+        $("startDate").value = data.startDate || "";
+    } catch {}
+}
+
+/* === HAPTIC === */
+function haptic(type) {
+    try {
+        if (!tg.HapticFeedback) return;
+        if (type === "success" && tg.HapticFeedback.notificationOccurred)
+            tg.HapticFeedback.notificationOccurred("success");
+        else if (tg.HapticFeedback.selectionChanged)
+            tg.HapticFeedback.selectionChanged();
+    } catch {}
+}
+
+/* === TOAST === */
+let toastTimer = null;
+function showToast(text) {
+    const toast = $("toast");
+    toast.textContent = text;
+    toast.classList.add("show");
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove("show"), 2200);
+}
+
+/* === SLIDER MARKS (числа 0–10) === */
+function createSliderMarks() {
+    sliderMarks.innerHTML = "";
+    for (let i = 0; i <= 10; i++) {
+        const mark = document.createElement("span");
+        mark.className = "slider-mark";
+        mark.textContent = i;
+        sliderMarks.appendChild(mark);
+    }
+}
+
+/* === BUBBLE POSITION === */
+function updateBubblePosition() {
+    const slider = scoreSlider;
+    const bubble = sliderBubble;
+    const min = Number(slider.min);
+    const max = Number(slider.max);
+    const val = Number(slider.value);
+    const percent = (val - min) / (max - min);
+    // Учитываем ширину bubble, чтобы не вылезал за края
+    const sliderWidth = slider.offsetWidth;
+    const bubbleWidth = bubble.offsetWidth || 30;
+    const offset = percent * (sliderWidth - bubbleWidth);
+    bubble.style.left = (offset + bubbleWidth / 2) + "px";
+    bubble.style.transform = "translateX(-50%)";
+    bubble.textContent = val;
+}
+
+/* === UPDATE QUESTION UI === */
+function updateQuestionUI() {
+    const idx = currentQuestion;
+    const sphere = spheres[idx];
+
+    sphereNumber.textContent = "СФЕРА " + (idx + 1);
+    sphereTitle.textContent = sphere.name;
+    questionEl.textContent = sphere.question;
+
+    // Восстанавливаем сохранённое значение
+    scoreSlider.value = values[idx];
+    scoreDisplay.textContent = values[idx];
+    sliderBubble.textContent = values[idx];
+
+    updateBubblePosition();
+
+    // Прогресс
+    const progress = Math.round(((idx + 1) / spheres.length) * 100);
+    progressText.textContent = "Сфера " + (idx + 1) + " из " + spheres.length;
+    progressPercent.textContent = progress + "%";
+    progressBar.style.width = progress + "%";
+
+    // Кнопки
+    backBtn.style.visibility = idx === 0 ? "hidden" : "visible";
+    nextBtn.textContent = idx === spheres.length - 1 ? "Готово ✓" : "Далее →";
+}
+
+/* === SLIDER EVENT === */
+scoreSlider.addEventListener("input", function() {
+    const val = Number(this.value);
+    scoreDisplay.textContent = val;
+    sliderBubble.textContent = val;
+    values[currentQuestion] = val;
+    saveValues();
+    updateBubblePosition();
+    sliderBubble.classList.add("show");
+    haptic("selection");
+});
+
+scoreSlider.addEventListener("mousedown", function() { sliderBubble.classList.add("show"); });
+scoreSlider.addEventListener("touchstart", function() { sliderBubble.classList.add("show"); });
+scoreSlider.addEventListener("mouseup", function() { setTimeout(() => sliderBubble.classList.remove("show"), 1200); });
+scoreSlider.addEventListener("touchend", function() { setTimeout(() => sliderBubble.classList.remove("show"), 1200); });
+scoreSlider.addEventListener("mouseleave", function() { setTimeout(() => sliderBubble.classList.remove("show"), 1200); });
+
+/* === NAVIGATION === */
+backBtn.addEventListener("click", function() {
+    if (currentQuestion > 0) {
+        currentQuestion--;
+        updateQuestionUI();
+        haptic("selection");
+    }
+});
+
+nextBtn.addEventListener("click", function() {
+    values[currentQuestion] = Number(scoreSlider.value);
+    saveValues();
+
+    if (currentQuestion < spheres.length - 1) {
+        currentQuestion++;
+        updateQuestionUI();
+        haptic("selection");
+    } else {
+        // Последний вопрос — показываем результат
+        testCompleted = true;
+        testSection.classList.add("hidden");
+        resultSection.classList.remove("hidden");
+        showResults();
+        haptic("success");
+    }
+});
+
+/* === WHEEL DRAWING === */
+function drawWheel(canvas, vals, desiredVals) {
+    const ctx = canvas.getContext("2d");
+    const size = 700;
+    canvas.width = size;
+    canvas.height = size;
+
+    const cx = size / 2;
+    const cy = size / 2;
+    const radius = size / 2 - 30;
+    const n = categories.length;
+    const angleStep = (Math.PI * 2) / n;
+
+    ctx.clearRect(0, 0, size, size);
+
+    // Фоновые кольца
+    for (let r = 1; r <= 10; r++) {
+        ctx.beginPath();
+        ctx.arc(cx, cy, (radius * r) / 10, 0, Math.PI * 2);
+        ctx.strokeStyle = "rgba(255,255,255,0.06)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+
+    // Сектора
+    for (let i = 0; i < n; i++) {
+        const angle = i * angleStep - Math.PI / 2;
+        const val = vals[i];
+        const r = (radius * val) / 10;
+
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.arc(cx, cy, r, angle, angle + angleStep);
+        ctx.closePath();
+
+        const hue = (i / n) * 360;
+        ctx.fillStyle = "hsla(" + hue + ", 55%, 45%, 0.75)";
+        ctx.fill();
+
+        ctx.strokeStyle = "rgba(255,255,255,0.15)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+
+    // Желаемые значения (пунктирная линия)
+    if (desiredVals) {
+        for (let i = 0; i < n; i++) {
+            const angle = i * angleStep - Math.PI / 2;
+            const r = (radius * desiredVals[i]) / 10;
+            ctx.beginPath();
+            ctx.arc(cx, cy, r, angle, angle + angleStep);
+            ctx.strokeStyle = "rgba(126, 174, 255, 0.7)";
+            ctx.lineWidth = 2;
+            ctx.setLineDash([5, 4]);
+            ctx.stroke();
+            ctx.setLineDash([]);
+        }
+    }
+
+    // Линии-спицы
+    for (let i = 0; i < n; i++) {
+        const angle = i * angleStep - Math.PI / 2;
+        ctx.beginPath();
+        ctx.moveTo(cx, cy);
+        ctx.lineTo(cx + Math.cos(angle) * radius, cy + Math.sin(angle) * radius);
+        ctx.strokeStyle = "rgba(255,255,255,0.12)";
+        ctx.lineWidth = 1;
+        ctx.stroke();
+    }
+
+    // Подписи
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "bold 13px -apple-system, Arial, sans-serif";
+    ctx.textAlign = "center";
+    ctx.textBaseline = "middle";
+
+    for (let i = 0; i < n; i++) {
+        const angle = i * angleStep - Math.PI / 2 + angleStep / 2;
+        const labelR = radius + 18;
+        const x = cx + Math.cos(angle) * labelR;
+        const y = cy + Math.sin(angle) * labelR;
+
+        // Разбиваем название на строки
+        const words = categories[i].split(" ");
+        if (words.length > 1) {
+            ctx.fillText(words[0], x, y - 7);
+            ctx.fillText(words.slice(1).join(" "), x, y + 7);
+        } else {
+            ctx.fillText(categories[i], x, y);
+        }
+    }
+}
+
+/* === RESULTS === */
+function showResults() {
+    const avg = (values.reduce((a, b) => a + b, 0) / values.length).toFixed(1);
+    const max = Math.max(...values);
+    const min = Math.min(...values);
+    const gap = max - min;
+
+    $("average").textContent = avg;
+    $("maximum").textContent = max;
+    $("minimum").textContent = min;
+    $("gap").textContent = gap;
+
+    // Интерпретация
+    let interp = "";
+    if (avg >= 7) {
+        interp = "<p>В целом, вы оцениваете разные сферы жизни довольно высоко. Это хороший показатель общего баланса.</p>";
+    } else if (avg >= 5) {
+        interp = "<p>Ваш баланс средний — есть сферы, которые вас устраивают, и те, что требуют внимания.</p>";
+    } else {
+        interp = "<p>Похоже, вы переживаете непростый период. Несколько сфер вызывают серьёзное недовольство — стоит начать с небольших шагов в самых важных из них.</p>";
+    }
+    if (gap >= 5) {
+        interp += "<p>Заметный разрыв между сферами говорит о неравномерном распределении энергии и внимания.</p>";
+    }
+    $("interpretation").innerHTML = interp;
+
+    // Сильные / слабые
+    const sorted = categories.map((name, i) => ({ name, val: values[i] })).sort((a, b) => b.val - a.val);
+    const top = sorted.filter(s => s.val >= 6);
+    const bottom = sorted.filter(s => s.val <= 5).reverse();
+
+    $("topSpheres").innerHTML = top.length
+        ? top.map(s => '<div class="sphere-result"><span class="sphere-result-name">' + s.name + '</span><span class="sphere-result-score">' + s.val + '</span></div>').join("")
+        : '<div class="empty">Нет сфер с оценкой 6+</div>';
+
+    $("bottomSpheres").innerHTML = bottom.length
+        ? bottom.map(s => '<div class="sphere-result"><span class="sphere-result-name">' + s.name + '</span><span class="sphere-result-score">' + s.val + '</span></div>').join("")
+        : '<div class="empty">Нет сфер с оценкой 5 и ниже</div>';
+
+    // Приоритеты
+    selectedPriorities = [];
+    const priList = $("priorityList");
+    priList.innerHTML = "";
+    categories.forEach((name, i) => {
+        const item = document.createElement("div");
+        item.className = "priority-item";
+        item.innerHTML = '<input type="checkbox" data-idx="' + i + '"><span class="priority-name">' + name + '</span><span class="priority-score">' + values[i] + '/10</span>';
+        const cb = item.querySelector("input");
+        cb.addEventListener("change", function() {
+            if (this.checked) {
+                if (selectedPriorities.length >= 3) {
+                    this.checked = false;
+                    showToast("Можно выбрать не более 3 сфер");
+                    return;
+                }
+                selectedPriorities.push(i);
+            } else {
+                selectedPriorities = selectedPriorities.filter(x => x !== i);
+            }
+            updateDesiredSection();
+            haptic("selection");
+        });
+        priList.appendChild(item);
+    });
+
+    drawWheel($("wheel"), values);
+    loadJournal();
+}
+
+/* === DESIRED SECTION === */
+function updateDesiredSection() {
+    const desiredList = $("desiredList");
+    desiredList.innerHTML = "";
+
+    if (selectedPriorities.length === 0) {
+        desiredList.innerHTML = '<div class="empty">Сначала выберите приоритеты выше</div>';
+        $("desiredWheelCard").classList.add("hidden");
+        $("planCard").classList.add("hidden");
+        return;
+    }
+
+    selectedPriorities.forEach(idx => {
+        const row = document.createElement("div");
+        row.className = "desired-row";
+        row.innerHTML =
+            '<div class="desired-header"><span class="desired-name">' + categories[idx] + '</span><span class="desired-value">Цель: ' + desiredValues[idx] + '</span></div>' +
+            '<input type="range" min="0" max="10" step="1" value="' + desiredValues[idx] + '" data-idx="' + idx + '" style="width:100%;height:36px;accent-color:#6ea8fe;cursor:pointer;">' +
+            '<div style="display:flex;justify-content:space-between;color:#718099;font-size:11px;margin-top:2px;"><span>0</span><span>10</span></div>';
+
+        const slider = row.querySelector('input[type="range"]');
+        slider.addEventListener("input", function() {
+            desiredValues[idx] = Number(this.value);
+            row.querySelector(".desired-value").textContent = "Цель: " + this.value;
+            saveDesiredValues();
+        });
+        desiredList.appendChild(row);
+    });
+
+    $("desiredWheelCard").classList.remove("hidden");
+    $("planCard").classList.remove("hidden");
+    drawDesiredWheel();
+    buildPlan();
+}
+
+function drawDesiredWheel() {
+    drawWheel($("desiredWheel"), values, desiredValues);
+}
+
+function buildPlan() {
+    const planList = $("planList");
+    planList.innerHTML = "";
+    selectedPriorities.forEach(idx => {
+        const plan = document.createElement("div");
+        plan.className = "plan";
+        plan.innerHTML =
+            '<div class="plan-title">' + categories[idx] + '</div>' +
+            '<div class="plan-line">Текущая оценка: <strong>' + values[idx] + '/10</strong></div>' +
+            '<div class="plan-line">Желаемая оценка: <strong>' + desiredValues[idx] + '/10</strong></div>' +
+            '<div class="plan-line">Разрыв: <strong>' + (desiredValues[idx] - values[idx]) + '</strong> баллов</div>';
+        planList.appendChild(plan);
+    });
+}
+
+/* === SAVE / PNG / RESTART / RESET === */
+$("saveBtn").addEventListener("click", function() {
+    const entry = {
+        date: new Date().toISOString(),
+        values: [...values],
+        desired: [...desiredValues],
+        reflection: $("reflectionText").value,
+        firstStep: $("firstStepText").value,
+        startDate: $("startDate").value
+    };
+    const journal = JSON.parse(localStorage.getItem(JOURNAL_KEY) || "[]");
+    journal.unshift(entry);
+    localStorage.setItem(JOURNAL_KEY, JSON.stringify(journal));
+    loadJournal();
+    haptic("success");
+    showToast("Результат сохранён в историю");
+});
+
+$("pngBtn").addEventListener("click", function() {
+    const canvas = $("wheel");
+    const dataUrl = canvas.toDataURL("image/png");
+    $("pngPreview").src = dataUrl;
+    $("modal").classList.add("active");
+});
+
+$("closeModal").addEventListener("click", function() { $("modal").classList.remove("active"); });
+
+$("restartBtn").addEventListener("click", function() {
+    currentQuestion = 0;
+    testCompleted = false;
+    testSection.classList.remove("hidden");
+    resultSection.classList.add("hidden");
+    updateQuestionUI();
+    haptic("selection");
+});
+
+$("resetBtn").addEventListener("click", function() {
+    values = Array(categories.length).fill(5);
+    desiredValues = Array(categories.length).fill(5);
+    selectedPriorities = [];
+    saveValues();
+    saveDesiredValues();
+    currentQuestion = 0;
+    testSection.classList.remove("hidden");
+    resultSection.classList.add("hidden");
+    updateQuestionUI();
+    haptic("selection");
+    showToast("Результат очищен");
+});
+
+/* === JOURNAL === */
+function loadJournal() {
+    const journal = JSON.parse(localStorage.getItem(JOURNAL_KEY) || "[]");
+    const container = $("journal");
+    if (journal.length === 0) {
+        container.innerHTML = '<div class="empty">История пуста</div>';
+        return;
+    }
+    container.innerHTML = journal.map((entry, i) => {
+        const date = new Date(entry.date).toLocaleDateString("ru-RU");
+        const avg = (entry.values.reduce((a, b) => a + b, 0) / entry.values.length).toFixed(1);
+        let scores = categories.map((name, j) => name + ": " + entry.values[j]).join(" · ");
+        return '<div class="journal-entry">' +
+            '<div class="journal-date">' + date + ' · Среднее: ' + avg + '</div>' +
+            '<div class="journal-score">' + scores + '</div>' +
+            '<div class="journal-buttons">' +
+                '<button onclick="loadJournalEntry(' + i + ')">Загрузить</button>' +
+                '<button class="delete" onclick="deleteJournalEntry(' + i + ')">Удалить</button>' +
+            '</div></div>';
+    }).join("");
+}
+
+window.loadJournalEntry = function(i) {
+    const journal = JSON.parse(localStorage.getItem(JOURNAL_KEY) || "[]");
+    const entry = journal[i];
+    if (!entry) return;
+    values = [...entry.values];
+    desiredValues = [...entry.desired];
+    saveValues();
+    saveDesiredValues();
+    $("reflectionText").value = entry.reflection || "";
+    $("firstStepText").value = entry.firstStep || "";
+    $("startDate").value = entry.startDate || "";
+    testSection.classList.add("hidden");
+    resultSection.classList.remove("hidden");
+    showResults();
+    haptic("selection");
+    showToast("Запись загружена");
+};
+
+window.deleteJournalEntry = function(i) {
+    const journal = JSON.parse(localStorage.getItem(JOURNAL_KEY) || "[]");
+    journal.splice(i, 1);
+    localStorage.setItem(JOURNAL_KEY, JSON.stringify(journal));
+    loadJournal();
+    haptic("selection");
+    showToast("Запись удалена");
+};
+
+/* === TEXT AUTOSAVE === */
+$("reflectionText").addEventListener("input", saveTexts);
+$("firstStepText").addEventListener("input", saveTexts);
+$("startDate").addEventListener("change", saveTexts);
+
+/* === INIT === */
+loadValues();
+loadDesiredValues();
+loadTexts();
+createSliderMarks();
+updateQuestionUI();
+
+// Если тест уже пройден — показать результат
+if (values.some(v => v !== 5) && localStorage.getItem("wheelCompleted")) {
+    testSection.classList.add("hidden");
+    resultSection.classList.remove("hidden");
+    showResults();
+}
+
+// Сохраняем флаг прохождения
+nextBtn.addEventListener("click", function() {
+    if (currentQuestion === spheres.length - 1) {
+        localStorage.setItem("wheelCompleted", "1");
+    }
+});
+</script>
+</body>
+</html>
