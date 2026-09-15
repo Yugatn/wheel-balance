@@ -2,9 +2,14 @@
 <html lang="ru">
 <head>
     <meta charset="UTF-8">
+
     <meta
         name="viewport"
-        content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no"
+        content="width=device-width,
+        initial-scale=1.0,
+        maximum-scale=1.0,
+        user-scalable=no,
+        viewport-fit=cover"
     >
 
     <title>Колесо баланса</title>
@@ -12,29 +17,238 @@
     <script src="https://telegram.org/js/telegram-web-app.js"></script>
 
     <style>
+        * {
+            box-sizing: border-box;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        html,
         body {
             margin: 0;
-            min-height: 100vh;
-            display: flex;
-            align-items: center;
-            justify-content: center;
+            padding: 0;
+            min-height: 100%;
             background: #0b1120;
-            color: white;
-            font-family: Arial, sans-serif;
-            text-align: center;
+            color: #ffffff;
+            font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Arial, sans-serif;
+        }
+
+        body {
+            min-height: 100vh;
+            min-height: 100dvh;
+            padding: 16px;
         }
 
         .container {
-            padding: 30px;
+            width: 100%;
+            max-width: 900px;
+            margin: 0 auto;
         }
 
         h1 {
+            text-align: center;
             font-size: 28px;
+            margin: 8px 0 6px;
         }
 
-        p {
+        .subtitle {
+            text-align: center;
             color: #aab4c3;
-            font-size: 17px;
+            font-size: 15px;
+            margin-bottom: 20px;
+        }
+
+        .card {
+            background: #111a2e;
+            border: 1px solid #26324a;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 16px;
+        }
+
+        .wheel-wrapper {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            width: 100%;
+        }
+
+        canvas {
+            display: block;
+            width: min(90vw, 600px);
+            height: min(90vw, 600px);
+            max-width: 100%;
+            touch-action: none;
+        }
+
+        .stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .stat {
+            background: #18233a;
+            border-radius: 14px;
+            padding: 12px 6px;
+            text-align: center;
+        }
+
+        .stat-value {
+            font-size: 23px;
+            font-weight: 700;
+        }
+
+        .stat-label {
+            color: #9da9bb;
+            font-size: 12px;
+            margin-top: 3px;
+        }
+
+        .slider-item {
+            margin-bottom: 18px;
+        }
+
+        .slider-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 7px;
+            gap: 10px;
+        }
+
+        .slider-name {
+            font-size: 15px;
+        }
+
+        .slider-value {
+            min-width: 34px;
+            text-align: center;
+            font-weight: 700;
+            background: #24314b;
+            border-radius: 9px;
+            padding: 4px 7px;
+        }
+
+        input[type="range"] {
+            width: 100%;
+            height: 34px;
+            accent-color: #6ea8fe;
+        }
+
+        .buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+        }
+
+        button {
+            border: none;
+            border-radius: 14px;
+            padding: 13px 10px;
+            font-size: 15px;
+            font-weight: 600;
+            cursor: pointer;
+            color: white;
+            background: #24314b;
+        }
+
+        button:active {
+            transform: scale(0.98);
+        }
+
+        .primary {
+            background: #315fa8;
+        }
+
+        .danger {
+            background: #713c49;
+        }
+
+        .journal-entry {
+            background: #18233a;
+            border-radius: 14px;
+            padding: 12px;
+            margin-top: 10px;
+        }
+
+        .journal-date {
+            color: #8fa0b8;
+            font-size: 12px;
+            margin-bottom: 8px;
+        }
+
+        .journal-score {
+            font-size: 14px;
+            line-height: 1.5;
+        }
+
+        .empty {
+            color: #8fa0b8;
+            text-align: center;
+            padding: 10px;
+            font-size: 14px;
+        }
+
+        .modal {
+            position: fixed;
+            inset: 0;
+            background: rgba(0, 0, 0, 0.86);
+            display: none;
+            align-items: center;
+            justify-content: center;
+            padding: 20px;
+            z-index: 1000;
+        }
+
+        .modal.active {
+            display: flex;
+        }
+
+        .modal-content {
+            width: 100%;
+            max-width: 700px;
+            background: #111a2e;
+            border-radius: 20px;
+            padding: 14px;
+            text-align: center;
+        }
+
+        .modal img {
+            width: 100%;
+            max-height: 70vh;
+            object-fit: contain;
+            border-radius: 12px;
+            background: white;
+        }
+
+        .modal-text {
+            color: #b6c0cf;
+            font-size: 13px;
+            margin: 10px 0;
+        }
+
+        @media (max-width: 600px) {
+            body {
+                padding: 10px;
+            }
+
+            h1 {
+                font-size: 24px;
+            }
+
+            .card {
+                padding: 12px;
+                border-radius: 17px;
+            }
+
+            .buttons {
+                grid-template-columns: 1fr;
+            }
+
+            .stats {
+                gap: 6px;
+            }
         }
     </style>
 </head>
@@ -42,18 +256,1280 @@
 <body>
 
 <div class="container">
+
     <h1>🌀 Колесо баланса</h1>
 
-    <p>
-        Mini App успешно запущен.
-    </p>
+    <div class="subtitle">
+        Оцените каждую сферу жизни от 0 до 10
+    </div>
+
+    <div class="card">
+        <div class="wheel-wrapper">
+            <canvas id="wheel"></canvas>
+        </div>
+
+        <div class="stats">
+            <div class="stat">
+                <div class="stat-value" id="average">5.0</div>
+                <div class="stat-label">Среднее</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-value" id="maximum">5</div>
+                <div class="stat-label">Максимум</div>
+            </div>
+
+            <div class="stat">
+                <div class="stat-value" id="minimum">5</div>
+                <div class="stat-label">Минимум</div>
+            </div>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>Оценки сфер</h2>
+        <div id="sliders"></div>
+    </div>
+
+    <div class="card">
+        <div class="buttons">
+            <button class="primary" id="saveBtn">
+                💾 Сохранить результат
+            </button>
+
+            <button id="pngBtn">
+                🖼 Сохранить PNG
+            </button>
+
+            <button class="danger" id="resetBtn">
+                🔄 Сбросить
+            </button>
+        </div>
+    </div>
+
+    <div class="card">
+        <h2>📖 История</h2>
+        <div id="journal"></div>
+    </div>
+
+</div>
+
+<div class="modal" id="modal">
+    <div class="modal-content">
+
+        <img id="pngPreview" alt="Колесо баланса">
+
+        <div class="modal-text">
+            На iPhone можно нажать и удерживать изображение,
+            чтобы сохранить его.
+        </div>
+
+        <button id="closeModal">
+            Закрыть
+        </button>
+
+    </div>
 </div>
 
 <script>
-    const tg = window.Telegram.WebApp;
 
-    tg.ready();
-    tg.expand();
+const tg = window.Telegram.WebApp;
+
+tg.ready();
+tg.expand();
+
+
+const categories = [
+    "Здоровье",
+    "Энергия",
+    "Карьера",
+    "Призвание",
+    "Финансы",
+    "Семья",
+    "Друзья",
+    "Окружение",
+    "Любовь",
+    "Секс",
+    "Личный рост",
+    "Отдых",
+    "Хобби",
+    "Прокрастинация",
+    "Дом и быт",
+    "Духовность и смыслы",
+    "Самооценка",
+    "Стабильность",
+    "Творчество",
+    "Путешествия"
+];
+
+
+let values = Array(categories.length).fill(5);
+
+const canvas = document.getElementById("wheel");
+const ctx = canvas.getContext("2d");
+
+const slidersContainer = document.getElementById("sliders");
+
+const averageEl = document.getElementById("average");
+const maximumEl = document.getElementById("maximum");
+const minimumEl = document.getElementById("minimum");
+
+const journalContainer = document.getElementById("journal");
+
+const modal = document.getElementById("modal");
+const pngPreview = document.getElementById("pngPreview");
+
+
+function saveValues() {
+    localStorage.setItem(
+        "wheelBalanceValues",
+        JSON.stringify(values)
+    );
+}
+
+
+function loadValues() {
+
+    const saved = localStorage.getItem(
+        "wheelBalanceValues"
+    );
+
+    if (saved) {
+
+        try {
+
+            const parsed = JSON.parse(saved);
+
+            if (
+                Array.isArray(parsed) &&
+                parsed.length === categories.length
+            ) {
+                values = parsed.map(Number);
+            }
+
+        } catch (error) {
+            console.log(error);
+        }
+    }
+}
+
+
+function createSliders() {
+
+    slidersContainer.innerHTML = "";
+
+    categories.forEach((category, index) => {
+
+        const item = document.createElement("div");
+
+        item.className = "slider-item";
+
+        item.innerHTML = `
+            <div class="slider-header">
+
+                <div class="slider-name">
+                    ${index + 1}. ${category}
+                </div>
+
+                <div class="slider-value"
+                     id="value-${index}">
+                    ${values[index]}
+                </div>
+
+            </div>
+
+            <input
+                type="range"
+                min="0"
+                max="10"
+                step="1"
+                value="${values[index]}"
+                id="slider-${index}"
+            >
+        `;
+
+        slidersContainer.appendChild(item);
+
+        const slider =
+            document.getElementById(`slider-${index}`);
+
+        slider.addEventListener("input", function () {
+
+            values[index] = Number(this.value);
+
+            document.getElementById(
+                `value-${index}`
+            ).textContent = values[index];
+
+            saveValues();
+
+            updateStats();
+            drawWheel();
+
+            if (
+                tg.HapticFeedback &&
+                tg.HapticFeedback.selectionChanged
+            ) {
+                tg.HapticFeedback.selectionChanged();
+            }
+        });
+    });
+}
+
+
+function updateStats() {
+
+    const sum = values.reduce(
+        (a, b) => a + b,
+        0
+    );
+
+    const average =
+        sum / values.length;
+
+    const maximum =
+        Math.max(...values);
+
+    const minimum =
+        Math.min(...values);
+
+    averageEl.textContent =
+        average.toFixed(1);
+
+    maximumEl.textContent =
+        maximum;
+
+    minimumEl.textContent =
+        minimum;
+}
+
+
+function resizeCanvas() {
+
+    const size =
+        Math.min(
+            window.innerWidth * 0.9,
+            600
+        );
+
+    const dpr =
+        window.devicePixelRatio || 1;
+
+    canvas.width =
+        size * dpr;
+
+    canvas.height =
+        size * dpr;
+
+    canvas.style.width =
+        size + "px";
+
+    canvas.style.height =
+        size + "px";
+
+    ctx.setTransform(
+        dpr,
+        0,
+        0,
+        dpr,
+        0,
+        0
+    );
+
+    drawWheel();
+}
+
+
+function drawWheel() {
+
+    const width =
+        canvas.clientWidth;
+
+    const height =
+        canvas.clientHeight;
+
+    const size =
+        Math.min(width, height);
+
+    const center =
+        size / 2;
+
+    const radius =
+        size * 0.36;
+
+    ctx.clearRect(
+        0,
+        0,
+        width,
+        height
+    );
+
+    ctx.save();
+
+    ctx.translate(
+        center,
+        center
+    );
+
+
+    /*
+     * Фон
+     */
+
+    ctx.beginPath();
+
+    ctx.arc(
+        0,
+        0,
+        radius,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fillStyle =
+        "#111a2e";
+
+    ctx.fill();
+
+
+    /*
+     * Сетка
+     */
+
+    for (
+        let level = 1;
+        level <= 10;
+        level++
+    ) {
+
+        const r =
+            radius * level / 10;
+
+        ctx.beginPath();
+
+        ctx.arc(
+            0,
+            0,
+            r,
+            0,
+            Math.PI * 2
+        );
+
+        ctx.strokeStyle =
+            "#33425f";
+
+        ctx.lineWidth = 1;
+
+        ctx.stroke();
+    }
+
+
+    /*
+     * Сектора
+     */
+
+    const count =
+        categories.length;
+
+    const step =
+        Math.PI * 2 / count;
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        const angle =
+            -Math.PI / 2 +
+            i * step;
+
+        ctx.beginPath();
+
+        ctx.moveTo(0, 0);
+
+        ctx.lineTo(
+            Math.cos(angle) * radius,
+            Math.sin(angle) * radius
+        );
+
+        ctx.strokeStyle =
+            "#33425f";
+
+        ctx.lineWidth = 1;
+
+        ctx.stroke();
+    }
+
+
+    /*
+     * Значения
+     */
+
+    ctx.beginPath();
+
+    values.forEach(
+        (value, index) => {
+
+            const angle =
+                -Math.PI / 2 +
+                index * step;
+
+            const r =
+                radius * value / 10;
+
+            const x =
+                Math.cos(angle) * r;
+
+            const y =
+                Math.sin(angle) * r;
+
+            if (index === 0) {
+                ctx.moveTo(x, y);
+            } else {
+                ctx.lineTo(x, y);
+            }
+        }
+    );
+
+    ctx.closePath();
+
+    ctx.fillStyle =
+        "rgba(76, 137, 218, 0.35)";
+
+    ctx.fill();
+
+    ctx.strokeStyle =
+        "#6ea8fe";
+
+    ctx.lineWidth = 3;
+
+    ctx.stroke();
+
+
+    /*
+     * Точки
+     */
+
+    values.forEach(
+        (value, index) => {
+
+            const angle =
+                -Math.PI / 2 +
+                index * step;
+
+            const r =
+                radius * value / 10;
+
+            const x =
+                Math.cos(angle) * r;
+
+            const y =
+                Math.sin(angle) * r;
+
+            ctx.beginPath();
+
+            ctx.arc(
+                x,
+                y,
+                5,
+                0,
+                Math.PI * 2
+            );
+
+            ctx.fillStyle =
+                "#ffffff";
+
+            ctx.fill();
+
+            ctx.strokeStyle =
+                "#6ea8fe";
+
+            ctx.lineWidth = 2;
+
+            ctx.stroke();
+        }
+    );
+
+
+    /*
+     * Подписи
+     */
+
+    categories.forEach(
+        (category, index) => {
+
+            const angle =
+                -Math.PI / 2 +
+                index * step;
+
+            const labelRadius =
+                radius + 25;
+
+            const x =
+                Math.cos(angle) *
+                labelRadius;
+
+            const y =
+                Math.sin(angle) *
+                labelRadius;
+
+            ctx.save();
+
+            ctx.translate(
+                x,
+                y
+            );
+
+            ctx.fillStyle =
+                "#ffffff";
+
+            ctx.font =
+                "11px Arial";
+
+            ctx.textAlign =
+                "center";
+
+            ctx.textBaseline =
+                "middle";
+
+            ctx.fillText(
+                category,
+                0,
+                0
+            );
+
+            ctx.restore();
+        }
+    );
+
+
+    ctx.restore();
+}
+
+
+function getWheelDataURL() {
+
+    /*
+     * Создаём отдельный белый PNG,
+     * чтобы изображение было удобно
+     * сохранять и отправлять.
+     */
+
+    const exportCanvas =
+        document.createElement("canvas");
+
+    const size = 1200;
+
+    exportCanvas.width = size;
+    exportCanvas.height = size;
+
+    const exportCtx =
+        exportCanvas.getContext("2d");
+
+    exportCtx.fillStyle = "#ffffff";
+
+    exportCtx.fillRect(
+        0,
+        0,
+        size,
+        size
+    );
+
+    const center =
+        size / 2;
+
+    const radius =
+        size * 0.36;
+
+    exportCtx.save();
+
+    exportCtx.translate(
+        center,
+        center
+    );
+
+    /*
+     * Сетка
+     */
+
+    for (
+        let level = 1;
+        level <= 10;
+        level++
+    ) {
+
+        const r =
+            radius * level / 10;
+
+        exportCtx.beginPath();
+
+        exportCtx.arc(
+            0,
+            0,
+            r,
+            0,
+            Math.PI * 2
+        );
+
+        exportCtx.strokeStyle =
+            "#b5bfd0";
+
+        exportCtx.lineWidth = 2;
+
+        exportCtx.stroke();
+    }
+
+
+    const count =
+        categories.length;
+
+    const step =
+        Math.PI * 2 / count;
+
+
+    /*
+     * Радиальные линии
+     */
+
+    for (
+        let i = 0;
+        i < count;
+        i++
+    ) {
+
+        const angle =
+            -Math.PI / 2 +
+            i * step;
+
+        exportCtx.beginPath();
+
+        exportCtx.moveTo(
+            0,
+            0
+        );
+
+        exportCtx.lineTo(
+            Math.cos(angle) * radius,
+            Math.sin(angle) * radius
+        );
+
+        exportCtx.strokeStyle =
+            "#b5bfd0";
+
+        exportCtx.lineWidth = 2;
+
+        exportCtx.stroke();
+    }
+
+
+    /*
+     * Фигура
+     */
+
+    exportCtx.beginPath();
+
+    values.forEach(
+        (value, index) => {
+
+            const angle =
+                -Math.PI / 2 +
+                index * step;
+
+            const r =
+                radius * value / 10;
+
+            const x =
+                Math.cos(angle) * r;
+
+            const y =
+                Math.sin(angle) * r;
+
+            if (index === 0) {
+                exportCtx.moveTo(
+                    x,
+                    y
+                );
+            } else {
+                exportCtx.lineTo(
+                    x,
+                    y
+                );
+            }
+        }
+    );
+
+    exportCtx.closePath();
+
+    exportCtx.fillStyle =
+        "rgba(70, 120, 200, 0.30)";
+
+    exportCtx.fill();
+
+    exportCtx.strokeStyle =
+        "#315fa8";
+
+    exportCtx.lineWidth = 6;
+
+    exportCtx.stroke();
+
+
+    /*
+     * Точки
+     */
+
+    values.forEach(
+        (value, index) => {
+
+            const angle =
+                -Math.PI / 2 +
+                index * step;
+
+            const r =
+                radius * value / 10;
+
+            const x =
+                Math.cos(angle) * r;
+
+            const y =
+                Math.sin(angle) * r;
+
+            exportCtx.beginPath();
+
+            exportCtx.arc(
+                x,
+                y,
+                10,
+                0,
+                Math.PI * 2
+            );
+
+            exportCtx.fillStyle =
+                "#315fa8";
+
+            exportCtx.fill();
+        }
+    );
+
+
+    /*
+     * Подписи
+     */
+
+    categories.forEach(
+        (category, index) => {
+
+            const angle =
+                -Math.PI / 2 +
+                index * step;
+
+            const labelRadius =
+                radius + 55;
+
+            const x =
+                Math.cos(angle) *
+                labelRadius;
+
+            const y =
+                Math.sin(angle) *
+                labelRadius;
+
+            exportCtx.fillStyle =
+                "#111111";
+
+            exportCtx.font =
+                "22px Arial";
+
+            exportCtx.textAlign =
+                "center";
+
+            exportCtx.textBaseline =
+                "middle";
+
+            exportCtx.fillText(
+                category,
+                x,
+                y
+            );
+        }
+    );
+
+
+    exportCtx.restore();
+
+    return exportCanvas.toDataURL(
+        "image/png"
+    );
+}
+
+
+function getJournal() {
+
+    const saved =
+        localStorage.getItem(
+            "wheelBalanceJournal"
+        );
+
+    if (!saved) {
+        return [];
+    }
+
+    try {
+        return JSON.parse(saved);
+    } catch {
+        return [];
+    }
+}
+
+
+function saveJournal() {
+
+    const journal =
+        getJournal();
+
+    const record = {
+
+        date:
+            new Date().toLocaleString(
+                "ru-RU"
+            ),
+
+        values:
+            [...values],
+
+        average:
+            (
+                values.reduce(
+                    (a, b) => a + b,
+                    0
+                ) / values.length
+            ).toFixed(1)
+    };
+
+
+    journal.unshift(record);
+
+
+    /*
+     * Храним последние 100 результатов
+     */
+
+    const limited =
+        journal.slice(0, 100);
+
+    localStorage.setItem(
+        "wheelBalanceJournal",
+        JSON.stringify(limited)
+    );
+
+    renderJournal();
+
+
+    if (
+        tg.HapticFeedback &&
+        tg.HapticFeedback.notificationOccurred
+    ) {
+
+        tg.HapticFeedback.notificationOccurred(
+            "success"
+        );
+    }
+}
+
+
+function renderJournal() {
+
+    const journal =
+        getJournal();
+
+    journalContainer.innerHTML = "";
+
+
+    if (journal.length === 0) {
+
+        journalContainer.innerHTML =
+            `<div class="empty">
+                Сохранённых результатов пока нет.
+            </div>`;
+
+        return;
+    }
+
+
+    journal.forEach(
+        (record, index) => {
+
+            const entry =
+                document.createElement(
+                    "div"
+                );
+
+            entry.className =
+                "journal-entry";
+
+
+            const details =
+                categories.map(
+                    (category, i) =>
+                        `${category}: ${record.values[i]}`
+                ).join("<br>");
+
+
+            entry.innerHTML = `
+
+                <div class="journal-date">
+                    ${record.date}
+                </div>
+
+                <div class="journal-score">
+                    <b>Среднее: ${record.average}</b>
+                    <br><br>
+                    ${details}
+                </div>
+
+                <br>
+
+                <button
+                    data-index="${index}"
+                    class="load-record"
+                >
+                    Загрузить
+                </button>
+
+                <button
+                    data-index="${index}"
+                    class="delete-record"
+                >
+                    Удалить
+                </button>
+            `;
+
+
+            journalContainer.appendChild(
+                entry
+            );
+        }
+    );
+
+
+    document.querySelectorAll(
+        ".load-record"
+    ).forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const index =
+                        Number(
+                            button.dataset.index
+                        );
+
+                    const journal =
+                        getJournal();
+
+                    if (
+                        journal[index]
+                    ) {
+
+                        values =
+                            [
+                                ...journal[index].values
+                            ];
+
+                        saveValues();
+
+                        createSliders();
+                        updateStats();
+                        drawWheel();
+
+                        window.scrollTo({
+                            top: 0,
+                            behavior: "smooth"
+                        });
+                    }
+                }
+            );
+        }
+    );
+
+
+    document.querySelectorAll(
+        ".delete-record"
+    ).forEach(
+        button => {
+
+            button.addEventListener(
+                "click",
+                () => {
+
+                    const index =
+                        Number(
+                            button.dataset.index
+                        );
+
+                    const journal =
+                        getJournal();
+
+                    journal.splice(
+                        index,
+                        1
+                    );
+
+                    localStorage.setItem(
+                        "wheelBalanceJournal",
+                        JSON.stringify(journal)
+                    );
+
+                    renderJournal();
+                }
+            );
+        }
+    );
+}
+
+
+document
+    .getElementById("saveBtn")
+    .addEventListener(
+        "click",
+        saveJournal
+    );
+
+
+document
+    .getElementById("resetBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            if (
+                !confirm(
+                    "Сбросить все оценки?"
+                )
+            ) {
+                return;
+            }
+
+            values =
+                Array(
+                    categories.length
+                ).fill(5);
+
+            saveValues();
+
+            createSliders();
+            updateStats();
+            drawWheel();
+        }
+    );
+
+
+document
+    .getElementById("pngBtn")
+    .addEventListener(
+        "click",
+        () => {
+
+            const dataURL =
+                getWheelDataURL();
+
+            pngPreview.src =
+                dataURL;
+
+            modal.classList.add(
+                "active"
+            );
+        }
+    );
+
+
+document
+    .getElementById("closeModal")
+    .addEventListener(
+        "click",
+        () => {
+
+            modal.classList.remove(
+                "active"
+            );
+        }
+    );
+
+
+modal.addEventListener(
+    "click",
+    event => {
+
+        if (
+            event.target === modal
+        ) {
+
+            modal.classList.remove(
+                "active"
+            );
+        }
+    }
+);
+
+
+/*
+ * Управление колесом пальцем/мышью
+ */
+
+function updateValueFromPointer(
+    event
+) {
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+    const x =
+        event.clientX -
+        rect.left;
+
+    const y =
+        event.clientY -
+        rect.top;
+
+    const centerX =
+        rect.width / 2;
+
+    const centerY =
+        rect.height / 2;
+
+    let angle =
+        Math.atan2(
+            y - centerY,
+            x - centerX
+        );
+
+    angle += Math.PI / 2;
+
+    if (angle < 0) {
+        angle += Math.PI * 2;
+    }
+
+    const count =
+        categories.length;
+
+    let index =
+        Math.round(
+            angle /
+            (Math.PI * 2 / count)
+        ) % count;
+
+
+    const distance =
+        Math.sqrt(
+            Math.pow(
+                x - centerX,
+                2
+            ) +
+            Math.pow(
+                y - centerY,
+                2
+            )
+        );
+
+    const radius =
+        rect.width * 0.36;
+
+    let value =
+        Math.round(
+            (distance / radius) * 10
+        );
+
+    value =
+        Math.max(
+            0,
+            Math.min(
+                10,
+                value
+            )
+        );
+
+    values[index] =
+        value;
+
+    const slider =
+        document.getElementById(
+            `slider-${index}`
+        );
+
+    if (slider) {
+        slider.value =
+            value;
+    }
+
+    const valueLabel =
+        document.getElementById(
+            `value-${index}`
+        );
+
+    if (valueLabel) {
+        valueLabel.textContent =
+            value;
+    }
+
+    saveValues();
+    updateStats();
+    drawWheel();
+}
+
+
+canvas.addEventListener(
+    "pointerdown",
+    event => {
+
+        canvas.setPointerCapture(
+            event.pointerId
+        );
+
+        updateValueFromPointer(
+            event
+        );
+    }
+);
+
+
+canvas.addEventListener(
+    "pointermove",
+    event => {
+
+        if (
+            event.buttons === 1
+        ) {
+
+            updateValueFromPointer(
+                event
+            );
+        }
+    }
+);
+
+
+window.addEventListener(
+    "resize",
+    resizeCanvas
+);
+
+
+/*
+ * Запуск
+ */
+
+loadValues();
+
+createSliders();
+
+renderJournal();
+
+updateStats();
+
+resizeCanvas();
+
 </script>
 
 </body>
