@@ -41,7 +41,23 @@
         body {
             min-height: 100vh;
             min-height: 100dvh;
-            padding: 12px;
+            padding: 10px;
+        }
+
+        button,
+        input,
+        textarea {
+            font-family: inherit;
+        }
+
+        button {
+            border: none;
+            cursor: pointer;
+            color: #ffffff;
+        }
+
+        button:active {
+            transform: scale(0.98);
         }
 
         .container {
@@ -52,24 +68,164 @@
 
         h1 {
             text-align: center;
-            font-size: 28px;
+            font-size: 27px;
             margin: 8px 0 5px;
+        }
+
+        h2 {
+            font-size: 20px;
+            margin: 0 0 15px;
+        }
+
+        h3 {
+            font-size: 17px;
+            margin: 0 0 10px;
         }
 
         .subtitle {
             text-align: center;
             color: #aab4c3;
-            font-size: 15px;
-            margin-bottom: 16px;
+            font-size: 14px;
+            line-height: 1.45;
+            margin-bottom: 15px;
         }
 
         .card {
             background: #111a2e;
             border: 1px solid #26324a;
             border-radius: 20px;
-            padding: 15px;
-            margin-bottom: 15px;
+            padding: 16px;
+            margin-bottom: 14px;
         }
+
+        .hidden {
+            display: none !important;
+        }
+
+        /* ПРОГРЕСС */
+
+        .progress-wrapper {
+            margin-bottom: 14px;
+        }
+
+        .progress-top {
+            display: flex;
+            justify-content: space-between;
+            color: #9da9bb;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        .progress-track {
+            width: 100%;
+            height: 8px;
+            background: #24314b;
+            border-radius: 20px;
+            overflow: hidden;
+        }
+
+        .progress-bar {
+            height: 100%;
+            width: 12.5%;
+            background: #6ea8fe;
+            border-radius: 20px;
+            transition: width 0.25s ease;
+        }
+
+        /* ТЕСТ */
+
+        .sphere-number {
+            color: #7faeff;
+            font-size: 13px;
+            font-weight: 700;
+            margin-bottom: 5px;
+        }
+
+        .sphere-title {
+            font-size: 25px;
+            font-weight: 700;
+            margin-bottom: 12px;
+        }
+
+        .question {
+            color: #c1cada;
+            font-size: 16px;
+            line-height: 1.55;
+            margin-bottom: 20px;
+        }
+
+        .scale-label {
+            text-align: center;
+            color: #9da9bb;
+            font-size: 13px;
+            margin-bottom: 9px;
+        }
+
+        .score-display {
+            text-align: center;
+            font-size: 52px;
+            line-height: 1;
+            font-weight: 800;
+            margin: 12px 0 18px;
+        }
+
+        .score-slider {
+            width: 100%;
+            height: 42px;
+            accent-color: #6ea8fe;
+            cursor: pointer;
+        }
+
+        .number-scale {
+            display: grid;
+            grid-template-columns: repeat(11, 1fr);
+            gap: 4px;
+            margin-top: 6px;
+        }
+
+        .number-button {
+            min-height: 38px;
+            padding: 7px 2px;
+            border-radius: 9px;
+            background: #18233a;
+            color: #aeb9ca;
+            font-size: 13px;
+            font-weight: 600;
+        }
+
+        .number-button.active {
+            background: #315fa8;
+            color: #ffffff;
+        }
+
+        .scale-ends {
+            display: flex;
+            justify-content: space-between;
+            color: #718099;
+            font-size: 11px;
+            margin-top: 6px;
+        }
+
+        .navigation {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 18px;
+        }
+
+        .nav-button {
+            padding: 14px 10px;
+            border-radius: 14px;
+            background: #24314b;
+            font-size: 15px;
+            font-weight: 700;
+        }
+
+        .nav-button.primary {
+            background: #315fa8;
+        }
+
+        /* КОЛЕСО */
 
         .wheel-wrapper {
             width: 100%;
@@ -91,116 +247,264 @@
             text-align: center;
             color: #9da9bb;
             font-size: 13px;
-            margin-top: 4px;
+            margin-top: 3px;
         }
 
         .stats {
             display: grid;
-            grid-template-columns: repeat(3, 1fr);
-            gap: 8px;
-            margin-top: 12px;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 7px;
+            margin-top: 13px;
         }
 
         .stat {
             background: #18233a;
-            border-radius: 14px;
-            padding: 10px 5px;
+            border-radius: 13px;
+            padding: 10px 4px;
             text-align: center;
         }
 
         .stat-value {
-            font-size: 23px;
-            font-weight: 700;
+            font-size: 20px;
+            font-weight: 800;
         }
 
         .stat-label {
             color: #9da9bb;
-            font-size: 12px;
+            font-size: 11px;
             margin-top: 3px;
         }
 
-        h2 {
-            font-size: 19px;
-            margin-top: 3px;
-            margin-bottom: 15px;
+        /* ИНТЕРПРЕТАЦИЯ */
+
+        .interpretation {
+            color: #c2ccda;
+            font-size: 15px;
+            line-height: 1.6;
         }
 
-        .slider-item {
-            margin-bottom: 17px;
+        .interpretation p {
+            margin: 0 0 11px;
         }
 
-        .slider-header {
+        .range-list {
+            display: grid;
+            gap: 8px;
+            margin-top: 12px;
+        }
+
+        .range-item {
+            background: #18233a;
+            border-radius: 12px;
+            padding: 10px 12px;
+            color: #b9c4d5;
+            font-size: 13px;
+            line-height: 1.45;
+        }
+
+        .range-item strong {
+            color: #ffffff;
+        }
+
+        .sphere-result {
             display: flex;
+            align-items: center;
             justify-content: space-between;
+            gap: 10px;
+            background: #18233a;
+            border-radius: 13px;
+            padding: 11px 12px;
+            margin-top: 8px;
+        }
+
+        .sphere-result-name {
+            font-size: 14px;
+        }
+
+        .sphere-result-score {
+            min-width: 38px;
+            text-align: center;
+            background: #315fa8;
+            padding: 5px 7px;
+            border-radius: 9px;
+            font-weight: 800;
+        }
+
+        /* ПРИОРИТЕТЫ */
+
+        .priority-item {
+            display: flex;
             align-items: center;
             gap: 10px;
-            margin-bottom: 5px;
+            background: #18233a;
+            padding: 11px;
+            border-radius: 12px;
+            margin-top: 8px;
         }
 
-        .slider-name {
-            font-size: 15px;
-        }
-
-        .slider-value {
-            min-width: 36px;
-            text-align: center;
-            font-weight: 700;
-            background: #24314b;
-            border-radius: 9px;
-            padding: 4px 7px;
-        }
-
-        input[type="range"] {
-            width: 100%;
-            height: 34px;
+        .priority-item input {
+            width: 20px;
+            height: 20px;
             accent-color: #6ea8fe;
+            flex-shrink: 0;
         }
+
+        .priority-name {
+            flex: 1;
+            font-size: 14px;
+        }
+
+        .priority-score {
+            color: #8fa0b8;
+            font-size: 12px;
+        }
+
+        .goal-box {
+            margin-top: 15px;
+        }
+
+        .goal-box label {
+            display: block;
+            color: #b5c0d0;
+            font-size: 13px;
+            margin-bottom: 7px;
+        }
+
+        textarea,
+        input[type="date"] {
+            width: 100%;
+            border: 1px solid #33425f;
+            border-radius: 12px;
+            background: #0e1729;
+            color: #ffffff;
+            padding: 11px;
+            font-size: 14px;
+            outline: none;
+        }
+
+        textarea {
+            min-height: 90px;
+            resize: vertical;
+        }
+
+        input[type="date"] {
+            min-height: 45px;
+        }
+
+        textarea:focus,
+        input[type="date"]:focus {
+            border-color: #6ea8fe;
+        }
+
+        .desired-row {
+            background: #18233a;
+            border-radius: 13px;
+            padding: 12px;
+            margin-top: 9px;
+        }
+
+        .desired-header {
+            display: flex;
+            justify-content: space-between;
+            gap: 8px;
+            margin-bottom: 7px;
+        }
+
+        .desired-name {
+            font-size: 14px;
+            font-weight: 600;
+        }
+
+        .desired-value {
+            font-weight: 800;
+            color: #7faeff;
+        }
+
+        /* ПЛАН */
+
+        .plan {
+            background: #18233a;
+            border-radius: 15px;
+            padding: 13px;
+            margin-top: 9px;
+        }
+
+        .plan-title {
+            font-weight: 700;
+            margin-bottom: 9px;
+        }
+
+        .plan-line {
+            color: #b7c2d2;
+            font-size: 13px;
+            line-height: 1.5;
+            margin: 5px 0;
+        }
+
+        .plan-line strong {
+            color: #ffffff;
+        }
+
+        /* КНОПКИ */
 
         .buttons {
             display: grid;
             grid-template-columns: 1fr 1fr;
-            gap: 10px;
+            gap: 9px;
         }
 
-        button {
-            border: none;
+        .main-button {
+            padding: 14px 10px;
             border-radius: 14px;
-            padding: 13px 10px;
-            font-size: 15px;
-            font-weight: 600;
-            cursor: pointer;
-            color: white;
             background: #24314b;
+            font-size: 14px;
+            font-weight: 700;
         }
 
-        button:active {
-            transform: scale(0.98);
-        }
-
-        .primary {
+        .main-button.primary {
             background: #315fa8;
         }
 
-        .danger {
+        .main-button.danger {
             background: #713c49;
         }
+
+        /* ИСТОРИЯ */
 
         .journal-entry {
             background: #18233a;
             border-radius: 14px;
-            padding: 12px;
+            padding: 13px;
             margin-top: 10px;
         }
 
         .journal-date {
             color: #8fa0b8;
             font-size: 12px;
-            margin-bottom: 8px;
+            margin-bottom: 7px;
         }
 
         .journal-score {
             font-size: 14px;
             line-height: 1.5;
+        }
+
+        .journal-buttons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 8px;
+            margin-top: 10px;
+        }
+
+        .journal-buttons button {
+            padding: 10px;
+            border-radius: 11px;
+            background: #24314b;
+            font-size: 13px;
+        }
+
+        .journal-buttons .delete {
+            background: #5b3440;
         }
 
         .empty {
@@ -210,14 +514,16 @@
             font-size: 14px;
         }
 
+        /* МОДАЛЬНОЕ ОКНО */
+
         .modal {
             position: fixed;
             inset: 0;
-            background: rgba(0, 0, 0, 0.88);
+            background: rgba(0, 0, 0, 0.9);
             display: none;
             align-items: center;
             justify-content: center;
-            padding: 18px;
+            padding: 15px;
             z-index: 1000;
         }
 
@@ -227,16 +533,18 @@
 
         .modal-content {
             width: 100%;
-            max-width: 700px;
+            max-width: 720px;
+            max-height: 95vh;
+            overflow: auto;
             background: #111a2e;
             border-radius: 20px;
-            padding: 14px;
+            padding: 13px;
             text-align: center;
         }
 
         .modal img {
             width: 100%;
-            max-height: 70vh;
+            max-height: 72vh;
             object-fit: contain;
             border-radius: 12px;
             background: white;
@@ -245,8 +553,36 @@
         .modal-text {
             color: #b6c0cf;
             font-size: 13px;
-            margin: 10px 0;
+            line-height: 1.45;
+            margin: 9px 0;
         }
+
+        /* УВЕДОМЛЕНИЕ */
+
+        .toast {
+            position: fixed;
+            left: 50%;
+            bottom: 20px;
+            transform: translateX(-50%) translateY(100px);
+            background: #263653;
+            color: #ffffff;
+            padding: 11px 16px;
+            border-radius: 13px;
+            font-size: 13px;
+            z-index: 2000;
+            opacity: 0;
+            transition: all 0.25s ease;
+            max-width: calc(100vw - 30px);
+            text-align: center;
+            pointer-events: none;
+        }
+
+        .toast.show {
+            opacity: 1;
+            transform: translateX(-50%) translateY(0);
+        }
+
+        /* MOBILE */
 
         @media (max-width: 600px) {
 
@@ -259,17 +595,35 @@
             }
 
             .card {
-                padding: 11px;
+                padding: 12px;
                 border-radius: 17px;
+            }
+
+            .sphere-title {
+                font-size: 22px;
+            }
+
+            .question {
+                font-size: 15px;
+            }
+
+            .stats {
+                grid-template-columns: repeat(2, 1fr);
             }
 
             .buttons {
                 grid-template-columns: 1fr;
             }
 
-            .slider-name {
-                font-size: 14px;
+            .navigation {
+                grid-template-columns: 1fr 1fr;
             }
+
+            .number-button {
+                min-height: 36px;
+                font-size: 12px;
+            }
+
         }
 
     </style>
@@ -282,99 +636,491 @@
     <h1>🌀 Колесо баланса</h1>
 
     <div class="subtitle">
-        Оцените каждую сферу жизни от 0 до 10
-    </div>
-
-    <div class="card">
-
-        <div class="wheel-wrapper">
-            <canvas id="wheel"></canvas>
-        </div>
-
-        <div class="scale-info">
-            Центр = 0 · Внешний круг = 10
-        </div>
-
-        <div class="stats">
-
-            <div class="stat">
-                <div class="stat-value" id="average">
-                    5.0
-                </div>
-                <div class="stat-label">
-                    Среднее
-                </div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-value" id="maximum">
-                    5
-                </div>
-                <div class="stat-label">
-                    Максимум
-                </div>
-            </div>
-
-            <div class="stat">
-                <div class="stat-value" id="minimum">
-                    5
-                </div>
-                <div class="stat-label">
-                    Минимум
-                </div>
-            </div>
-
-        </div>
-
+        Небольшая рефлексия о том, как вы воспринимаете
+        разные сферы своей жизни сейчас.
     </div>
 
 
-    <div class="card">
+    <!-- ========================= -->
+    <!-- ТЕСТ -->
+    <!-- ========================= -->
 
-        <h2>Оценки сфер</h2>
+    <section id="testSection">
 
-        <div id="sliders"></div>
+        <div class="card">
 
-    </div>
+            <div class="progress-wrapper">
+
+                <div class="progress-top">
+
+                    <span id="progressText">
+                        Сфера 1 из 8
+                    </span>
+
+                    <span id="progressPercent">
+                        13%
+                    </span>
+
+                </div>
+
+                <div class="progress-track">
+
+                    <div
+                        class="progress-bar"
+                        id="progressBar"
+                    ></div>
+
+                </div>
+
+            </div>
 
 
-    <div class="card">
+            <div class="sphere-number" id="sphereNumber">
+                СФЕРА 1
+            </div>
 
-        <div class="buttons">
-
-            <button
-                class="primary"
-                id="saveBtn"
+            <div
+                class="sphere-title"
+                id="sphereTitle"
             >
-                💾 Сохранить результат
-            </button>
+                Здоровье
+            </div>
 
-            <button id="pngBtn">
-                🖼 Сохранить PNG
-            </button>
-
-            <button
-                class="danger"
-                id="resetBtn"
+            <div
+                class="question"
+                id="question"
             >
-                🔄 Сбросить
-            </button>
+                Насколько вы довольны своим физическим
+                состоянием и заботой о здоровье сейчас?
+            </div>
+
+
+            <div class="scale-label">
+                Выберите значение от 0 до 10
+            </div>
+
+
+            <div
+                class="score-display"
+                id="scoreDisplay"
+            >
+                5
+            </div>
+
+
+            <input
+                type="range"
+                class="score-slider"
+                id="scoreSlider"
+                min="0"
+                max="10"
+                step="1"
+                value="5"
+            >
+
+
+            <div
+                class="number-scale"
+                id="numberScale"
+            ></div>
+
+
+            <div class="scale-ends">
+
+                <span>
+                    0 — совсем не удовлетворён
+                </span>
+
+                <span>
+                    10 — полностью удовлетворён
+                </span>
+
+            </div>
+
+
+            <div class="navigation">
+
+                <button
+                    class="nav-button"
+                    id="backBtn"
+                >
+                    ← Назад
+                </button>
+
+                <button
+                    class="nav-button primary"
+                    id="nextBtn"
+                >
+                    Далее →
+                </button>
+
+            </div>
 
         </div>
 
-    </div>
+    </section>
 
 
-    <div class="card">
+    <!-- ========================= -->
+    <!-- РЕЗУЛЬТАТ -->
+    <!-- ========================= -->
 
-        <h2>📖 История</h2>
+    <section
+        id="resultSection"
+        class="hidden"
+    >
 
-        <div id="journal"></div>
+        <div class="card">
 
-    </div>
+            <h2>
+                🌀 Ваше колесо баланса
+            </h2>
+
+            <div class="wheel-wrapper">
+
+                <canvas id="wheel"></canvas>
+
+            </div>
+
+            <div class="scale-info">
+                Центр = 0 · Внешний круг = 10
+            </div>
+
+
+            <div class="stats">
+
+                <div class="stat">
+
+                    <div
+                        class="stat-value"
+                        id="average"
+                    >
+                        5.0
+                    </div>
+
+                    <div class="stat-label">
+                        Среднее
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div
+                        class="stat-value"
+                        id="maximum"
+                    >
+                        5
+                    </div>
+
+                    <div class="stat-label">
+                        Максимум
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div
+                        class="stat-value"
+                        id="minimum"
+                    >
+                        5
+                    </div>
+
+                    <div class="stat-label">
+                        Минимум
+                    </div>
+
+                </div>
+
+
+                <div class="stat">
+
+                    <div
+                        class="stat-value"
+                        id="gap"
+                    >
+                        0
+                    </div>
+
+                    <div class="stat-label">
+                        Разрыв
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ИНТЕРПРЕТАЦИЯ -->
+
+        <div class="card">
+
+            <h2>
+                📊 Что показывает результат
+            </h2>
+
+            <div
+                class="interpretation"
+                id="interpretation"
+            ></div>
+
+            <div class="range-list">
+
+                <div class="range-item">
+                    <strong>8–10</strong> — относительно сильная сфера.
+                </div>
+
+                <div class="range-item">
+                    <strong>6–7</strong> — относительно стабильная сфера.
+                </div>
+
+                <div class="range-item">
+                    <strong>4–5</strong> — сфера, которой может быть полезно уделить внимание.
+                </div>
+
+                <div class="range-item">
+                    <strong>0–3</strong> — выраженный текущий приоритет для размышления.
+                </div>
+
+            </div>
+
+        </div>
+
+
+        <!-- ЛУЧШИЕ / НИЖНИЕ -->
+
+        <div class="card">
+
+            <h2>
+                🔎 Сферы результата
+            </h2>
+
+            <h3>
+                Относительно сильные
+            </h3>
+
+            <div id="topSpheres"></div>
+
+
+            <h3 style="margin-top:18px;">
+                Требующие внимания
+            </h3>
+
+            <div id="bottomSpheres"></div>
+
+        </div>
+
+
+        <!-- ПРИОРИТЕТЫ -->
+
+        <div class="card">
+
+            <h2>
+                🎯 Приоритеты
+            </h2>
+
+            <div class="interpretation">
+                Выберите до трёх сфер, которым вы хотели бы
+                уделить больше внимания.
+            </div>
+
+            <div id="priorityList"></div>
+
+        </div>
+
+
+        <!-- ЖЕЛАЕМЫЕ ЗНАЧЕНИЯ -->
+
+        <div
+            class="card"
+            id="desiredCard"
+        >
+
+            <h2>
+                🌱 Желаемые изменения
+            </h2>
+
+            <div class="interpretation">
+                Для выбранных приоритетов укажите,
+                какого уровня вы хотели бы достичь.
+            </div>
+
+            <div id="desiredList"></div>
+
+
+            <div class="goal-box">
+
+                <label for="reflectionText">
+                    Что вы хотели бы изменить?
+                </label>
+
+                <textarea
+                    id="reflectionText"
+                    placeholder="Например: хочу уделять больше времени отдыху, наладить режим сна..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="goal-box">
+
+                <label for="firstStepText">
+                    Какой первый шаг вы готовы сделать?
+                </label>
+
+                <textarea
+                    id="firstStepText"
+                    placeholder="Опишите небольшое конкретное действие..."
+                ></textarea>
+
+            </div>
+
+
+            <div class="goal-box">
+
+                <label for="startDate">
+                    Дата начала
+                </label>
+
+                <input
+                    type="date"
+                    id="startDate"
+                >
+
+            </div>
+
+        </div>
+
+
+        <!-- ЖЕЛАЕМОЕ КОЛЕСО -->
+
+        <div
+            class="card hidden"
+            id="desiredWheelCard"
+        >
+
+            <h2>
+                🌱 Текущее и желаемое
+            </h2>
+
+            <div class="wheel-wrapper">
+
+                <canvas
+                    id="desiredWheel"
+                ></canvas>
+
+            </div>
+
+            <div class="scale-info">
+                Сравнение текущих и желаемых значений
+            </div>
+
+        </div>
+
+
+        <!-- МИНИ-ПЛАН -->
+
+        <div
+            class="card hidden"
+            id="planCard"
+        >
+
+            <h2>
+                🧭 Мини-план
+            </h2>
+
+            <div id="planList"></div>
+
+        </div>
+
+
+        <!-- ДЕЙСТВИЯ -->
+
+        <div class="card">
+
+            <div class="buttons">
+
+                <button
+                    class="main-button primary"
+                    id="saveBtn"
+                >
+                    💾 Сохранить результат
+                </button>
+
+                <button
+                    class="main-button"
+                    id="pngBtn"
+                >
+                    🖼 Сохранить PNG
+                </button>
+
+                <button
+                    class="main-button"
+                    id="restartBtn"
+                >
+                    🔄 Пройти заново
+                </button>
+
+                <button
+                    class="main-button danger"
+                    id="resetBtn"
+                >
+                    🗑 Очистить текущий результат
+                </button>
+
+            </div>
+
+        </div>
+
+
+        <!-- ИСТОРИЯ -->
+
+        <div class="card">
+
+            <h2>
+                📖 История
+            </h2>
+
+            <div id="journal"></div>
+
+        </div>
+
+
+        <!-- ДИСКЛЕЙМЕР -->
+
+        <div class="card">
+
+            <div class="interpretation">
+
+                <p>
+                    <strong>Важно:</strong>
+                    результат отражает ваше текущее
+                    субъективное восприятие различных сфер жизни.
+                </p>
+
+                <p>
+                    Это не оценка качества вашей жизни
+                    и не психологическая диагностика.
+                </p>
+
+            </div>
+
+        </div>
+
+    </section>
 
 </div>
 
+
+<!-- ========================= -->
+<!-- PNG MODAL -->
+<!-- ========================= -->
 
 <div
     class="modal"
@@ -393,7 +1139,10 @@
             чтобы сохранить его.
         </div>
 
-        <button id="closeModal">
+        <button
+            class="main-button primary"
+            id="closeModal"
+        >
             Закрыть
         </button>
 
@@ -402,7 +1151,17 @@
 </div>
 
 
+<div
+    class="toast"
+    id="toast"
+></div>
+
+
 <script>
+
+/* =========================================================
+   TELEGRAM
+   ========================================================= */
 
 const tg = window.Telegram.WebApp;
 
@@ -410,68 +1169,399 @@ tg.ready();
 tg.expand();
 
 
-const categories = [
+/* =========================================================
+   DATA
+   ========================================================= */
 
-    "Здоровье",
-    "Энергия",
-    "Карьера",
-    "Призвание",
-    "Финансы",
-    "Семья",
-    "Друзья",
-    "Окружение",
-    "Любовь",
-    "Секс",
-    "Личный рост",
-    "Отдых",
-    "Хобби",
-    "Прокрастинация",
-    "Дом и быт",
-    "Духовность и смыслы",
-    "Самооценка",
-    "Стабильность",
-    "Творчество",
-    "Путешествия"
+const spheres = [
+
+    {
+        name: "Здоровье",
+        question:
+            "Насколько вы довольны своим физическим состоянием и заботой о здоровье сейчас?"
+    },
+
+    {
+        name: "Работа и карьера",
+        question:
+            "Насколько вас устраивает ваша текущая работа, профессиональное развитие и карьерная ситуация?"
+    },
+
+    {
+        name: "Финансы",
+        question:
+            "Насколько вас устраивает ваше текущее финансовое положение и ощущение финансовой устойчивости?"
+    },
+
+    {
+        name: "Отношения и семья",
+        question:
+            "Насколько вас удовлетворяют ваши близкие отношения и семейная жизнь?"
+    },
+
+    {
+        name: "Друзья и социальная жизнь",
+        question:
+            "Насколько вы удовлетворены общением с друзьями, знакомыми и своим социальным окружением?"
+    },
+
+    {
+        name: "Личное развитие",
+        question:
+            "Насколько вы удовлетворены своим обучением, развитием навыков и личностным ростом?"
+    },
+
+    {
+        name: "Отдых и восстановление",
+        question:
+            "Насколько вам хватает отдыха, восстановления и времени для себя?"
+    },
+
+    {
+        name: "Творчество и самореализация",
+        question:
+            "Насколько вы чувствуете возможность заниматься творчеством, реализовывать свои идеи и способности?"
+    }
 
 ];
 
+
+const categories =
+    spheres.map(
+        sphere => sphere.name
+    );
+
+
+/* =========================================================
+   STATE
+   ========================================================= */
 
 let values =
     Array(categories.length).fill(5);
 
 
-const canvas =
-    document.getElementById("wheel");
+let desiredValues =
+    Array(categories.length).fill(5);
 
-const ctx =
-    canvas.getContext("2d");
 
-const slidersContainer =
-    document.getElementById("sliders");
+let currentQuestion = 0;
+
+
+let testCompleted = false;
+
+
+/* =========================================================
+   DOM
+   ========================================================= */
+
+const testSection =
+    document.getElementById(
+        "testSection"
+    );
+
+
+const resultSection =
+    document.getElementById(
+        "resultSection"
+    );
+
+
+const sphereNumber =
+    document.getElementById(
+        "sphereNumber"
+    );
+
+
+const sphereTitle =
+    document.getElementById(
+        "sphereTitle"
+    );
+
+
+const question =
+    document.getElementById(
+        "question"
+    );
+
+
+const scoreDisplay =
+    document.getElementById(
+        "scoreDisplay"
+    );
+
+
+const scoreSlider =
+    document.getElementById(
+        "scoreSlider"
+    );
+
+
+const numberScale =
+    document.getElementById(
+        "numberScale"
+    );
+
+
+const progressText =
+    document.getElementById(
+        "progressText"
+    );
+
+
+const progressPercent =
+    document.getElementById(
+        "progressPercent"
+    );
+
+
+const progressBar =
+    document.getElementById(
+        "progressBar"
+    );
+
+
+const backBtn =
+    document.getElementById(
+        "backBtn"
+    );
+
+
+const nextBtn =
+    document.getElementById(
+        "nextBtn"
+    );
+
 
 const averageEl =
-    document.getElementById("average");
+    document.getElementById(
+        "average"
+    );
+
 
 const maximumEl =
-    document.getElementById("maximum");
+    document.getElementById(
+        "maximum"
+    );
+
 
 const minimumEl =
-    document.getElementById("minimum");
+    document.getElementById(
+        "minimum"
+    );
+
+
+const gapEl =
+    document.getElementById(
+        "gap"
+    );
+
+
+const interpretationEl =
+    document.getElementById(
+        "interpretation"
+    );
+
+
+const topSpheres =
+    document.getElementById(
+        "topSpheres"
+    );
+
+
+const bottomSpheres =
+    document.getElementById(
+        "bottomSpheres"
+    );
+
+
+const priorityList =
+    document.getElementById(
+        "priorityList"
+    );
+
+
+const desiredList =
+    document.getElementById(
+        "desiredList"
+    );
+
+
+const reflectionText =
+    document.getElementById(
+        "reflectionText"
+    );
+
+
+const firstStepText =
+    document.getElementById(
+        "firstStepText"
+    );
+
+
+const startDate =
+    document.getElementById(
+        "startDate"
+    );
+
+
+const desiredWheelCard =
+    document.getElementById(
+        "desiredWheelCard"
+    );
+
+
+const planCard =
+    document.getElementById(
+        "planCard"
+    );
+
+
+const planList =
+    document.getElementById(
+        "planList"
+    );
+
 
 const journalContainer =
-    document.getElementById("journal");
+    document.getElementById(
+        "journal"
+    );
+
 
 const modal =
-    document.getElementById("modal");
+    document.getElementById(
+        "modal"
+    );
+
 
 const pngPreview =
-    document.getElementById("pngPreview");
+    document.getElementById(
+        "pngPreview"
+    );
 
+
+const toast =
+    document.getElementById(
+        "toast"
+    );
+
+
+/* =========================================================
+   STORAGE KEYS
+   ========================================================= */
+
+const VALUES_KEY =
+    "wheelBalanceV2Values";
+
+
+const DESIRED_KEY =
+    "wheelBalanceV2Desired";
+
+
+const JOURNAL_KEY =
+    "wheelBalanceV2Journal";
+
+
+const TEXT_KEY =
+    "wheelBalanceV2Texts";
+
+
+/* =========================================================
+   HAPTIC
+   ========================================================= */
+
+function haptic(
+    type = "selection"
+) {
+
+    try {
+
+        if (
+            !tg.HapticFeedback
+        ) {
+            return;
+        }
+
+
+        if (
+            type === "success" &&
+            tg.HapticFeedback.notificationOccurred
+        ) {
+
+            tg.HapticFeedback.notificationOccurred(
+                "success"
+            );
+
+            return;
+
+        }
+
+
+        if (
+            tg.HapticFeedback.selectionChanged
+        ) {
+
+            tg.HapticFeedback.selectionChanged();
+
+        }
+
+    } catch {
+
+        // Ничего не делаем,
+        // если Telegram Haptic недоступен.
+
+    }
+
+}
+
+
+/* =========================================================
+   TOAST
+   ========================================================= */
+
+let toastTimer = null;
+
+
+function showToast(
+    text
+) {
+
+    toast.textContent =
+        text;
+
+    toast.classList.add(
+        "show"
+    );
+
+
+    clearTimeout(
+        toastTimer
+    );
+
+
+    toastTimer =
+        setTimeout(
+            () => {
+
+                toast.classList.remove(
+                    "show"
+                );
+
+            },
+            2200
+        );
+
+}
+
+
+/* =========================================================
+   STORAGE
+   ========================================================= */
 
 function saveValues() {
 
     localStorage.setItem(
-        "wheelBalanceValues",
+        VALUES_KEY,
         JSON.stringify(values)
     );
 
@@ -482,17 +1572,20 @@ function loadValues() {
 
     const saved =
         localStorage.getItem(
-            "wheelBalanceValues"
+            VALUES_KEY
         );
+
 
     if (!saved) {
         return;
     }
 
+
     try {
 
         const parsed =
             JSON.parse(saved);
+
 
         if (
             Array.isArray(parsed) &&
@@ -500,97 +1593,225 @@ function loadValues() {
         ) {
 
             values =
-                parsed.map(Number);
+                parsed.map(
+                    value =>
+                        Math.max(
+                            0,
+                            Math.min(
+                                10,
+                                Number(value)
+                            )
+                        )
+                );
 
         }
 
-    } catch (error) {
+    } catch {
 
-        console.log(error);
+        values =
+            Array(categories.length).fill(5);
 
     }
 
 }
 
 
-function createSliders() {
+function saveDesiredValues() {
 
-    slidersContainer.innerHTML = "";
+    localStorage.setItem(
+        DESIRED_KEY,
+        JSON.stringify(desiredValues)
+    );
 
-    categories.forEach(
-        (category, index) => {
-
-            const item =
-                document.createElement("div");
-
-            item.className =
-                "slider-item";
-
-            item.innerHTML = `
-
-                <div class="slider-header">
-
-                    <div class="slider-name">
-                        ${index + 1}. ${category}
-                    </div>
-
-                    <div
-                        class="slider-value"
-                        id="value-${index}"
-                    >
-                        ${values[index]}
-                    </div>
-
-                </div>
-
-                <input
-                    type="range"
-                    min="0"
-                    max="10"
-                    step="1"
-                    value="${values[index]}"
-                    id="slider-${index}"
-                >
-
-            `;
-
-            slidersContainer.appendChild(item);
+}
 
 
-            const slider =
-                document.getElementById(
-                    `slider-${index}`
+function loadDesiredValues() {
+
+    const saved =
+        localStorage.getItem(
+            DESIRED_KEY
+        );
+
+
+    if (!saved) {
+        return;
+    }
+
+
+    try {
+
+        const parsed =
+            JSON.parse(saved);
+
+
+        if (
+            Array.isArray(parsed) &&
+            parsed.length === categories.length
+        ) {
+
+            desiredValues =
+                parsed.map(
+                    value =>
+                        Math.max(
+                            0,
+                            Math.min(
+                                10,
+                                Number(value)
+                            )
                 );
 
+        }
 
-            slider.addEventListener(
-                "input",
-                function () {
+    } catch {
 
-                    values[index] =
-                        Number(this.value);
+        desiredValues =
+            Array(categories.length).fill(5);
 
-                    document.getElementById(
-                        `value-${index}`
-                    ).textContent =
-                        values[index];
+    }
 
-                    saveValues();
+}
 
-                    updateStats();
 
-                    drawWheel();
+function saveTexts() {
 
-                    if (
-                        tg.HapticFeedback &&
-                        tg.HapticFeedback.selectionChanged
-                    ) {
+    const data = {
 
-                        tg.HapticFeedback.selectionChanged();
+        reflection:
+            reflectionText.value,
 
-                    }
+        firstStep:
+            firstStepText.value,
 
-                }
+        startDate:
+            startDate.value
+
+    };
+
+
+    localStorage.setItem(
+        TEXT_KEY,
+        JSON.stringify(data)
+    );
+
+}
+
+
+function loadTexts() {
+
+    const saved =
+        localStorage.getItem(
+            TEXT_KEY
+        );
+
+
+    if (!saved) {
+        return;
+    }
+
+
+    try {
+
+        const data =
+            JSON.parse(saved);
+
+
+        reflectionText.value =
+            data.reflection || "";
+
+
+        firstStepText.value =
+            data.firstStep || "";
+
+
+        startDate.value =
+            data.startDate || "";
+
+    } catch {
+
+        // ignore
+
+    }
+
+}
+
+
+/* =========================================================
+   TEST UI
+   ========================================================= */
+
+function createNumberScale() {
+
+    numberScale.innerHTML = "";
+
+
+    for (
+        let number = 0;
+        number <= 10;
+        number++
+    ) {
+
+        const button =
+            document.createElement(
+                "button"
+            );
+
+
+        button.type =
+            "button";
+
+
+        button.className =
+            "number-button";
+
+
+        button.textContent =
+            number;
+
+
+        button.dataset.value =
+            number;
+
+
+        button.addEventListener(
+            "click",
+            () => {
+
+                setCurrentScore(
+                    number
+                );
+
+                haptic();
+
+            }
+        );
+
+
+        numberScale.appendChild(
+            button
+        );
+
+    }
+
+}
+
+
+function updateNumberScale() {
+
+    const buttons =
+        numberScale.querySelectorAll(
+            ".number-button"
+        );
+
+
+    buttons.forEach(
+        button => {
+
+            button.classList.toggle(
+                "active",
+                Number(
+                    button.dataset.value
+                ) === values[currentQuestion]
             );
 
         }
@@ -599,7 +1820,179 @@ function createSliders() {
 }
 
 
-function updateStats() {
+function setCurrentScore(
+    value
+) {
+
+    value =
+        Math.max(
+            0,
+            Math.min(
+                10,
+                Number(value)
+            )
+        );
+
+
+    values[currentQuestion] =
+        value;
+
+
+    scoreSlider.value =
+        value;
+
+
+    scoreDisplay.textContent =
+        value;
+
+
+    updateNumberScale();
+
+    saveValues();
+
+}
+
+
+function renderQuestion() {
+
+    const sphere =
+        spheres[currentQuestion];
+
+
+    sphereNumber.textContent =
+        `СФЕРА ${currentQuestion + 1}`;
+
+
+    sphereTitle.textContent =
+        sphere.name;
+
+
+    question.textContent =
+        sphere.question;
+
+
+    scoreDisplay.textContent =
+        values[currentQuestion];
+
+
+    scoreSlider.value =
+        values[currentQuestion];
+
+
+    progressText.textContent =
+        `Сфера ${currentQuestion + 1} из ${spheres.length}`;
+
+
+    const percent =
+        Math.round(
+            (
+                (currentQuestion + 1) /
+                spheres.length
+            ) * 100
+        );
+
+
+    progressPercent.textContent =
+        `${percent}%`;
+
+
+    progressBar.style.width =
+        `${percent}%`;
+
+
+    backBtn.disabled =
+        currentQuestion === 0;
+
+
+    backBtn.style.opacity =
+        currentQuestion === 0
+            ? "0.45"
+            : "1";
+
+
+    nextBtn.textContent =
+        currentQuestion === spheres.length - 1
+            ? "Получить результат →"
+            : "Далее →";
+
+
+    updateNumberScale();
+
+}
+
+
+scoreSlider.addEventListener(
+    "input",
+    () => {
+
+        setCurrentScore(
+            Number(
+                scoreSlider.value
+            )
+        );
+
+        haptic();
+
+    }
+);
+
+
+backBtn.addEventListener(
+    "click",
+    () => {
+
+        if (
+            currentQuestion > 0
+        ) {
+
+            currentQuestion--;
+
+            renderQuestion();
+
+            haptic();
+
+        }
+
+    }
+);
+
+
+nextBtn.addEventListener(
+    "click",
+    () => {
+
+        if (
+            currentQuestion <
+            spheres.length - 1
+        ) {
+
+            currentQuestion++;
+
+            renderQuestion();
+
+            haptic();
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+            return;
+
+        }
+
+
+        finishTest();
+
+    }
+);
+
+
+/* =========================================================
+   SCORING
+   ========================================================= */
+
+function calculateStats() {
 
     const sum =
         values.reduce(
@@ -607,45 +2000,801 @@ function updateStats() {
             0
         );
 
+
     const average =
         sum / values.length;
 
-    averageEl.textContent =
-        average.toFixed(1);
 
-    maximumEl.textContent =
-        Math.max(...values);
+    const maximum =
+        Math.max(
+            ...values
+        );
 
-    minimumEl.textContent =
-        Math.min(...values);
+
+    const minimum =
+        Math.min(
+            ...values
+        );
+
+
+    const gap =
+        maximum - minimum;
+
+
+    return {
+
+        average,
+        maximum,
+        minimum,
+        gap
+
+    };
 
 }
 
 
+function getLevel(
+    value
+) {
+
+    if (
+        value >= 8
+    ) {
+
+        return "strong";
+
+    }
+
+
+    if (
+        value >= 6
+    ) {
+
+        return "stable";
+
+    }
+
+
+    if (
+        value >= 4
+    ) {
+
+        return "attention";
+
+    }
+
+
+    return "priority";
+
+}
+
+
+/* =========================================================
+   INTERPRETATION
+   ========================================================= */
+
+function getLevelText(
+    value
+) {
+
+    if (
+        value >= 8
+    ) {
+
+        return "относительно сильная";
+
+    }
+
+
+    if (
+        value >= 6
+    ) {
+
+        return "относительно стабильная";
+
+    }
+
+
+    if (
+        value >= 4
+    ) {
+
+        return "требующая внимания";
+
+    }
+
+
+    return "текущий приоритет";
+
+}
+
+
+function generateInterpretation(
+    stats
+) {
+
+    const averageText =
+        stats.average >= 8
+            ? "Средняя оценка находится в достаточно высоком диапазоне."
+            : stats.average >= 6
+                ? "В среднем оценки находятся в относительно стабильном диапазоне."
+                : stats.average >= 4
+                    ? "Средний показатель показывает, что нескольким сферам может быть полезно уделить дополнительное внимание."
+                    : "Средний показатель находится в низком диапазоне, поэтому особенно полезно посмотреть на конкретные сферы и определить собственные приоритеты.";
+
+
+    const gapText =
+        stats.gap >= 6
+            ? "Разница между наиболее и наименее высоко оценёнными сферами заметная."
+            : stats.gap >= 3
+                ? "Между сферами есть умеренная разница в оценках."
+                : "Оценки сфер находятся достаточно близко друг к другу.";
+
+
+    interpretationEl.innerHTML = `
+
+        <p>
+            ${averageText}
+        </p>
+
+        <p>
+            ${gapText}
+        </p>
+
+        <p>
+            Само по себе среднее значение не говорит о
+            качестве вашей жизни. Важнее то, какие именно
+            сферы вы хотите сохранить, изменить или развивать.
+        </p>
+
+    `;
+
+}
+
+
+/* =========================================================
+   RESULT LISTS
+   ========================================================= */
+
+function sortSpheres() {
+
+    return spheres
+        .map(
+            (sphere, index) => ({
+
+                index,
+
+                name:
+                    sphere.name,
+
+                value:
+                    values[index]
+
+            })
+        )
+        .sort(
+            (a, b) =>
+                b.value - a.value
+        );
+
+}
+
+
+function createSphereResult(
+    item
+) {
+
+    return `
+
+        <div class="sphere-result">
+
+            <div class="sphere-result-name">
+                ${item.name}
+                <br>
+                <span
+                    style="
+                        color:#8290a6;
+                        font-size:11px;
+                    "
+                >
+                    ${getLevelText(item.value)}
+                </span>
+            </div>
+
+            <div class="sphere-result-score">
+                ${item.value}
+            </div>
+
+        </div>
+
+    `;
+
+}
+
+
+function renderTopBottom() {
+
+    const sorted =
+        sortSpheres();
+
+
+    const top =
+        sorted.slice(
+            0,
+            3
+        );
+
+
+    const bottom =
+        [...sorted]
+            .sort(
+                (a, b) =>
+                    a.value - b.value
+            )
+            .slice(
+                0,
+                3
+            );
+
+
+    topSpheres.innerHTML =
+        top
+            .map(
+                createSphereResult
+            )
+            .join("");
+
+
+    bottomSpheres.innerHTML =
+        bottom
+            .map(
+                createSphereResult
+            )
+            .join("");
+
+}
+
+
+/* =========================================================
+   PRIORITIES
+   ========================================================= */
+
+function getSelectedPriorities() {
+
+    return Array.from(
+        document.querySelectorAll(
+            ".priority-checkbox:checked"
+        )
+    ).map(
+        checkbox =>
+            Number(
+                checkbox.value
+            )
+    );
+
+}
+
+
+function renderPriorities() {
+
+    priorityList.innerHTML =
+        "";
+
+
+    spheres.forEach(
+        (sphere, index) => {
+
+            const wrapper =
+                document.createElement(
+                    "label"
+                );
+
+
+            wrapper.className =
+                "priority-item";
+
+
+            wrapper.innerHTML = `
+
+                <input
+                    type="checkbox"
+                    class="priority-checkbox"
+                    value="${index}"
+                >
+
+                <span class="priority-name">
+                    ${sphere.name}
+                </span>
+
+                <span class="priority-score">
+                    Сейчас: ${values[index]}
+                </span>
+
+            `;
+
+
+            priorityList.appendChild(
+                wrapper
+            );
+
+        }
+    );
+
+
+    document
+        .querySelectorAll(
+            ".priority-checkbox"
+        )
+        .forEach(
+            checkbox => {
+
+                checkbox.addEventListener(
+                    "change",
+                    () => {
+
+                        const selected =
+                            getSelectedPriorities();
+
+
+                        if (
+                            selected.length > 3
+                        ) {
+
+                            checkbox.checked =
+                                false;
+
+                            showToast(
+                                "Можно выбрать максимум 3 приоритета."
+                            );
+
+                            return;
+
+                        }
+
+
+                        renderDesiredValues();
+
+                        updatePlan();
+
+                        haptic();
+
+                    }
+                );
+
+            }
+        );
+
+}
+
+
+/* =========================================================
+   DESIRED VALUES
+   ========================================================= */
+
+function renderDesiredValues() {
+
+    const selected =
+        getSelectedPriorities();
+
+
+    desiredList.innerHTML =
+        "";
+
+
+    if (
+        selected.length === 0
+    ) {
+
+        desiredWheelCard.classList.add(
+            "hidden"
+        );
+
+        planCard.classList.add(
+            "hidden"
+        );
+
+        return;
+
+    }
+
+
+    selected.forEach(
+        index => {
+
+            if (
+                desiredValues[index] <
+                values[index]
+            ) {
+
+                desiredValues[index] =
+                    values[index];
+
+            }
+
+
+            const wrapper =
+                document.createElement(
+                    "div"
+                );
+
+
+            wrapper.className =
+                "desired-row";
+
+
+            wrapper.innerHTML = `
+
+                <div class="desired-header">
+
+                    <span class="desired-name">
+                        ${categories[index]}
+                    </span>
+
+                    <span
+                        class="desired-value"
+                        id="desired-value-${index}"
+                    >
+                        ${desiredValues[index]}
+                    </span>
+
+                </div>
+
+                <input
+                    type="range"
+                    min="${values[index]}"
+                    max="10"
+                    step="1"
+                    value="${desiredValues[index]}"
+                    class="score-slider desired-slider"
+                    data-index="${index}"
+                >
+
+                <div class="scale-ends">
+                    <span>
+                        Сейчас: ${values[index]}
+                    </span>
+                    <span>
+                        Цель: 10
+                    </span>
+                </div>
+
+            `;
+
+
+            desiredList.appendChild(
+                wrapper
+            );
+
+        }
+    );
+
+
+    document
+        .querySelectorAll(
+            ".desired-slider"
+        )
+        .forEach(
+            slider => {
+
+                slider.addEventListener(
+                    "input",
+                    () => {
+
+                        const index =
+                            Number(
+                                slider.dataset.index
+                            );
+
+
+                        desiredValues[index] =
+                            Number(
+                                slider.value
+                            );
+
+
+                        const label =
+                            document.getElementById(
+                                `desired-value-${index}`
+                            );
+
+
+                        if (label) {
+
+                            label.textContent =
+                                desiredValues[index];
+
+                        }
+
+
+                        saveDesiredValues();
+
+                        updatePlan();
+
+                        drawDesiredWheel();
+
+                    }
+                );
+
+            }
+        );
+
+
+    desiredWheelCard.classList.remove(
+        "hidden"
+    );
+
+
+    planCard.classList.remove(
+        "hidden"
+    );
+
+
+    saveDesiredValues();
+
+    updatePlan();
+
+    drawDesiredWheel();
+
+}
+
+
+/* =========================================================
+   MINI PLAN
+   ========================================================= */
+
+function updatePlan() {
+
+    const selected =
+        getSelectedPriorities();
+
+
+    if (
+        selected.length === 0
+    ) {
+
+        planCard.classList.add(
+            "hidden"
+        );
+
+        return;
+
+    }
+
+
+    planCard.classList.remove(
+        "hidden"
+    );
+
+
+    planList.innerHTML =
+        "";
+
+
+    selected.forEach(
+        index => {
+
+            const current =
+                values[index];
+
+
+            const desired =
+                desiredValues[index];
+
+
+            const plan =
+                document.createElement(
+                    "div"
+                );
+
+
+            plan.className =
+                "plan";
+
+
+            plan.innerHTML = `
+
+                <div class="plan-title">
+                    ${categories[index]}
+                </div>
+
+                <div class="plan-line">
+                    <strong>Текущая оценка:</strong>
+                    ${current}
+                </div>
+
+                <div class="plan-line">
+                    <strong>Желаемая оценка:</strong>
+                    ${desired}
+                </div>
+
+                <div class="plan-line">
+                    <strong>Изменение:</strong>
+                    ${Math.max(
+                        0,
+                        desired - current
+                    )}
+                </div>
+
+                <div class="plan-line">
+                    <strong>Первый шаг:</strong>
+                    ${
+                        firstStepText.value.trim()
+                            ? firstStepText.value.trim()
+                            : "Определить небольшое конкретное действие."
+                    }
+                </div>
+
+                <div class="plan-line">
+                    <strong>Дата начала:</strong>
+                    ${
+                        startDate.value
+                            ? formatDate(
+                                startDate.value
+                            )
+                            : "не указана"
+                    }
+                </div>
+
+            `;
+
+
+            planList.appendChild(
+                plan
+            );
+
+        }
+    );
+
+}
+
+
+function formatDate(
+    dateString
+) {
+
+    if (!dateString) {
+        return "";
+    }
+
+
+    const parts =
+        dateString.split("-");
+
+
+    if (
+        parts.length !== 3
+    ) {
+
+        return dateString;
+
+    }
+
+
+    return `${parts[2]}.${parts[1]}.${parts[0]}`;
+
+}
+
+
+reflectionText.addEventListener(
+    "input",
+    () => {
+
+        saveTexts();
+
+        updatePlan();
+
+    }
+);
+
+
+firstStepText.addEventListener(
+    "input",
+    () => {
+
+        saveTexts();
+
+        updatePlan();
+
+    }
+);
+
+
+startDate.addEventListener(
+    "change",
+    () => {
+
+        saveTexts();
+
+        updatePlan();
+
+    }
+);
+
+
+/* =========================================================
+   WHEEL
+   ========================================================= */
+
+const canvas =
+    document.getElementById(
+        "wheel"
+    );
+
+
+const ctx =
+    canvas.getContext(
+        "2d"
+    );
+
+
+const desiredCanvas =
+    document.getElementById(
+        "desiredWheel"
+    );
+
+
+const desiredCtx =
+    desiredCanvas.getContext(
+        "2d"
+    );
+
+
 function resizeCanvas() {
 
-    const size =
+    resizeSingleCanvas(
+        canvas,
+        ctx
+    );
+
+
+    resizeSingleCanvas(
+        desiredCanvas,
+        desiredCtx
+    );
+
+}
+
+
+function resizeSingleCanvas(
+    targetCanvas,
+    targetCtx
+) {
+
+    const containerWidth =
         Math.min(
             window.innerWidth * 0.96,
             700
         );
 
+
+    const size =
+        Math.max(
+            300,
+            containerWidth
+        );
+
+
     const dpr =
         window.devicePixelRatio || 1;
 
-    canvas.width =
+
+    targetCanvas.width =
         size * dpr;
 
-    canvas.height =
+
+    targetCanvas.height =
         size * dpr;
 
-    canvas.style.width =
+
+    targetCanvas.style.width =
         size + "px";
 
-    canvas.style.height =
+
+    targetCanvas.style.height =
         size + "px";
 
-    ctx.setTransform(
+
+    targetCtx.setTransform(
         dpr,
         0,
         0,
@@ -654,41 +2803,48 @@ function resizeCanvas() {
         0
     );
 
-    drawWheel();
-
 }
 
 
-function drawWheel() {
+function drawBaseWheel(
+    targetCanvas,
+    targetCtx,
+    data,
+    compareData = null
+) {
 
     const width =
-        canvas.clientWidth;
+        targetCanvas.clientWidth;
+
 
     const height =
-        canvas.clientHeight;
+        targetCanvas.clientHeight;
+
 
     const size =
-        Math.min(width, height);
+        Math.min(
+            width,
+            height
+        );
+
 
     const center =
         size / 2;
 
-    /*
-     * Увеличиваем рабочую область,
-     * чтобы подписи сфер помещались.
-     */
 
     const radius =
         size * 0.33;
 
+
     const count =
         categories.length;
+
 
     const step =
         Math.PI * 2 / count;
 
 
-    ctx.clearRect(
+    targetCtx.clearRect(
         0,
         0,
         width,
@@ -696,21 +2852,20 @@ function drawWheel() {
     );
 
 
-    ctx.save();
+    targetCtx.save();
 
-    ctx.translate(
+
+    targetCtx.translate(
         center,
         center
     );
 
 
-    /*
-     * Фоновый круг
-     */
+    /* Фон */
 
-    ctx.beginPath();
+    targetCtx.beginPath();
 
-    ctx.arc(
+    targetCtx.arc(
         0,
         0,
         radius,
@@ -718,15 +2873,13 @@ function drawWheel() {
         Math.PI * 2
     );
 
-    ctx.fillStyle =
+    targetCtx.fillStyle =
         "#111a2e";
 
-    ctx.fill();
+    targetCtx.fill();
 
 
-    /*
-     * Круги шкалы 1–10
-     */
+    /* Круги 1–10 */
 
     for (
         let level = 1;
@@ -735,12 +2888,14 @@ function drawWheel() {
     ) {
 
         const r =
-            radius * level / 10;
+            radius *
+            level /
+            10;
 
 
-        ctx.beginPath();
+        targetCtx.beginPath();
 
-        ctx.arc(
+        targetCtx.arc(
             0,
             0,
             r,
@@ -749,65 +2904,48 @@ function drawWheel() {
         );
 
 
-        /*
-         * Каждый 5-й круг делаем
-         * немного заметнее.
-         */
-
-        ctx.strokeStyle =
-            level === 5 || level === 10
+        targetCtx.strokeStyle =
+            level === 5 ||
+            level === 10
                 ? "#5a6b88"
                 : "#33425f";
 
-        ctx.lineWidth =
-            level === 5 || level === 10
+
+        targetCtx.lineWidth =
+            level === 5 ||
+            level === 10
                 ? 1.5
                 : 1;
 
-        ctx.stroke();
 
-    }
-
-
-    /*
-     * ЧИСЛОВАЯ ШКАЛА
-     *
-     * 1 ... 10
-     *
-     * Цифры располагаются сверху,
-     * на вертикальной оси.
-     */
-
-    for (
-        let level = 1;
-        level <= 10;
-        level++
-    ) {
-
-        const r =
-            radius * level / 10;
+        targetCtx.stroke();
 
 
-        ctx.fillStyle =
-            level === 5 || level === 10
+        /* Шкала */
+
+        targetCtx.fillStyle =
+            level === 5 ||
+            level === 10
                 ? "#ffffff"
                 : "#8fa0b8";
 
 
-        ctx.font =
-            level === 5 || level === 10
+        targetCtx.font =
+            level === 5 ||
+            level === 10
                 ? "bold 12px Arial"
                 : "11px Arial";
 
 
-        ctx.textAlign =
+        targetCtx.textAlign =
             "left";
 
-        ctx.textBaseline =
+
+        targetCtx.textBaseline =
             "middle";
 
 
-        ctx.fillText(
+        targetCtx.fillText(
             String(level),
             5,
             -r
@@ -816,9 +2954,7 @@ function drawWheel() {
     }
 
 
-    /*
-     * Радиальные линии
-     */
+    /* Радиальные оси */
 
     for (
         let i = 0;
@@ -831,63 +2967,151 @@ function drawWheel() {
             i * step;
 
 
-        ctx.beginPath();
+        targetCtx.beginPath();
 
-        ctx.moveTo(
+        targetCtx.moveTo(
             0,
             0
         );
 
-        ctx.lineTo(
-            Math.cos(angle) * radius,
-            Math.sin(angle) * radius
+
+        targetCtx.lineTo(
+            Math.cos(angle) *
+                radius,
+            Math.sin(angle) *
+                radius
         );
 
 
-        ctx.strokeStyle =
+        targetCtx.strokeStyle =
             "#33425f";
 
-        ctx.lineWidth = 1;
 
-        ctx.stroke();
+        targetCtx.lineWidth =
+            1;
+
+
+        targetCtx.stroke();
 
     }
 
 
-    /*
-     * Фигура текущего баланса
-     */
+    /* Желаемая фигура */
 
-    ctx.beginPath();
+    if (
+        compareData
+    ) {
+
+        targetCtx.beginPath();
 
 
-    values.forEach(
+        compareData.forEach(
+            (value, index) => {
+
+                const angle =
+                    -Math.PI / 2 +
+                    index * step;
+
+
+                const r =
+                    radius *
+                    value /
+                    10;
+
+
+                const x =
+                    Math.cos(angle) * r;
+
+
+                const y =
+                    Math.sin(angle) * r;
+
+
+                if (
+                    index === 0
+                ) {
+
+                    targetCtx.moveTo(
+                        x,
+                        y
+                    );
+
+                } else {
+
+                    targetCtx.lineTo(
+                        x,
+                        y
+                    );
+
+                }
+
+            }
+        );
+
+
+        targetCtx.closePath();
+
+
+        targetCtx.strokeStyle =
+            "#ffffff";
+
+
+        targetCtx.lineWidth =
+            2;
+
+
+        targetCtx.setLineDash(
+            [7, 5]
+        );
+
+
+        targetCtx.stroke();
+
+
+        targetCtx.setLineDash([]);
+
+    }
+
+
+    /* Основная фигура */
+
+    targetCtx.beginPath();
+
+
+    data.forEach(
         (value, index) => {
 
             const angle =
                 -Math.PI / 2 +
                 index * step;
 
+
             const r =
-                radius * value / 10;
+                radius *
+                value /
+                10;
+
 
             const x =
                 Math.cos(angle) * r;
+
 
             const y =
                 Math.sin(angle) * r;
 
 
-            if (index === 0) {
+            if (
+                index === 0
+            ) {
 
-                ctx.moveTo(
+                targetCtx.moveTo(
                     x,
                     y
                 );
 
             } else {
 
-                ctx.lineTo(
+                targetCtx.lineTo(
                     x,
                     y
                 );
@@ -898,47 +3122,55 @@ function drawWheel() {
     );
 
 
-    ctx.closePath();
+    targetCtx.closePath();
 
 
-    ctx.fillStyle =
+    targetCtx.fillStyle =
         "rgba(76, 137, 218, 0.35)";
 
-    ctx.fill();
+
+    targetCtx.fill();
 
 
-    ctx.strokeStyle =
+    targetCtx.strokeStyle =
         "#6ea8fe";
 
-    ctx.lineWidth = 3;
 
-    ctx.stroke();
+    targetCtx.lineWidth =
+        3;
 
 
-    /*
-     * Точки значений
-     */
+    targetCtx.stroke();
 
-    values.forEach(
+
+    /* Точки */
+
+    data.forEach(
         (value, index) => {
 
             const angle =
                 -Math.PI / 2 +
                 index * step;
 
+
             const r =
-                radius * value / 10;
+                radius *
+                value /
+                10;
+
 
             const x =
                 Math.cos(angle) * r;
+
 
             const y =
                 Math.sin(angle) * r;
 
 
-            ctx.beginPath();
+            targetCtx.beginPath();
 
-            ctx.arc(
+
+            targetCtx.arc(
                 x,
                 y,
                 5,
@@ -947,85 +3179,70 @@ function drawWheel() {
             );
 
 
-            ctx.fillStyle =
+            targetCtx.fillStyle =
                 "#ffffff";
 
-            ctx.fill();
+
+            targetCtx.fill();
 
 
-            ctx.strokeStyle =
+            targetCtx.strokeStyle =
                 "#6ea8fe";
 
-            ctx.lineWidth = 2;
 
-            ctx.stroke();
-
-        }
-    );
+            targetCtx.lineWidth =
+                2;
 
 
-    /*
-     * Значения рядом с точками
-     */
-
-    values.forEach(
-        (value, index) => {
-
-            const angle =
-                -Math.PI / 2 +
-                index * step;
-
-            const r =
-                radius * value / 10;
+            targetCtx.stroke();
 
 
-            /*
-             * Если значение 0,
-             * ставим цифру немного выше центра.
-             */
+            /* Значение */
 
             const labelR =
                 Math.max(
-                    r + 9,
+                    r + 10,
                     18
                 );
 
 
-            const x =
+            const lx =
                 Math.cos(angle) *
                 labelR;
 
-            const y =
+
+            const ly =
                 Math.sin(angle) *
                 labelR;
 
 
-            ctx.fillStyle =
+            targetCtx.fillStyle =
                 "#ffffff";
 
-            ctx.font =
+
+            targetCtx.font =
                 "bold 11px Arial";
 
-            ctx.textAlign =
+
+            targetCtx.textAlign =
                 "center";
 
-            ctx.textBaseline =
+
+            targetCtx.textBaseline =
                 "middle";
 
 
-            ctx.fillText(
+            targetCtx.fillText(
                 String(value),
-                x,
-                y
+                lx,
+                ly
             );
 
         }
     );
 
 
-    /*
-     * Подписи сфер
-     */
+    /* Подписи */
 
     categories.forEach(
         (category, index) => {
@@ -1033,6 +3250,7 @@ function drawWheel() {
             const angle =
                 -Math.PI / 2 +
                 index * step;
+
 
             const labelRadius =
                 radius + 30;
@@ -1042,67 +3260,58 @@ function drawWheel() {
                 Math.cos(angle) *
                 labelRadius;
 
+
             const y =
                 Math.sin(angle) *
                 labelRadius;
 
 
-            ctx.save();
+            targetCtx.save();
 
-            ctx.translate(
+
+            targetCtx.translate(
                 x,
                 y
             );
 
 
-            ctx.fillStyle =
+            targetCtx.fillStyle =
                 "#ffffff";
 
-            ctx.font =
-                "10px Arial";
 
-            ctx.textAlign =
+            targetCtx.font =
+                category.length > 18
+                    ? "8px Arial"
+                    : "10px Arial";
+
+
+            targetCtx.textAlign =
                 "center";
 
-            ctx.textBaseline =
+
+            targetCtx.textBaseline =
                 "middle";
 
 
-            /*
-             * Для длинных названий
-             * уменьшаем шрифт.
-             */
-
-            if (
-                category.length > 16
-            ) {
-
-                ctx.font =
-                    "8px Arial";
-
-            }
-
-
-            ctx.fillText(
+            targetCtx.fillText(
                 category,
                 0,
                 0
             );
 
 
-            ctx.restore();
+            targetCtx.restore();
 
         }
     );
 
 
-    /*
-     * Центральная точка
-     */
+    /* Центр */
 
-    ctx.beginPath();
+    targetCtx.beginPath();
 
-    ctx.arc(
+
+    targetCtx.arc(
         0,
         0,
         4,
@@ -1110,31 +3319,439 @@ function drawWheel() {
         Math.PI * 2
     );
 
-    ctx.fillStyle =
+
+    targetCtx.fillStyle =
         "#ffffff";
 
-    ctx.fill();
+
+    targetCtx.fill();
 
 
-    ctx.restore();
+    targetCtx.restore();
 
 }
 
+
+function drawWheel() {
+
+    drawBaseWheel(
+        canvas,
+        ctx,
+        values
+    );
+
+}
+
+
+function drawDesiredWheel() {
+
+    drawBaseWheel(
+        desiredCanvas,
+        desiredCtx,
+        values,
+        desiredValues
+    );
+
+}
+
+
+window.addEventListener(
+    "resize",
+    () => {
+
+        if (
+            !resultSection.classList.contains(
+                "hidden"
+            )
+        ) {
+
+            resizeCanvas();
+
+            drawWheel();
+
+            drawDesiredWheel();
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   POINTER CONTROL
+   ========================================================= */
+
+function updateValueFromPointer(
+    event
+) {
+
+    const rect =
+        canvas.getBoundingClientRect();
+
+
+    const x =
+        event.clientX -
+        rect.left;
+
+
+    const y =
+        event.clientY -
+        rect.top;
+
+
+    const centerX =
+        rect.width / 2;
+
+
+    const centerY =
+        rect.height / 2;
+
+
+    let angle =
+        Math.atan2(
+            y - centerY,
+            x - centerX
+        );
+
+
+    angle +=
+        Math.PI / 2;
+
+
+    if (
+        angle < 0
+    ) {
+
+        angle +=
+            Math.PI * 2;
+
+    }
+
+
+    const count =
+        categories.length;
+
+
+    const index =
+        Math.round(
+            angle /
+            (
+                Math.PI * 2 /
+                count
+            )
+        ) % count;
+
+
+    const distance =
+        Math.sqrt(
+            Math.pow(
+                x - centerX,
+                2
+            ) +
+            Math.pow(
+                y - centerY,
+                2
+            )
+        );
+
+
+    const radius =
+        rect.width * 0.33;
+
+
+    let value =
+        Math.round(
+            (
+                distance /
+                radius
+            ) * 10
+        );
+
+
+    value =
+        Math.max(
+            0,
+            Math.min(
+                10,
+                value
+            )
+        );
+
+
+    values[index] =
+        value;
+
+
+    saveValues();
+
+
+    updateResultDisplay();
+
+}
+
+
+canvas.addEventListener(
+    "pointerdown",
+    event => {
+
+        canvas.setPointerCapture(
+            event.pointerId
+        );
+
+
+        updateValueFromPointer(
+            event
+        );
+
+    }
+);
+
+
+canvas.addEventListener(
+    "pointermove",
+    event => {
+
+        if (
+            event.buttons === 1
+        ) {
+
+            updateValueFromPointer(
+                event
+            );
+
+        }
+
+    }
+);
+
+
+/* =========================================================
+   RESULT DISPLAY
+   ========================================================= */
+
+function updateResultDisplay() {
+
+    const stats =
+        calculateStats();
+
+
+    averageEl.textContent =
+        stats.average.toFixed(1);
+
+
+    maximumEl.textContent =
+        stats.maximum;
+
+
+    minimumEl.textContent =
+        stats.minimum;
+
+
+    gapEl.textContent =
+        stats.gap;
+
+
+    drawWheel();
+
+    renderTopBottom();
+
+    renderPriorities();
+
+}
+
+
+function finishTest() {
+
+    testCompleted =
+        true;
+
+
+    testSection.classList.add(
+        "hidden"
+    );
+
+
+    resultSection.classList.remove(
+        "hidden"
+    );
+
+
+    updateResultDisplay();
+
+
+    generateInterpretation(
+        calculateStats()
+    );
+
+
+    window.scrollTo({
+        top: 0,
+        behavior: "smooth"
+    });
+
+
+    haptic(
+        "success"
+    );
+
+}
+
+
+/* =========================================================
+   RESTART
+   ========================================================= */
+
+document
+    .getElementById(
+        "restartBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            currentQuestion =
+                0;
+
+
+            testCompleted =
+                false;
+
+
+            testSection.classList.remove(
+                "hidden"
+            );
+
+
+            resultSection.classList.add(
+                "hidden"
+            );
+
+
+            renderQuestion();
+
+
+            window.scrollTo({
+                top: 0,
+                behavior: "smooth"
+            });
+
+        }
+    );
+
+
+/* =========================================================
+   RESET
+   ========================================================= */
+
+document
+    .getElementById(
+        "resetBtn"
+    )
+    .addEventListener(
+        "click",
+        () => {
+
+            if (
+                !confirm(
+                    "Очистить текущие оценки и начать заново?"
+                )
+            ) {
+
+                return;
+
+            }
+
+
+            values =
+                Array(
+                    categories.length
+                ).fill(5);
+
+
+            desiredValues =
+                Array(
+                    categories.length
+                ).fill(5);
+
+
+            localStorage.removeItem(
+                VALUES_KEY
+            );
+
+
+            localStorage.removeItem(
+                DESIRED_KEY
+            );
+
+
+            localStorage.removeItem(
+                TEXT_KEY
+            );
+
+
+            reflectionText.value =
+                "";
+
+
+            firstStepText.value =
+                "";
+
+
+            startDate.value =
+                "";
+
+
+            currentQuestion =
+                0;
+
+
+            testSection.classList.remove(
+                "hidden"
+            );
+
+
+            resultSection.classList.add(
+                "hidden"
+            );
+
+
+            renderQuestion();
+
+
+            showToast(
+                "Текущий результат очищен."
+            );
+
+        }
+    );
+
+
+/* =========================================================
+   JOURNAL
+   ========================================================= */
 
 function getJournal() {
 
     const saved =
         localStorage.getItem(
-            "wheelBalanceJournal"
+            JOURNAL_KEY
         );
+
 
     if (!saved) {
         return [];
     }
 
+
     try {
 
-        return JSON.parse(saved);
+        const journal =
+            JSON.parse(saved);
+
+
+        return Array.isArray(journal)
+            ? journal
+            : [];
 
     } catch {
 
@@ -1151,11 +3768,12 @@ function saveJournal() {
         getJournal();
 
 
-    const average =
-        values.reduce(
-            (a, b) => a + b,
-            0
-        ) / values.length;
+    const stats =
+        calculateStats();
+
+
+    const priorities =
+        getSelectedPriorities();
 
 
     const record = {
@@ -1168,19 +3786,50 @@ function saveJournal() {
         values:
             [...values],
 
+        desiredValues:
+            [...desiredValues],
+
         average:
-            average.toFixed(1)
+            Number(
+                stats.average.toFixed(1)
+            ),
+
+        maximum:
+            stats.maximum,
+
+        minimum:
+            stats.minimum,
+
+        gap:
+            stats.gap,
+
+        priorities:
+            priorities,
+
+        reflection:
+            reflectionText.value.trim(),
+
+        firstStep:
+            firstStepText.value.trim(),
+
+        startDate:
+            startDate.value
 
     };
 
 
-    journal.unshift(record);
+    journal.unshift(
+        record
+    );
 
 
     localStorage.setItem(
-        "wheelBalanceJournal",
+        JOURNAL_KEY,
         JSON.stringify(
-            journal.slice(0, 100)
+            journal.slice(
+                0,
+                100
+            )
         )
     );
 
@@ -1188,18 +3837,26 @@ function saveJournal() {
     renderJournal();
 
 
-    if (
-        tg.HapticFeedback &&
-        tg.HapticFeedback.notificationOccurred
-    ) {
+    showToast(
+        "Результат сохранён в историю."
+    );
 
-        tg.HapticFeedback.notificationOccurred(
-            "success"
-        );
 
-    }
+    haptic(
+        "success"
+    );
 
 }
+
+
+document
+    .getElementById(
+        "saveBtn"
+    )
+    .addEventListener(
+        "click",
+        saveJournal
+    );
 
 
 function renderJournal() {
@@ -1241,13 +3898,18 @@ function renderJournal() {
                 "journal-entry";
 
 
-            const details =
-                categories
-                    .map(
-                        (category, i) =>
-                            `${category}: ${record.values[i]}`
-                    )
-                    .join("<br>");
+            const priorityNames =
+                Array.isArray(
+                    record.priorities
+                )
+                    ? record.priorities
+                        .map(
+                            i =>
+                                categories[i]
+                        )
+                        .filter(Boolean)
+                        .join(", ")
+                    : "";
 
 
             entry.innerHTML = `
@@ -1262,27 +3924,49 @@ function renderJournal() {
                         Среднее: ${record.average}
                     </b>
 
-                    <br><br>
+                    &nbsp;·&nbsp;
 
-                    ${details}
+                    Максимум: ${record.maximum}
+
+                    &nbsp;·&nbsp;
+
+                    Минимум: ${record.minimum}
+
+                    <br>
+
+                    Разрыв:
+                    ${record.gap}
+
+                    ${
+                        priorityNames
+                            ? `
+                                <br>
+                                Приоритеты:
+                                ${priorityNames}
+                            `
+                            : ""
+                    }
 
                 </div>
 
-                <br>
 
-                <button
-                    data-index="${index}"
-                    class="load-record"
-                >
-                    Загрузить
-                </button>
+                <div class="journal-buttons">
 
-                <button
-                    data-index="${index}"
-                    class="delete-record"
-                >
-                    Удалить
-                </button>
+                    <button
+                        class="load-record"
+                        data-index="${index}"
+                    >
+                        Загрузить
+                    </button>
+
+                    <button
+                        class="delete delete-record"
+                        data-index="${index}"
+                    >
+                        Удалить
+                    </button>
+
+                </div>
 
             `;
 
@@ -1296,7 +3980,9 @@ function renderJournal() {
 
 
     document
-        .querySelectorAll(".load-record")
+        .querySelectorAll(
+            ".load-record"
+        )
         .forEach(
             button => {
 
@@ -1309,33 +3995,103 @@ function renderJournal() {
                                 button.dataset.index
                             );
 
+
                         const journal =
                             getJournal();
 
 
-                        if (
-                            journal[index]
-                        ) {
+                        const record =
+                            journal[index];
 
-                            values =
-                                [
-                                    ...journal[index].values
+
+                        if (!record) {
+                            return;
+                        }
+
+
+                        values =
+                            Array.isArray(
+                                record.values
+                            )
+                                ? [
+                                    ...record.values
+                                ]
+                                : Array(
+                                    categories.length
+                                ).fill(5);
+
+
+                        desiredValues =
+                            Array.isArray(
+                                record.desiredValues
+                            )
+                                ? [
+                                    ...record.desiredValues
+                                ]
+                                : [
+                                    ...values
                                 ];
 
-                            saveValues();
 
-                            createSliders();
+                        reflectionText.value =
+                            record.reflection || "";
 
-                            updateStats();
 
-                            drawWheel();
+                        firstStepText.value =
+                            record.firstStep || "";
 
-                            window.scrollTo({
-                                top: 0,
-                                behavior: "smooth"
-                            });
 
-                        }
+                        startDate.value =
+                            record.startDate || "";
+
+
+                        saveValues();
+
+                        saveDesiredValues();
+
+                        saveTexts();
+
+
+                        currentQuestion =
+                            0;
+
+
+                        testSection.classList.add(
+                            "hidden"
+                        );
+
+
+                        resultSection.classList.remove(
+                            "hidden"
+                        );
+
+
+                        updateResultDisplay();
+
+                        generateInterpretation(
+                            calculateStats()
+                        );
+
+
+                        restorePriorities(
+                            record.priorities || []
+                        );
+
+
+                        renderDesiredValues();
+
+                        renderJournal();
+
+
+                        window.scrollTo({
+                            top: 0,
+                            behavior: "smooth"
+                        });
+
+
+                        showToast(
+                            "Результат загружен."
+                        );
 
                     }
                 );
@@ -1345,7 +4101,9 @@ function renderJournal() {
 
 
     document
-        .querySelectorAll(".delete-record")
+        .querySelectorAll(
+            ".delete-record"
+        )
         .forEach(
             button => {
 
@@ -1357,6 +4115,7 @@ function renderJournal() {
                             Number(
                                 button.dataset.index
                             );
+
 
                         const journal =
                             getJournal();
@@ -1369,12 +4128,19 @@ function renderJournal() {
 
 
                         localStorage.setItem(
-                            "wheelBalanceJournal",
-                            JSON.stringify(journal)
+                            JOURNAL_KEY,
+                            JSON.stringify(
+                                journal
+                            )
                         );
 
 
                         renderJournal();
+
+
+                        showToast(
+                            "Запись удалена."
+                        );
 
                     }
                 );
@@ -1385,49 +4151,38 @@ function renderJournal() {
 }
 
 
-document
-    .getElementById("saveBtn")
-    .addEventListener(
-        "click",
-        saveJournal
-    );
+function restorePriorities(
+    indexes
+) {
 
+    document
+        .querySelectorAll(
+            ".priority-checkbox"
+        )
+        .forEach(
+            checkbox => {
 
-document
-    .getElementById("resetBtn")
-    .addEventListener(
-        "click",
-        () => {
+                checkbox.checked =
+                    indexes.includes(
+                        Number(
+                            checkbox.value
+                        )
+                    );
 
-            if (
-                !confirm(
-                    "Сбросить все оценки?"
-                )
-            ) {
-                return;
             }
+        );
+
+}
 
 
-            values =
-                Array(
-                    categories.length
-                ).fill(5);
-
-
-            saveValues();
-
-            createSliders();
-
-            updateStats();
-
-            drawWheel();
-
-        }
-    );
-
+/* =========================================================
+   PNG EXPORT
+   ========================================================= */
 
 document
-    .getElementById("pngBtn")
+    .getElementById(
+        "pngBtn"
+    )
     .addEventListener(
         "click",
         () => {
@@ -1449,7 +4204,9 @@ document
 
 
 document
-    .getElementById("closeModal")
+    .getElementById(
+        "closeModal"
+    )
     .addEventListener(
         "click",
         () => {
@@ -1480,209 +4237,41 @@ modal.addEventListener(
 );
 
 
-/*
- * Управление колесом пальцем / мышью
- */
-
-function updateValueFromPointer(
-    event
-) {
-
-    const rect =
-        canvas.getBoundingClientRect();
-
-
-    const x =
-        event.clientX -
-        rect.left;
-
-    const y =
-        event.clientY -
-        rect.top;
-
-
-    const centerX =
-        rect.width / 2;
-
-    const centerY =
-        rect.height / 2;
-
-
-    let angle =
-        Math.atan2(
-            y - centerY,
-            x - centerX
-        );
-
-
-    angle +=
-        Math.PI / 2;
-
-
-    if (
-        angle < 0
-    ) {
-
-        angle +=
-            Math.PI * 2;
-
-    }
-
-
-    const count =
-        categories.length;
-
-
-    const index =
-        Math.round(
-            angle /
-            (Math.PI * 2 / count)
-        ) % count;
-
-
-    const distance =
-        Math.sqrt(
-            Math.pow(
-                x - centerX,
-                2
-            ) +
-            Math.pow(
-                y - centerY,
-                2
-            )
-        );
-
-
-    const radius =
-        rect.width * 0.33;
-
-
-    let value =
-        Math.round(
-            (distance / radius) * 10
-        );
-
-
-    value =
-        Math.max(
-            0,
-            Math.min(
-                10,
-                value
-            )
-        );
-
-
-    values[index] =
-        value;
-
-
-    const slider =
-        document.getElementById(
-            `slider-${index}`
-        );
-
-
-    if (slider) {
-
-        slider.value =
-            value;
-
-    }
-
-
-    const valueLabel =
-        document.getElementById(
-            `value-${index}`
-        );
-
-
-    if (valueLabel) {
-
-        valueLabel.textContent =
-            value;
-
-    }
-
-
-    saveValues();
-
-    updateStats();
-
-    drawWheel();
-
-}
-
-
-canvas.addEventListener(
-    "pointerdown",
-    event => {
-
-        canvas.setPointerCapture(
-            event.pointerId
-        );
-
-        updateValueFromPointer(
-            event
-        );
-
-    }
-);
-
-
-canvas.addEventListener(
-    "pointermove",
-    event => {
-
-        if (
-            event.buttons === 1
-        ) {
-
-            updateValueFromPointer(
-                event
-            );
-
-        }
-
-    }
-);
-
-
-window.addEventListener(
-    "resize",
-    resizeCanvas
-);
-
-
-/*
- * PNG
- */
+/* =========================================================
+   EXPORT CANVAS
+   ========================================================= */
 
 function getWheelDataURL() {
 
-    /*
-     * Создаём отдельное большое
-     * изображение для экспорта.
-     */
+    const size =
+        1600;
+
 
     const exportCanvas =
-        document.createElement("canvas");
+        document.createElement(
+            "canvas"
+        );
 
-    const size = 1400;
 
     exportCanvas.width =
         size;
+
 
     exportCanvas.height =
         size;
 
 
     const exportCtx =
-        exportCanvas.getContext("2d");
+        exportCanvas.getContext(
+            "2d"
+        );
 
+
+    /* Белый фон */
 
     exportCtx.fillStyle =
         "#ffffff";
+
 
     exportCtx.fillRect(
         0,
@@ -1695,17 +4284,22 @@ function getWheelDataURL() {
     const center =
         size / 2;
 
+
     const radius =
         size * 0.35;
+
 
     const count =
         categories.length;
 
+
     const step =
-        Math.PI * 2 / count;
+        Math.PI * 2 /
+        count;
 
 
     exportCtx.save();
+
 
     exportCtx.translate(
         center,
@@ -1713,9 +4307,49 @@ function getWheelDataURL() {
     );
 
 
-    /*
-     * Сетка 1–10
-     */
+    /* Заголовок */
+
+    exportCtx.fillStyle =
+        "#111111";
+
+
+    exportCtx.font =
+        "bold 44px Arial";
+
+
+    exportCtx.textAlign =
+        "center";
+
+
+    exportCtx.fillText(
+        "Колесо баланса",
+        0,
+        -radius - 170
+    );
+
+
+    /* Среднее */
+
+    const stats =
+        calculateStats();
+
+
+    exportCtx.font =
+        "28px Arial";
+
+
+    exportCtx.fillStyle =
+        "#444444";
+
+
+    exportCtx.fillText(
+        `Среднее: ${stats.average.toFixed(1)} · Разрыв: ${stats.gap}`,
+        0,
+        -radius - 125
+    );
+
+
+    /* Сетка */
 
     for (
         let level = 1;
@@ -1724,10 +4358,13 @@ function getWheelDataURL() {
     ) {
 
         const r =
-            radius * level / 10;
+            radius *
+            level /
+            10;
 
 
         exportCtx.beginPath();
+
 
         exportCtx.arc(
             0,
@@ -1741,28 +4378,33 @@ function getWheelDataURL() {
         exportCtx.strokeStyle =
             "#b5bfd0";
 
+
         exportCtx.lineWidth =
-            level === 5 || level === 10
+            level === 5 ||
+            level === 10
                 ? 3
                 : 2;
+
 
         exportCtx.stroke();
 
 
-        /*
-         * Числа шкалы
-         */
+        /* Число */
 
         exportCtx.fillStyle =
             "#555555";
 
+
         exportCtx.font =
-            level === 5 || level === 10
-                ? "bold 25px Arial"
+            level === 5 ||
+            level === 10
+                ? "bold 26px Arial"
                 : "21px Arial";
+
 
         exportCtx.textAlign =
             "left";
+
 
         exportCtx.textBaseline =
             "middle";
@@ -1770,16 +4412,14 @@ function getWheelDataURL() {
 
         exportCtx.fillText(
             String(level),
-            12,
+            15,
             -r
         );
 
     }
 
 
-    /*
-     * Радиальные линии
-     */
+    /* Оси */
 
     for (
         let i = 0;
@@ -1794,31 +4434,118 @@ function getWheelDataURL() {
 
         exportCtx.beginPath();
 
+
         exportCtx.moveTo(
             0,
             0
         );
 
+
         exportCtx.lineTo(
-            Math.cos(angle) * radius,
-            Math.sin(angle) * radius
+            Math.cos(angle) *
+                radius,
+            Math.sin(angle) *
+                radius
         );
 
 
         exportCtx.strokeStyle =
             "#b5bfd0";
 
+
         exportCtx.lineWidth =
             2;
+
 
         exportCtx.stroke();
 
     }
 
 
-    /*
-     * Фигура
-     */
+    /* Желаемая фигура */
+
+    const selected =
+        getSelectedPriorities();
+
+
+    if (
+        selected.length > 0
+    ) {
+
+        exportCtx.beginPath();
+
+
+        desiredValues.forEach(
+            (value, index) => {
+
+                const angle =
+                    -Math.PI / 2 +
+                    index * step;
+
+
+                const r =
+                    radius *
+                    value /
+                    10;
+
+
+                const x =
+                    Math.cos(angle) *
+                    r;
+
+
+                const y =
+                    Math.sin(angle) *
+                    r;
+
+
+                if (
+                    index === 0
+                ) {
+
+                    exportCtx.moveTo(
+                        x,
+                        y
+                    );
+
+                } else {
+
+                    exportCtx.lineTo(
+                        x,
+                        y
+                    );
+
+                }
+
+            }
+        );
+
+
+        exportCtx.closePath();
+
+
+        exportCtx.strokeStyle =
+            "#555555";
+
+
+        exportCtx.lineWidth =
+            4;
+
+
+        exportCtx.setLineDash(
+            [12, 8]
+        );
+
+
+        exportCtx.stroke();
+
+
+        exportCtx.setLineDash([]);
+
+    }
+
+
+    /* Текущая фигура */
 
     exportCtx.beginPath();
 
@@ -1830,14 +4557,21 @@ function getWheelDataURL() {
                 -Math.PI / 2 +
                 index * step;
 
+
             const r =
-                radius * value / 10;
+                radius *
+                value /
+                10;
+
 
             const x =
-                Math.cos(angle) * r;
+                Math.cos(angle) *
+                r;
+
 
             const y =
-                Math.sin(angle) * r;
+                Math.sin(angle) *
+                r;
 
 
             if (
@@ -1866,7 +4600,8 @@ function getWheelDataURL() {
 
 
     exportCtx.fillStyle =
-        "rgba(70, 120, 200, 0.30)";
+        "rgba(70,120,200,0.22)";
+
 
     exportCtx.fill();
 
@@ -1874,15 +4609,15 @@ function getWheelDataURL() {
     exportCtx.strokeStyle =
         "#315fa8";
 
+
     exportCtx.lineWidth =
         6;
+
 
     exportCtx.stroke();
 
 
-    /*
-     * Точки
-     */
+    /* Точки и значения */
 
     values.forEach(
         (value, index) => {
@@ -1891,17 +4626,25 @@ function getWheelDataURL() {
                 -Math.PI / 2 +
                 index * step;
 
+
             const r =
-                radius * value / 10;
+                radius *
+                value /
+                10;
+
 
             const x =
-                Math.cos(angle) * r;
+                Math.cos(angle) *
+                r;
+
 
             const y =
-                Math.sin(angle) * r;
+                Math.sin(angle) *
+                r;
 
 
             exportCtx.beginPath();
+
 
             exportCtx.arc(
                 x,
@@ -1915,15 +4658,46 @@ function getWheelDataURL() {
             exportCtx.fillStyle =
                 "#315fa8";
 
+
             exportCtx.fill();
+
+
+            const labelR =
+                Math.max(
+                    r + 25,
+                    30
+                );
+
+
+            exportCtx.fillStyle =
+                "#222222";
+
+
+            exportCtx.font =
+                "bold 24px Arial";
+
+
+            exportCtx.textAlign =
+                "center";
+
+
+            exportCtx.textBaseline =
+                "middle";
+
+
+            exportCtx.fillText(
+                String(value),
+                Math.cos(angle) *
+                    labelR,
+                Math.sin(angle) *
+                    labelR
+            );
 
         }
     );
 
 
-    /*
-     * Названия сфер
-     */
+    /* Названия */
 
     categories.forEach(
         (category, index) => {
@@ -1934,12 +4708,13 @@ function getWheelDataURL() {
 
 
             const labelRadius =
-                radius + 65;
+                radius + 95;
 
 
             const x =
                 Math.cos(angle) *
                 labelRadius;
+
 
             const y =
                 Math.sin(angle) *
@@ -1949,13 +4724,16 @@ function getWheelDataURL() {
             exportCtx.fillStyle =
                 "#111111";
 
+
             exportCtx.font =
-                category.length > 16
+                category.length > 18
                     ? "16px Arial"
                     : "20px Arial";
 
+
             exportCtx.textAlign =
                 "center";
+
 
             exportCtx.textBaseline =
                 "middle";
@@ -1981,19 +4759,77 @@ function getWheelDataURL() {
 }
 
 
-/*
- * Запуск приложения
- */
+/* =========================================================
+   INITIALIZATION
+   ========================================================= */
 
 loadValues();
 
-createSliders();
+loadDesiredValues();
+
+loadTexts();
+
+createNumberScale();
+
+renderQuestion();
 
 renderJournal();
 
-updateStats();
 
-resizeCanvas();
+/*
+ * Дата по умолчанию — сегодня.
+ */
+
+if (
+    !startDate.value
+) {
+
+    const now =
+        new Date();
+
+
+    const yyyy =
+        now.getFullYear();
+
+
+    const mm =
+        String(
+            now.getMonth() + 1
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    const dd =
+        String(
+            now.getDate()
+        ).padStart(
+            2,
+            "0"
+        );
+
+
+    startDate.value =
+        `${yyyy}-${mm}-${dd}`;
+
+}
+
+
+/*
+ * Canvas сначала скрыт,
+ * поэтому инициализируем его
+ * после загрузки.
+ */
+
+window.addEventListener(
+    "load",
+    () => {
+
+        resizeCanvas();
+
+    }
+);
 
 </script>
 
