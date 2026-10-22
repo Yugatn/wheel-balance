@@ -1,0 +1,79 @@
+<!doctype html>
+<html lang="ru">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Два колеса баланса</title>
+<style>
+:root{color-scheme:dark;--bg:#0b1120;--panel:#121c30;--line:#2b3a55;--text:#f3f6fc;--muted:#aab7cb;--accent:#83b5ff;--violet:#c5a3ff}
+*{box-sizing:border-box}body{margin:0;padding:16px;background:var(--bg);color:var(--text);font:16px/1.5 system-ui,-apple-system,sans-serif}main{max-width:1150px;margin:auto}h1{font-size:clamp(1.8rem,4vw,2.6rem);line-height:1.15;margin:8px 0}.muted{color:var(--muted)}.intro{max-width:800px}.tabs{display:flex;gap:8px;flex-wrap:wrap;margin:20px 0}.tabs button,.btn{border:1px solid #49668d;background:#263d61;color:white;border-radius:10px;padding:10px 14px;cursor:pointer}.tabs button[aria-selected=true]{background:#4778b8}.panel{background:var(--panel);border:1px solid var(--line);border-radius:18px;padding:16px;margin:14px 0}.layout{display:grid;grid-template-columns:minmax(0,1.1fr) minmax(290px,.9fr);gap:16px}.wheel{width:100%;max-width:680px;display:block;margin:auto}.fields{display:grid;grid-template-columns:1fr 1fr;gap:10px}.fields label{display:block;font-size:.9rem;color:#d7e1f1}.fields input,.fields select,.fields textarea{width:100%;margin-top:5px;background:#0b1426;color:var(--text);border:1px solid #344966;border-radius:9px;padding:9px}.fields textarea{min-height:75px}.spoke{border:1px solid var(--line);border-radius:12px;padding:10px;margin:8px 0}.spoke-head{display:flex;align-items:center;gap:8px}.spoke-head strong{flex:1}.spoke label{display:block;color:var(--muted);font-size:.85rem;margin-top:8px}.spoke input,.spoke select{width:100%;background:#0b1426;color:var(--text);border:1px solid #344966;border-radius:8px;padding:8px;margin-top:3px}.scores{display:grid;grid-template-columns:1fr 1fr;gap:8px}.actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:14px}.status{color:#9ee6c0;min-height:1.5em}.hidden{display:none!important}small{color:var(--muted)}@media(max-width:780px){body{padding:10px}.layout{grid-template-columns:1fr}.fields{grid-template-columns:1fr}.panel{padding:12px}}
+</style>
+</head>
+<body><main>
+<h1>🌀 Два колеса баланса</h1>
+<p class="muted intro">Инструмент самонаблюдения и планирования, а не диагностический тест. Вы сами определяете, какие области жизни важны. Оценки субъективны и не обязаны стремиться к десяти.</p>
+<div class="tabs" role="tablist" aria-label="Выбор колеса">
+<button id="tabBlank" role="tab" aria-selected="true">1. Безымянные лучи</button>
+<button id="tabTemplate" role="tab" aria-selected="false">2. Список сфер</button>
+</div>
+<section id="blankPanel">
+<div class="panel"><h2>Колесо с неподписанными лучами</h2><p class="muted">Начните с 12 лучей без названий. Для каждого выберите направление из каталога, впишите собственное название или оставьте луч без названия. Список — подсказка, а не обязательная классификация.</p><div class="layout"><div><svg id="blankWheel" class="wheel" viewBox="0 0 640 640" role="img" aria-label="Колесо с двенадцатью безымянными лучами"></svg><p class="muted">Синий контур — состояние сейчас; фиолетовый пунктир — желаемое состояние.</p><div class="actions"><button class="btn" id="addBlank">＋ Добавить луч</button><button class="btn" id="exportSvgBlank">Скачать SVG</button></div></div><div><div id="blankSpokes"></div></div></div></div>
+</section>
+<section id="templatePanel" class="hidden">
+<div class="panel"><h2>Колесо по списку сфер</h2><p class="muted">Стартовый взрослый шаблон из Notion. Сферы можно переименовывать, заменять и удалять. Он не считается универсальным: оставляйте только то, что имеет значение для вас.</p><div class="layout"><div><svg id="templateWheel" class="wheel" viewBox="0 0 640 640" role="img" aria-label="Колесо баланса по списку сфер"></svg><div class="actions"><button class="btn" id="exportSvgTemplate">Скачать SVG</button></div></div><div id="templateSpokes"></div></div></div>
+</section>
+<div class="panel"><h2>Рефлексия и следующий шаг</h2><div class="fields">
+<label>Что заметили, глядя на колесо?<textarea id="reflection" placeholder="Можно пропустить"></textarea></label>
+<label>Какую одну сферу хотите исследовать в первую очередь?<input id="priority" placeholder="Сфера или направление"></label>
+<label>Желаемый результат<textarea id="goal" placeholder="Что должно измениться в реальной жизни?"></textarea></label>
+<label>Первый небольшой шаг<textarea id="step" placeholder="Конкретное действие, которое находится под вашим контролем"></textarea></label>
+<label>Целевая дата<input id="date" type="date"></label>
+<label>Статус<select id="status"><option>Не начато</option><option>В процессе</option><option>Пауза</option><option>Завершено</option></select></label>
+</div><div class="actions"><button class="btn" id="save">Сохранить снимок</button><button class="btn" id="exportJson">Экспортировать JSON</button><label class="btn" for="importJson">Импортировать JSON</label><input id="importJson" type="file" accept="application/json" class="hidden"></div><p id="message" class="status" aria-live="polite"></p><h3>Локальные снимки</h3><div id="history" class="muted">Пока нет сохранённых снимков.</div><small>Данные сохраняются только в локальном хранилище этого браузера. Экспортируйте JSON для резервной копии. Очистка данных браузера может удалить историю.</small></div>
+</main>
+<script>
+const catalogue = [
+"Физическое самочувствие и энергия","Эмоциональное состояние","Отношения и близость","Семья и родительство","Друзья и социальные связи","Работа, профессия и самореализация","Финансы и материальная устойчивость","Обучение и развитие навыков","Отдых, интересы и творчество","Смысл, ценности и личные ориентиры","Быт и окружающая среда","Самостоятельность и личные границы",
+"Общение","Школьные занятия","Движение и растяжка","Здоровье","Работа и проекты","Творчество","Отдых","Единоборства","Спорт","Сон","Питание","Навык или личная цель","Другое"
+];
+const adult = ["Физическое самочувствие и энергия","Эмоциональное состояние","Отношения и близость","Семья и родительство","Друзья и социальные связи","Работа, профессия и самореализация","Финансы и материальная устойчивость","Обучение и развитие навыков","Отдых, интересы и творчество","Смысл, ценности и личные ориентиры","Быт и окружающая среда","Самостоятельность и личные границы"];
+const blank = Array.from({length:12},(_,i)=>({id:'b'+i,name:'',current:5,desired:8}));
+let template = adult.map((name,i)=>({id:'t'+i,name,current:5,desired:8}));
+let active = 'blank';
+const $=id=>document.getElementById(id);
+const escapeHtml=s=>String(s).replace(/[&<>"']/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+function options(value){return '<option value="">— Без названия —</option>'+catalogue.map(n=>'<option '+(n===value?'selected':'')+'>'+escapeHtml(n)+'</option>').join('')+'<option value="__custom">Своё название…</option>'}
+function renderEditor(items,container,kind){
+  $(container).innerHTML=items.map((s,i)=>'<div class="spoke"><div class="spoke-head"><strong>Луч '+(i+1)+'</strong>'+(items.length>3?'<button class="btn" data-remove="'+s.id+'" aria-label="Удалить луч '+(i+1)+'">Удалить</button>':'')+'</div><label>Название из списка или своё<input data-name="'+s.id+'" list="unused" value="'+escapeHtml(s.name)+'" placeholder="Выберите или введите название"></label><datalist id="unused">'+catalogue.map(n=>'<option value="'+escapeHtml(n)+'">').join('')+'</datalist><div class="scores"><label>Сейчас: <b>'+s.current+'/10</b><input type="range" min="0" max="10" value="'+s.current+'" data-current="'+s.id+'"></label><label>Желаемое: <b>'+s.desired+'/10</b><input type="range" min="0" max="10" value="'+s.desired+'" data-desired="'+s.id+'"></label></div></div>').join('');
+  $(container).querySelectorAll('[data-name]').forEach(el=>el.addEventListener('change',()=>{const s=items.find(x=>x.id===el.dataset.name);s.name=el.value;renderAll()}));
+  $(container).querySelectorAll('[data-current],[data-desired]').forEach(el=>el.addEventListener('input',()=>{const s=items.find(x=>x.id===(el.dataset.current||el.dataset.desired));if(el.dataset.current)s.current=+el.value;else s.desired=+el.value;el.parentElement.querySelector('b').textContent=el.value+'/10';draw(kind==='blank'?'blankWheel':'templateWheel',items)}));
+  $(container).querySelectorAll('[data-remove]').forEach(el=>el.addEventListener('click',()=>{if(items.length<=3)return;const idx=items.findIndex(x=>x.id===el.dataset.remove);items.splice(idx,1);renderAll()}));
+}
+function draw(id,items){
+ const svg=$(id),cx=320,cy=320,r=215,n=items.length,step=2*Math.PI/n;
+ let out='<circle cx="320" cy="320" r="215" fill="none" stroke="#52647e" stroke-width="2"/>';
+ for(let k=1;k<=10;k++){out+='<circle cx="320" cy="320" r="'+(r*k/10)+'" fill="none" stroke="#52647e" stroke-opacity=".38"/>'}
+ items.forEach((s,i)=>{let a=i*step-Math.PI/2,x=cx+Math.cos(a)*r,y=cy+Math.sin(a)*r;out+='<line x1="'+cx+'" y1="'+cy+'" x2="'+x+'" y2="'+y+'" stroke="#52647e" stroke-opacity=".65"/>';});
+ for(const key of ['current','desired']){
+ let pts=items.map((s,i)=>{let a=i*step-Math.PI/2,rr=r*s[key]/10;return (cx+Math.cos(a)*rr)+','+(cy+Math.sin(a)*rr)}).join(' ');
+ out+='<polygon points="'+pts+'" fill="'+(key==='current'?'#83b5ff':'#c5a3ff')+'" fill-opacity="'+(key==='current'?'.2':'.08')+'" stroke="'+(key==='current'?'#83b5ff':'#c5a3ff')+'" stroke-width="'+(key==='current'?3:2)+'" '+(key==='desired'?'stroke-dasharray="7 6"':'')+'/>';
+ }
+ items.forEach((s,i)=>{let a=i*step-Math.PI/2,rr=r*s.current/10,x=cx+Math.cos(a)*rr,y=cy+Math.sin(a)*rr,lx=cx+Math.cos(a)*(r+40),ly=cy+Math.sin(a)*(r+40),label=s.name||('Луч '+(i+1));out+='<circle cx="'+x+'" cy="'+y+'" r="5" fill="#83b5ff"/><text x="'+lx+'" y="'+ly+'" fill="#f3f6fc" font-size="'+(n>10?12:14)+'" text-anchor="middle" dominant-baseline="middle">'+escapeHtml(label.length>23?label.slice(0,21)+'…':label)+'</text><text x="'+(x+8)+'" y="'+(y-8)+'" fill="#fff" font-size="12">'+s.current+'</text>';});
+ svg.innerHTML=out;
+}
+function renderAll(){renderEditor(blank,'blankSpokes','blank');renderEditor(template,'templateSpokes','template');draw('blankWheel',blank);draw('templateWheel',template)}
+function show(which){active=which;$('blankPanel').classList.toggle('hidden',which!=='blank');$('templatePanel').classList.toggle('hidden',which!=='template');$('tabBlank').setAttribute('aria-selected',String(which==='blank'));$('tabTemplate').setAttribute('aria-selected',String(which==='template'))}
+$('tabBlank').onclick=()=>show('blank');$('tabTemplate').onclick=()=>show('template');
+$('addBlank').onclick=()=>{if(blank.length>=24){$('message').textContent='Максимум 24 луча в этой версии.';return}blank.push({id:'b'+Date.now(),name:'',current:5,desired:8});renderAll()};
+function activeData(){return active==='blank'?blank:template}
+function download(name,type,data){const a=document.createElement('a');a.href=URL.createObjectURL(new Blob([data],{type}));a.download=name;a.click();URL.revokeObjectURL(a.href)}
+function exportSvg(id,name){const svg=$(id).cloneNode(true);svg.setAttribute('xmlns','http://www.w3.org/2000/svg');download(name,'image/svg+xml;charset=utf-8',new XMLSerializer().serializeToString(svg))}
+$('exportSvgBlank').onclick=()=>exportSvg('blankWheel','wheel-blank.svg');$('exportSvgTemplate').onclick=()=>exportSvg('templateWheel','wheel-template.svg');
+function getData(){return {version:1,savedAt:new Date().toISOString(),active,blank,template,reflection:$('reflection').value,priority:$('priority').value,goal:$('goal').value,step:$('step').value,date:$('date').value,status:$('status').value}}
+function applyData(d){if(Array.isArray(d.blank))blank.splice(0,blank.length,...d.blank);if(Array.isArray(d.template))template=d.template;$('reflection').value=d.reflection||'';$('priority').value=d.priority||'';$('goal').value=d.goal||'';$('step').value=d.step||'';$('date').value=d.date||'';$('status').value=d.status||'Не начато';show(d.active==='template'?'template':'blank');renderAll()}
+$('save').onclick=()=>{const data=getData();const hist=JSON.parse(localStorage.getItem('adaptiveWheelSnapshots')||'[]');hist.unshift(data);localStorage.setItem('adaptiveWheelSnapshots',JSON.stringify(hist.slice(0,30)));$('message').textContent='Снимок сохранён в этом браузере.';renderHistory()};
+$('exportJson').onclick=()=>download('wheel-balance-backup.json','application/json;charset=utf-8',JSON.stringify(getData(),null,2));
+$('importJson').onchange=async e=>{const f=e.target.files[0];if(!f)return;try{applyData(JSON.parse(await f.text()));$('message').textContent='Данные импортированы.'}catch{$('message').textContent='Не удалось прочитать JSON-файл.'}e.target.value=''};
+function renderHistory(){const h=JSON.parse(localStorage.getItem('adaptiveWheelSnapshots')||'[]');$('history').innerHTML=h.length?h.map((x,i)=>'<div class="spoke"><b>'+escapeHtml(new Date(x.savedAt).toLocaleString('ru-RU'))+'</b><p>'+escapeHtml(x.priority||'Без выбранного приоритета')+' · '+escapeHtml(x.status||'')+'</p><button class="btn" data-load="'+i+'">Загрузить</button></div>').join(''):'Пока нет сохранённых снимков.';$('history').querySelectorAll('[data-load]').forEach(b=>b.onclick=()=>{const x=h[+b.dataset.load];applyData(x);$('message').textContent='Снимок загружен.'})}
+renderAll();renderHistory();
+</script></body></html>
